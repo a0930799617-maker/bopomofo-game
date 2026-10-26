@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注音符號魔法樂園 - 小一趣味闖關遊戲</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #fff6d6 0%, #ffe4ec 50%, #e0f4ff 100%);
+      --primary: #ff6b6b;
+      --secondary: #4ecdc4;
+      --accent: #ffe66d;
+      --purple: #9b5de5;
+      --blue: #00bbf9;
+      --green: #06d6a0;
+      --orange: #ff9f1c;
+      --text-dark: #2b2d42;
+      --card-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Top Header */
+    header {
+      width: 100%;
+      max-width: 1100px;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 10px 20px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      border: 3px solid #fff;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      background: linear-gradient(90deg, #ff6b6b, #ff9f1c, #00bbf9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: #fff;
+      padding: 10px 22px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .star-badge {
+      color: #ffb703;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .streak-badge {
+      color: #ff6b6b;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Navigation Tabs */
+    .nav-tabs {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 8px 16px 20px;
+      max-width: 1100px;
+    }
+
+    .tab-btn {
+      border: none;
+      background: #fff;
+      color: var(--text-dark);
+      padding: 14px 22px;
+      border-radius: 24px;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #d9d9d9, 0 8px 15px rgba(0,0,0,0.1);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .tab-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #d9d9d9;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 6px 0 #c94646, 0 8px 15px rgba(255,107,107,0.35);
+    }
+
+    .tab-btn[data-mode="listen"].active {
+      background: var(--blue);
+      box-shadow: 0 6px 0 #0088b8;
+    }
+    .tab-btn[data-mode="tone"].active {
+      background: var(--purple);
+      box-shadow: 0 6px 0 #6e3ab0;
+    }
+    .tab-btn[data-mode="spell"].active {
+      background: var(--green);
+      box-shadow: 0 6px 0 #049a73;
+    }
+    .tab-btn[data-mode="match"].active {
+      background: var(--orange);
+      box-shadow: 0 6px 0 #c9780c;
+    }
+
+    /* Main Container */
+    main {
+      width: 95%;
+      max-width: 1060px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 32px;
+      padding: 28px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.1);
+      border: 4px solid #fff;
+      margin-bottom: 40px;
+      min-height: 540px;
+      position: relative;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-top: 0;
+      margin-bottom: 18px;
+      font-size: 1.5rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    /* Filter Pills */
+    .filter-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+
+    .filter-pill {
+      padding: 8px 18px;
+      border-radius: 50px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-pill.active {
+      border-color: var(--primary);
+      background: #fff0f0;
+      color: var(--primary);
+    }
+
+    /* Mode 1: Bopomofo Magic Book */
+    .bopomofo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: 14px;
+    }
+
+    .bopo-card {
+      background: #fff;
+      border-radius: 22px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #e5e5e5, 0 6px 12px rgba(0,0,0,0.06);
+      border: 3px solid #f0f0f0;
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+    }
+
+    .bopo-card:hover {
+      transform: translateY(-4px) scale(1.03);
+    }
+
+    .bopo-card:active {
+      transform: translateY(3px);
+      box-shadow: 0 2px 0 #e5e5e5;
+    }
+
+    .bopo-card.type-initial { border-color: #ffccd5; background: #fff9fa; }
+    .bopo-card.type-medial { border-color: #cdeac0; background: #f7fff4; }
+    .bopo-card.type-final { border-color: #bde0fe; background: #f5fbff; }
+
+    .bopo-symbol {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1.1;
+      color: #2b2d42;
+      margin-bottom: 4px;
+    }
+
+    .bopo-emoji {
+      font-size: 2rem;
+      margin: 4px 0;
+    }
+
+    .bopo-word {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #555;
+    }
+
+    /* Quiz Common UI */
+    .quiz-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 10px 0;
+    }
+
+    .prompt-box {
+      background: linear-gradient(135deg, #f8f9fa, #eef6ff);
+      border: 4px dashed #90e0ef;
+      border-radius: 28px;
+      padding: 24px 36px;
+      text-align: center;
+      min-width: 300px;
+      max-width: 650px;
+      width: 100%;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .big-speaker-btn {
+      background: linear-gradient(135deg, #00bbf9, #0096c7);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 34px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #0077b6, 0 12px 20px rgba(0,187,249,0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.15s;
+    }
+
+    .big-speaker-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #0077b6;
+    }
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(150px, 240px));
+      gap: 20px;
+      justify-content: center;
+      width: 100%;
+    }
+
+    @media (min-width: 720px) {
+      .options-grid.cols-4 {
+        grid-template-columns: repeat(4, minmax(140px, 200px));
+      }
+    }
+
+    .option-btn {
+      background: #fff;
+      border: 4px solid #e0e0e0;
+      border-radius: 26px;
+      padding: 24px 16px;
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: var(--text-dark);
+      cursor: pointer;
+      box-shadow: 0 8px 0 #d0d0d0, 0 10px 20px rgba(0,0,0,0.08);
+      transition: all 0.15s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .option-btn:hover {
+      border-color: #00bbf9;
+      transform: translateY(-3px);
+    }
+
+    .option-btn:active {
+      transform: translateY(5px);
+      box-shadow: 0 3px 0 #d0d0d0;
+    }
+
+    .option-btn.correct {
+      background: #d8f3dc;
+      border-color: #2d6a4f;
+      color: #1b4332;
+      animation: bounce 0.5s;
+    }
+
+    .option-btn.wrong {
+      background: #ffe5ec;
+      border-color: #e63946;
+      color: #a4161a;
+      animation: shake 0.4s;
+    }
+
+    .option-sub {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #666;
+    }
+
+    /* Mode 3: Tone Coaster */
+    .tone-diagram {
+      font-size: 1.5rem;
+      color: #7209b7;
+      font-weight: 800;
+      margin-top: 6px;
+    }
+
+    /* Mode 4: Spelling Builder */
+    .spell-slots {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      margin: 14px 0;
+      flex-wrap: wrap;
+    }
+
+    .spell-slot {
+      width: 95px;
+      height: 110px;
+      border-radius: 22px;
+      border: 4px dashed #adb5bd;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: #2b2d42;
+      position: relative;
+    }
+
+    .spell-slot.filled {
+      border-style: solid;
+      border-color: #06d6a0;
+      background: #f0fff8;
+    }
+
+    .slot-label {
+      font-size: 0.85rem;
+      color: #888;
+      position: absolute;
+      bottom: 6px;
+      font-weight: 700;
+    }
+
+    .choice-pool {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 720px;
+    }
+
+    .pool-chip {
+      background: #fff;
+      border: 3px solid #ffd166;
+      border-radius: 20px;
+      padding: 14px 24px;
+      font-size: 2.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #f4a261;
+      transition: all 0.15s;
+    }
+
+    .pool-chip:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #f4a261;
+    }
+
+    /* Mode 5: Memory Match */
+    .memory-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(100px, 150px));
+      gap: 16px;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    .mem-card {
+      height: 130px;
+      border-radius: 22px;
+      background: linear-gradient(135deg, #ff9f1c, #ffbf69);
+      border: 4px solid #fff;
+      box-shadow: 0 6px 0 #d97706, 0 8px 15px rgba(0,0,0,0.1);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.4rem;
+      font-weight: 900;
+      color: #fff;
+      transition: all 0.25s;
+    }
+
+    .mem-card.flipped, .mem-card.matched {
+      background: #fff;
+      color: var(--text-dark);
+      border-color: #ff9f1c;
+      box-shadow: 0 6px 0 #ffd166;
+    }
+
+    .mem-card.matched {
+      background: #d8f3dc;
+      border-color: #52b788;
+      box-shadow: 0 6px 0 #52b788;
+      cursor: default;
+    }
+
+    /* Feedback Banner */
+    .feedback-toast {
+      min-height: 44px;
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.12); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* Teacher helper footer */
+    .teacher-bar {
+      max-width: 1060px;
+      width: 95%;
+      background: rgba(255,255,255,0.85);
+      border-radius: 20px;
+      padding: 16px 24px;
+      margin-bottom: 30px;
+      font-size: 0.98rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <span style="font-size: 2.2rem;">🚂</span>
+      <h1>注音符號魔法樂園</h1>
+    </div>
+    <div class="score-bar">
+      <div class="star-badge">⭐ 星星：<span id="starCount">0</span></div>
+      <div class="streak-badge">🔥 連續答對：<span id="streakCount">0</span></div>
+      <button onclick="speakText('歡迎來到注音符號魔法樂園！小朋友，我們一起來闖關吧！')" style="border:none;background:#ffe66d;padding:8px 14px;border-radius:20px;font-weight:800;cursor:pointer;">🔊 語音測試</button>
+      <button onclick="openShareModal()" style="border:none;background:#06d6a0;color:#fff;padding:8px 16px;border-radius:20px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #049a73;">📲 分享 QR Code</button>
+    </div>
+  </header>
+
+  <!-- Share QR Code Modal -->
+  <div id="shareModal" onclick="if(event.target===this)closeShareModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:#fff;border-radius:28px;max-width:420px;width:100%;padding:28px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.25);position:relative;">
+      <button onclick="closeShareModal()" style="position:absolute;top:14px;right:18px;border:none;background:#f0f0f0;border-radius:50%;width:36px;height:36px;font-size:1.2rem;cursor:pointer;font-weight:bold;">✕</button>
+      <h3 style="margin:0 0 8px;font-size:1.45rem;color:#2b2d42;">📲 掃描 QR Code 立即玩！</h3>
+      <p style="margin:0 0 16px;color:#666;font-size:0.95rem;">請用手機或平板相機掃描，或複製下方網址分享給家長與老師：</p>
+      <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://a0930799617-maker.github.io/bopomofo-game/" alt="遊戲 QR Code" style="width:200px;height:200px;border:4px solid #ffe66d;border-radius:18px;padding:8px;background:#fff;" />
+      <div style="margin:14px 0;background:#f8f9fa;padding:10px 12px;border-radius:12px;font-size:0.9rem;word-break:break-all;font-weight:700;color:#0077b6;" id="shareUrlText">
+        https://a0930799617-maker.github.io/bopomofo-game/
+      </div>
+      <button onclick="copyGameUrl()" id="copyUrlBtn" style="border:none;background:#00bbf9;color:#fff;padding:12px 24px;border-radius:50px;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #0088b8;width:100%;">📋 點此複製遊戲網址</button>
+    </div>
+  </div>
+
+  <nav class="nav-tabs">
+    <button class="tab-btn active" data-mode="book" onclick="switchMode('book')">📖 1. 注音魔法書</button>
+    <button class="tab-btn" data-mode="listen" onclick="switchMode('listen')">🎧 2. 聽音抓抓樂</button>
+    <button class="tab-btn" data-mode="tone" onclick="switchMode('tone')">🎢 3. 聲調雲霄飛車</button>
+    <button class="tab-btn" data-mode="spell" onclick="switchMode('spell')">🧩 4. 看圖拼注音</button>
+    <button class="tab-btn" data-mode="match" onclick="switchMode('match')">🃏 5. 記憶翻翻樂</button>
+  </nav>
+
+  <main id="appContainer">
+    <!-- Dynamic game content injected here -->
+  </main>
+
+  <section class="teacher-bar">
+    <strong>👩‍🏫 給一年級老師的教學小幫手：</strong>
+    <span>
+      本系統支援<strong>課堂大屏觸控（電子白板）</strong>與<strong>學生平板自學</strong>。
+      在「🎧 聽音抓抓樂」中可切換<strong>「易混淆音特訓」（ㄅ/ㄆ/ㄉ/ㄊ、ㄓ/ㄔ/ㄕ vs ㄗ/ㄘ/ㄙ、ㄢ/ㄤ vs ㄣ/ㄥ）</strong>；
+      在「🎢 聲調雲霄飛車」中特別強化小一最常卡關的<strong>二聲、三聲與輕聲辨識</strong>！
+    </span>
+  </section>
+
+  <script>
+    // ========= 1. 完整 37 個注音符號資料庫 =========
+    const BOPOMOFO_DATA = [
+      // 聲母 (21)
+      { sym: 'ㄅ', type: 'initial', pronounce: 'ㄅ', word: '爸爸', emoji: '👨', pinyin: 'ㄅㄚˋ ㄅㄚ˙' },
+      { sym: 'ㄆ', type: 'initial', pronounce: 'ㄆ', word: '蘋果', emoji: '🍎', pinyin: 'ㄆㄧㄥˊ ㄍㄨㄛˇ' },
+      { sym: 'ㄇ', type: 'initial', pronounce: 'ㄇ', word: '貓咪', emoji: '🐱', pinyin: 'ㄇㄠ ㄇㄧ' },
+      { sym: 'ㄈ', type: 'initial', pronounce: 'ㄈ', word: '飛機', emoji: '✈️', pinyin: 'ㄈㄟ ㄐㄧ' },
+      { sym: 'ㄉ', type: 'initial', pronounce: 'ㄉ', word: '蛋糕', emoji: '🎂', pinyin: 'ㄉㄢˋ ㄍㄠ' },
+      { sym: 'ㄊ', type: 'initial', pronounce: 'ㄊ', word: '兔子', emoji: '🐰', pinyin: 'ㄊㄨˋ ㄗ˙' },
+      { sym: 'ㄋ', type: 'initial', pronounce: 'ㄋ', word: '牛奶', emoji: '🥛', pinyin: 'ㄋㄧㄡˊ ㄋㄞˇ' },
+      { sym: 'ㄌ', type: 'initial', pronounce: 'ㄌ', word: '恐龍', emoji: '🦖', pinyin: 'ㄎㄨㄥˇ ㄌㄨㄥˊ' },
+      { sym: 'ㄍ', type: 'initial', pronounce: 'ㄍ', word: '小狗', emoji: '🐶', pinyin: 'ㄒㄧㄠˇ ㄍㄡˇ' },
+      { sym: 'ㄎ', type: 'initial', pronounce: 'ㄎ', word: '卡車', emoji: '🚚', pinyin: 'ㄎㄚˇ ㄔㄜ' },
+      { sym: 'ㄏ', type: 'initial', pronounce: 'ㄏ', word: '猴子', emoji: '🐵', pinyin: 'ㄏㄡˊ ㄗ˙' },
+      { sym: 'ㄐ', type: 'initial', pronounce: 'ㄐ', word: '小雞', emoji: '🐥', pinyin: 'ㄒㄧㄠˇ ㄐㄧ' },
+      { sym: 'ㄑ', type: 'initial', pronounce: 'ㄑ', word: '氣球', emoji: '🎈', pinyin: 'ㄑㄧˋ ㄑㄧㄡˊ' },
+      { sym: 'ㄒ', type: 'initial', pronounce: 'ㄒ', word: '西瓜', emoji: '🍉', pinyin: 'ㄒㄧ ㄍㄨㄚ' },
+      { sym: 'ㄓ', type: 'initial', pronounce: 'ㄓ', word: '蜘蛛', emoji: '🕷️', pinyin: 'ㄓ ㄓㄨ' },
+      { sym: 'ㄔ', type: 'initial', pronounce: 'ㄔ', word: '吃飯', emoji: '🍚', pinyin: 'ㄔ ㄈㄢˋ' },
+      { sym: 'ㄕ', type: 'initial', pronounce: 'ㄕ', word: '獅子', emoji: '🦁', pinyin: 'ㄕ ㄗ˙' },
+      { sym: 'ㄖ', type: 'initial', pronounce: 'ㄖ', word: '太陽', emoji: '☀️', pinyin: 'ㄖˋ' },
+      { sym: 'ㄗ', type: 'initial', pronounce: 'ㄗ', word: '寫字', emoji: '✏️', pinyin: 'ㄒㄧㄝˇ ㄗˋ' },
+      { sym: 'ㄘ', type: 'initial', pronounce: 'ㄘ', word: '草莓', emoji: '🍓', pinyin: 'ㄘㄠˇ ㄇㄟˊ' },
+      { sym: 'ㄙ', type: 'initial', pronounce: 'ㄙ', word: '雨傘', emoji: '☂️', pinyin: 'ㄩˇ ㄙㄢˇ' },
+
+      // 介音 (3)
+      { sym: 'ㄧ', type: 'medial', pronounce: '衣', word: '衣服', emoji: '👕', pinyin: 'ㄧ ㄈㄨˊ' },
+      { sym: 'ㄨ', type: 'medial', pronounce: '屋', word: '烏龜', emoji: '🐢', pinyin: 'ㄨ ㄍㄨㄟ' },
+      { sym: 'ㄩ', type: 'medial', pronounce: '魚', word: '小魚', emoji: '🐟', pinyin: 'ㄒㄧㄠˇ ㄩˊ' },
+
+      // 韻母 (13)
+      { sym: 'ㄚ', type: 'final', pronounce: '阿', word: '鴨子', emoji: '🦆', pinyin: 'ㄧㄚ ㄗ˙' },
+      { sym: 'ㄛ', type: 'final', pronounce: '喔', word: '公雞啼', emoji: '🐓', pinyin: 'ㄛ ㄛ 啼' },
+      { sym: 'ㄜ', type: 'final', pronounce: '鵝', word: '白鵝', emoji: '🦢', pinyin: 'ㄅㄞˊ ㄜˊ' },
+      { sym: 'ㄝ', type: 'final', pronounce: '耶', word: '樹葉', emoji: '🍃', pinyin: 'ㄕㄨˋ ㄧㄝˋ' },
+      { sym: 'ㄞ', type: 'final', pronounce: '哀', word: '愛心', emoji: '❤️', pinyin: 'ㄞˋ ㄒㄧㄣ' },
+      { sym: 'ㄟ', type: 'final', pronounce: '杯', word: '水杯', emoji: '🥤', pinyin: 'ㄕㄨㄟˇ ㄅㄟ' },
+      { sym: 'ㄠ', type: 'final', pronounce: '熬', word: '書包', emoji: '🎒', pinyin: 'ㄕㄨ ㄅㄠ' },
+      { sym: 'ㄡ', type: 'final', pronounce: '歐', word: '海鷗', emoji: '🕊️', pinyin: 'ㄏㄞˇ ㄡ' },
+      { sym: 'ㄢ', type: 'final', pronounce: '安', word: '麵包', emoji: '🍞', pinyin: 'ㄇㄧㄢˋ ㄅㄠ' },
+      { sym: 'ㄣ', type: 'final', pronounce: '恩', word: '大門', emoji: '🚪', pinyin: 'ㄉㄚˋ ㄇㄣˊ' },
+      { sym: 'ㄤ', type: 'final', pronounce: '骯', word: '棒棒糖', emoji: '🍭', pinyin: 'ㄅㄤˋ ㄅㄤˋ ㄊㄤˊ' },
+      { sym: 'ㄥ', type: 'final', pronounce: '鞥', word: '蜜蜂', emoji: '🐝', pinyin: 'ㄇㄧˋ ㄈㄥ' },
+      { sym: 'ㄦ', type: 'final', pronounce: '兒', word: '耳朵', emoji: '👂', pinyin: 'ㄦˇ ㄉㄨㄛ˙' }
+    ];
+
+    // 聲調題庫（針對小一常錯的聲調）
+    const TONE_QUESTIONS = [
+      { word: '媽媽', targetChar: '媽', emoji: '👩', base: 'ㄇㄚ', correctTone: '一聲 (陰平)', options: ['ㄇㄚ', 'ㄇㄚˊ', 'ㄇㄚˇ', 'ㄇㄚˋ'], ans: 'ㄇㄚ', hint: '一聲平平高又長 ——' },
+      { word: '小魚', targetChar: '魚', emoji: '🐟', base: 'ㄩ', correctTone: '二聲 (陽平)', options: ['ㄩ', 'ㄩˊ', 'ㄩˇ', 'ㄩˋ'], ans: 'ㄩˊ', hint: '二聲往上爬山坡 ↗' },
+      { word: '小狗', targetChar: '狗', emoji: '🐶', base: 'ㄍㄡ', correctTone: '三聲 (上聲)', options: ['ㄍㄡ', 'ㄍㄡˊ', 'ㄍㄡˇ', 'ㄍㄡˋ'], ans: 'ㄍㄡˇ', hint: '三聲打勾勾 ∨' },
+      { word: '兔子', targetChar: '兔', emoji: '🐰', base: 'ㄊㄨ', correctTone: '四聲 (去聲)', options: ['ㄊㄨ', 'ㄊㄨˊ', 'ㄊㄨˇ', 'ㄊㄨˋ'], ans: 'ㄊㄨˋ', hint: '四聲往下溜滑梯 ↘' },
+      { word: '蘋果', targetChar: '蘋', emoji: '🍎', base: 'ㄆㄧㄥ', correctTone: '二聲 (陽平)', options: ['ㄆㄧㄥ', 'ㄆㄧㄥˊ', 'ㄆㄧㄥˇ', 'ㄆㄧㄥˋ'], ans: 'ㄆㄧㄥˊ', hint: '二聲往上爬山坡 ↗' },
+      { word: '草莓', targetChar: '草', emoji: '🍓', base: 'ㄘㄠ', correctTone: '三聲 (上聲)', options: ['ㄘㄠ', 'ㄘㄠˊ', 'ㄘㄠˇ', 'ㄘㄠˋ'], ans: 'ㄘㄠˇ', hint: '三聲打勾勾 ∨' },
+      { word: '大象', targetChar: '大', emoji: '🐘', base: 'ㄉㄚ', correctTone: '四聲 (去聲)', options: ['ㄉㄚ', 'ㄉㄚˊ', 'ㄉㄚˇ', 'ㄉㄚˋ'], ans: 'ㄉㄚˋ', hint: '四聲往下溜滑梯 ↘' },
+      { word: '桌子', targetChar: '子', emoji: '🪑', base: 'ㄗ', correctTone: '輕聲', options: ['ㄗ', 'ㄗˊ', 'ㄗˇ', 'ㄗ˙'], ans: 'ㄗ˙', hint: '輕聲頭上一顆小圓點 •' }
+    ];
+
+    // 看圖拼注音題庫
+    const SPELL_QUESTIONS = [
+      { word: '貓', fullWord: '貓咪', emoji: '🐱', parts: ['ㄇ', 'ㄠ'], distractors: ['ㄆ', 'ㄡ', 'ㄋ'] },
+      { word: '狗', fullWord: '小狗', emoji: '🐶', parts: ['ㄍ', 'ㄡˇ'], distractors: ['ㄎ', 'ㄠˇ', 'ㄏ'] },
+      { word: '魚', fullWord: '小魚', emoji: '🐟', parts: ['ㄩˊ'], distractors: ['ㄨˊ', 'ㄧˊ', 'ㄩˇ'] },
+      { word: '花', fullWord: '花朵', emoji: '🌸', parts: ['ㄏ', 'ㄨ', 'ㄚ'], distractors: ['ㄎ', 'ㄛ', 'ㄩ'] },
+      { word: '瓜', fullWord: '西瓜', emoji: '🍉', parts: ['ㄍ', 'ㄨ', 'ㄚ'], distractors: ['ㄎ', 'ㄧ', 'ㄚˋ'] },
+      { word: '包', fullWord: '書包', emoji: '🎒', parts: ['ㄅ', 'ㄠ'], distractors: ['ㄆ', 'ㄡ', 'ㄉ'] },
+      { word: '兔', fullWord: '兔子', emoji: '🐰', parts: ['ㄊ', 'ㄨˋ'], distractors: ['ㄉ', 'ㄨˇ', 'ㄋ'] },
+      { word: '鳥', fullWord: '小鳥', emoji: '🐦', parts: ['ㄋ', 'ㄧ', 'ㄠˇ'], distractors: ['ㄌ', 'ㄨ', 'ㄡˇ'] }
+    ];
+
+    // ========= 2. 狀態與音效系統 =========
+    let stars = 0;
+    let streak = 0;
+    let currentMode = 'book';
+    let bookFilter = 'all';
+    let listenFilter = 'all';
+    let currentQuestion = null;
+
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playSound(type) {
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+          osc.start(now);
+          osc.stop(now + 0.45);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(170, now + 0.15);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(600, now);
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+          osc.start(now);
+          osc.stop(now + 0.1);
+        }
+      } catch (e) {}
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'zh-TW';
+      utter.rate = 0.85; // 適合小一學生的語速
+      utter.pitch = 1.1;
+      const voices = window.speechSynthesis.getVoices();
+      const twVoice = voices.find(v => v.lang.includes('zh-TW') || v.name.includes('Meijia') || v.name.includes('Taiwan'));
+      if (twVoice) utter.voice = twVoice;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function addStar(amount = 1) {
+      stars += amount;
+      streak += 1;
+      document.getElementById('starCount').textContent = stars;
+      document.getElementById('streakCount').textContent = streak;
+    }
+
+    function resetStreak() {
+      streak = 0;
+      document.getElementById('streakCount').textContent = streak;
+    }
+
+    function switchMode(mode) {
+      currentMode = mode;
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+      });
+      renderCurrentMode();
+    }
+
+    function renderCurrentMode() {
+      const container = document.getElementById('appContainer');
+      if (currentMode === 'book') renderBookMode(container);
+      else if (currentMode === 'listen') renderListenMode(container);
+      else if (currentMode === 'tone') renderToneMode(container);
+      else if (currentMode === 'spell') renderSpellMode(container);
+      else if (currentMode === 'match') renderMatchMode(container);
+    }
+
+    // ========= 模式 1：注音魔法書 =========
+    function renderBookMode(container) {
+      const filtered = BOPOMOFO_DATA.filter(item => bookFilter === 'all' || item.type === bookFilter);
+      container.innerHTML = `
+        <h2 class="section-title">📖 點一點注音卡片，聽發音學語詞！</h2>
+        <div class="filter-bar">
+          <button class="filter-pill ${bookFilter === 'all' ? 'active' : ''}" onclick="setBookFilter('all')">全部 (37個)</button>
+          <button class="filter-pill ${bookFilter === 'initial' ? 'active' : ''}" onclick="setBookFilter('initial')">🍓 聲母 (21個：ㄅ~ㄙ)</button>
+          <button class="filter-pill ${bookFilter === 'medial' ? 'active' : ''}" onclick="setBookFilter('medial')">🌱 介音 (3個：ㄧㄨㄩ)</button>
+          <button class="filter-pill ${bookFilter === 'final' ? 'active' : ''}" onclick="setBookFilter('final')">💧 韻母 (13個：ㄚ~ㄦ)</button>
+        </div>
+        <div class="bopomofo-grid">
+          ${filtered.map(item => `
+            <div class="bopo-card type-${item.type}" onclick="playCard('${item.sym}', '${item.pronounce}', '${item.word}')">
+              <div class="bopo-symbol">${item.sym}</div>
+              <div class="bopo-emoji">${item.emoji}</div>
+              <div class="bopo-word">${item.word}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function setBookFilter(filter) {
+      bookFilter = filter;
+      renderCurrentMode();
+    }
+
+    function playCard(sym, pronounce, word) {
+      playSound('click');
+      speakText(`${pronounce}，${word}`);
+    }
+
+    // ========= 模式 2：聽音抓抓樂 (含易混淆特訓) =========
+    function renderListenMode(container) {
+      let pool = BOPOMOFO_DATA;
+      if (listenFilter === 'bpdt') {
+        pool = BOPOMOFO_DATA.filter(d => ['ㄅ','ㄆ','ㄉ','ㄊ','ㄋ','ㄌ'].includes(d.sym));
+      } else if (listenFilter === 'retroflex') {
+        pool = BOPOMOFO_DATA.filter(d => ['ㄓ','ㄔ','ㄕ','ㄗ','ㄘ','ㄙ'].includes(d.sym));
+      } else if (listenFilter === 'nasal') {
+        pool = BOPOMOFO_DATA.filter(d => ['ㄢ','ㄣ','ㄤ','ㄥ'].includes(d.sym));
+      }
+
+      const answer = pool[Math.floor(Math.random() * pool.length)];
+      const others = pool.filter(d => d.sym !== answer.sym).sort(() => Math.random() - 0.5).slice(0, 3);
+      const options = [answer, ...others].sort(() => Math.random() - 0.5);
+      currentQuestion = answer;
+
+      container.innerHTML = `
+        <h2 class="section-title">🎧 仔細聽聲音，找出正確的注音符號！</h2>
+        <div class="filter-bar">
+          <button class="filter-pill ${listenFilter === 'all' ? 'active' : ''}" onclick="setListenFilter('all')">🌟 全部 37 音</button>
+          <button class="filter-pill ${listenFilter === 'bpdt' ? 'active' : ''}" onclick="setListenFilter('bpdt')">🔍 易混淆：ㄅㄆ / ㄉㄊ / ㄋㄌ</button>
+          <button class="filter-pill ${listenFilter === 'retroflex' ? 'active' : ''}" onclick="setListenFilter('retroflex')">🔍 易混淆：翹舌 ㄓㄔㄕ vs 平舌 ㄗㄘㄙ</button>
+          <button class="filter-pill ${listenFilter === 'nasal' ? 'active' : ''}" onclick="setListenFilter('nasal')">🔍 易混淆：鼻音 ㄢㄣ vs ㄤㄥ</button>
+        </div>
+        <div class="quiz-stage">
+          <div class="prompt-box">
+            <div style="font-size: 3.4rem; margin-bottom: 10px;">${answer.emoji}</div>
+            <button class="big-speaker-btn" onclick="speakListenPrompt()">
+              🔊 點我聽題目發音
+            </button>
+            <p style="margin: 12px 0 0; color: #555; font-weight:700;">提示詞：${answer.word}</p>
+          </div>
+          <div class="options-grid cols-4">
+            ${options.map(opt => `
+              <button class="option-btn" onclick="checkListenAnswer(this, '${opt.sym}')">
+                <span>${opt.sym}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div id="listenFeedback" class="feedback-toast"></div>
+        </div>
+      `;
+
+      setTimeout(() => speakListenPrompt(), 250);
+    }
+
+    function setListenFilter(f) {
+      listenFilter = f;
+      renderCurrentMode();
+    }
+
+    function speakListenPrompt() {
+      if (!currentQuestion) return;
+      speakText(`請找出，${currentQuestion.pronounce}，${currentQuestion.word} 的 ${currentQuestion.pronounce}`);
+    }
+
+    function checkListenAnswer(btn, chosenSym) {
+      const fb = document.getElementById('listenFeedback');
+      if (chosenSym === currentQuestion.sym) {
+        btn.classList.add('correct');
+        playSound('correct');
+        addStar(1);
+        fb.style.color = '#2d6a4f';
+        fb.textContent = `🎉 太棒了！就是「${currentQuestion.sym}」（${currentQuestion.word}）！`;
+        speakText(`答對了！太棒了！`);
+        setTimeout(() => renderCurrentMode(), 1500);
+      } else {
+        btn.classList.add('wrong');
+        playSound('wrong');
+        resetStreak();
+        fb.style.color = '#e63946';
+        fb.textContent = `💪 差一點點，再聽一次看看喔！`;
+        speakText(`再試一次喔！`);
+      }
+    }
+
+    // ========= 模式 3：聲調雲霄飛車 =========
+    function renderToneMode(container) {
+      const q = TONE_QUESTIONS[Math.floor(Math.random() * TONE_QUESTIONS.length)];
+      currentQuestion = q;
+
+      container.innerHTML = `
+        <h2 class="section-title">🎢 聲調雲霄飛車：分辨一聲、二聲、三聲、四聲與輕聲！</h2>
+        <div class="quiz-stage">
+          <div class="prompt-box">
+            <div style="font-size: 4rem;">${q.emoji}</div>
+            <div style="font-size: 2rem; font-weight: 900; margin: 6px 0;">
+              「${q.word}」的 <span style="color:#e63946; font-size:2.4rem;">${q.targetChar}</span> 是哪一個聲調？
+            </div>
+            <button class="big-speaker-btn" onclick="speakText('${q.word}，${q.targetChar}')">
+              🔊 聽「${q.word}」的發音
+            </button>
+          </div>
+          <div class="options-grid cols-4">
+            ${q.options.map((opt, idx) => {
+              const toneLabels = ['一聲 —', '二聲 ˊ', '三聲 ˇ', '四聲/輕聲'];
+              return `
+                <button class="option-btn" onclick="checkToneAnswer(this, '${opt}')">
+                  <span>${opt}</span>
+                  <span class="option-sub">${toneLabels[idx]}</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
+          <div id="toneFeedback" class="feedback-toast"></div>
+        </div>
+      `;
+
+      setTimeout(() => speakText(`${q.word}，請問 ${q.targetChar} 是哪一個注音呢？`), 250);
+    }
+
+    function checkToneAnswer(btn, chosen) {
+      const fb = document.getElementById('toneFeedback');
+      if (chosen === currentQuestion.ans) {
+        btn.classList.add('correct');
+        playSound('correct');
+        addStar(1);
+        fb.style.color = '#2d6a4f';
+        fb.textContent = `🎉 答對囉！${currentQuestion.hint}`;
+        speakText(`答對囉！${currentQuestion.targetChar} 是 ${currentQuestion.correctTone}`);
+        setTimeout(() => renderCurrentMode(), 1700);
+      } else {
+        btn.classList.add('wrong');
+        playSound('wrong');
+        resetStreak();
+        fb.style.color = '#e63946';
+        fb.textContent = `💡 小提示：${currentQuestion.hint}`;
+        speakText(`再聽一次看看喔，${currentQuestion.word}`);
+      }
+    }
+
+    // ========= 模式 4：看圖拼注音 =========
+    let spellProgress = [];
+
+    function renderSpellMode(container) {
+      const q = SPELL_QUESTIONS[Math.floor(Math.random() * SPELL_QUESTIONS.length)];
+      currentQuestion = q;
+      spellProgress = [];
+
+      const pool = [...q.parts, ...q.distractors].sort(() => Math.random() - 0.5);
+
+      container.innerHTML = `
+        <h2 class="section-title">🧩 拼音小達人：按照順序點選注音，拼出圖片的讀音！</h2>
+        <div class="quiz-stage">
+          <div class="prompt-box">
+            <div style="font-size: 4.2rem;">${q.emoji}</div>
+            <div style="font-size: 1.9rem; font-weight: 900; margin: 8px 0;">
+              請拼出「${q.fullWord}」的 <span style="color:#ff6b6b;font-size:2.3rem;">${q.word}</span>
+            </div>
+            <button class="big-speaker-btn" onclick="speakText('${q.fullWord}，${q.word}')">
+              🔊 聽發音提示
+            </button>
+          </div>
+
+          <div class="spell-slots" id="spellSlots">
+            ${q.parts.map((_, i) => `
+              <div class="spell-slot" id="slot-${i}">
+                <span>?</span>
+                <span class="slot-label">第 ${i + 1} 格</span>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="choice-pool">
+            ${pool.map(sym => `
+              <button class="pool-chip" onclick="pickSpellPart(this, '${sym}')">${sym}</button>
+            `).join('')}
+          </div>
+
+          <div id="spellFeedback" class="feedback-toast"></div>
+        </div>
+      `;
+
+      setTimeout(() => speakText(`請拼出，${q.fullWord} 的 ${q.word}`), 250);
+    }
+
+    function pickSpellPart(btn, sym) {
+      const neededIdx = spellProgress.length;
+      const expected = currentQuestion.parts[neededIdx];
+      const fb = document.getElementById('spellFeedback');
+
+      if (sym === expected) {
+        playSound('correct');
+        spellProgress.push(sym);
+        const slot = document.getElementById(`slot-${neededIdx}`);
+        slot.classList.add('filled');
+        slot.innerHTML = `<span>${sym}</span>`;
+        btn.style.visibility = 'hidden';
+
+        if (spellProgress.length === currentQuestion.parts.length) {
+          addStar(2);
+          fb.style.color = '#2d6a4f';
+          fb.textContent = `🎉 恭喜拼成功！「${currentQuestion.parts.join('')}」＝ ${currentQuestion.word}！`;
+          speakText(`太厲害了！${currentQuestion.fullWord}`);
+          setTimeout(() => renderCurrentMode(), 1700);
+        } else {
+          fb.style.color = '#0096c7';
+          fb.textContent = `👍 很好！繼續選下一個注音符號！`;
+        }
+      } else {
+        playSound('wrong');
+        resetStreak();
+        fb.style.color = '#e63946';
+        fb.textContent = `🤔 順序或符號不對喔，再試試看！`;
+        speakText(`再試試看喔`);
+      }
+    }
+
+    // ========= 模式 5：記憶翻翻樂 =========
+    let flippedCards = [];
+    let matchedCount = 0;
+    let lockBoard = false;
+
+    function renderMatchMode(container) {
+      flippedCards = [];
+      matchedCount = 0;
+      lockBoard = false;
+
+      const sample = [...BOPOMOFO_DATA].sort(() => Math.random() - 0.5).slice(0, 4);
+      const deck = [];
+      sample.forEach((item, idx) => {
+        deck.push({ pairId: idx, display: item.sym, sub: '注音', speak: item.pronounce });
+        deck.push({ pairId: idx, display: item.emoji, sub: item.word, speak: item.word });
+      });
+      deck.sort(() => Math.random() - 0.5);
+
+      container.innerHTML = `
+        <h2 class="section-title">🃏 注音記憶翻翻樂：找出配對的「注音符號」與「圖案」！</h2>
+        <div class="memory-grid">
+          ${deck.map((card, i) => `
+            <div class="mem-card" id="mem-${i}" data-pair="${card.pairId}" data-display="${card.display}" data-sub="${card.sub}" data-speak="${card.speak}" onclick="flipMemCard(this)">
+              ❓
+            </div>
+          `).join('')}
+        </div>
+        <div id="matchFeedback" class="feedback-toast" style="margin-top:20px;">點擊卡片翻開配對吧！</div>
+      `;
+    }
+
+    function flipMemCard(cardEl) {
+      if (lockBoard || cardEl.classList.contains('flipped') || cardEl.classList.contains('matched')) return;
+
+      playSound('click');
+      cardEl.classList.add('flipped');
+      cardEl.innerHTML = `<div>${cardEl.dataset.display}</div><div style="font-size:0.95rem;color:#555;">${cardEl.dataset.sub}</div>`;
+      speakText(cardEl.dataset.speak);
+      flippedCards.push(cardEl);
+
+      if (flippedCards.length === 2) {
+        lockBoard = true;
+        const [c1, c2] = flippedCards;
+        const fb = document.getElementById('matchFeedback');
+
+        if (c1.dataset.pair === c2.dataset.pair) {
+          setTimeout(() => {
+            c1.classList.add('matched');
+            c2.classList.add('matched');
+            playSound('correct');
+            addStar(1);
+            matchedCount += 1;
+            flippedCards = [];
+            lockBoard = false;
+
+            if (matchedCount === 4) {
+              fb.style.color = '#2d6a4f';
+              fb.textContent = '🎊 全部配對成功！獲得大星星獎勵！';
+              speakText('恭喜全部配對成功！再玩一局吧！');
+              setTimeout(() => renderCurrentMode(), 2000);
+            } else {
+              fb.style.color = '#2d6a4f';
+              fb.textContent = '✨ 配對成功！繼續加油！';
+            }
+          }, 350);
+        } else {
+          setTimeout(() => {
+            playSound('wrong');
+            c1.classList.remove('flipped');
+            c2.classList.remove('flipped');
+            c1.innerHTML = '❓';
+            c2.innerHTML = '❓';
+            flippedCards = [];
+            lockBoard = false;
+            fb.style.color = '#e63946';
+            fb.textContent = '💭 不一樣喔，記住位置再試一次！';
+          }, 950);
+        }
+      }
+    }
+
+    function openShareModal() {
+      const publicUrl = 'https://a0930799617-maker.github.io/bopomofo-game/';
+      document.getElementById('shareUrlText').textContent = publicUrl;
+      document.getElementById('qrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(publicUrl);
+      document.getElementById('shareModal').style.display = 'flex';
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').style.display = 'none';
+    }
+
+    function copyGameUrl() {
+      const publicUrl = 'https://a0930799617-maker.github.io/bopomofo-game/';
+      navigator.clipboard.writeText(publicUrl).then(() => {
+        const btn = document.getElementById('copyUrlBtn');
+        btn.textContent = '✅ 已複製網址！可直接貼到 LINE 分享';
+        btn.style.background = '#06d6a0';
+        setTimeout(() => {
+          btn.textContent = '📋 點此複製遊戲網址';
+          btn.style.background = '#00bbf9';
+        }, 2500);
+      });
+    }
+
+    // 初始化載入
+    window.addEventListener('DOMContentLoaded', () => {
+      renderCurrentMode();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+    });
+  </script>
+</body>
+</html>
