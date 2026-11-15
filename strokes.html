@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>康軒小一分課生字筆順練習館 - 國語一上・一下平板互動描紅</title>
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #eef7ff 0%, #fff9e6 50%, #fef0f5 100%);
+      --primary: #ff6b6b;
+      --secondary: #2ec4b6;
+      --purple: #7209b7;
+      --blue: #2563eb;
+      --green: #06d6a0;
+      --orange: #f77f00;
+      --gold: #ffbe0b;
+      --text-dark: #2b2d42;
+      --card-shadow: 0 10px 24px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.05);
+      --font-kai: "DFKai-SB", "BiauKai", "標楷體", "Kaiti TC", "PingFang TC", "Microsoft JhengHei", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Top Portal Switch Bar */
+    .top-portal-bar {
+      width: 100%;
+      background: #2b2d42;
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+      flex-wrap: wrap;
+    }
+
+    .portal-link {
+      color: #ffe66d;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255,255,255,0.13);
+      padding: 5px 14px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .portal-link:hover {
+      background: rgba(255,255,255,0.26);
+      transform: translateY(-1px);
+    }
+
+    .portal-link.current {
+      background: #ffe66d;
+      color: #2b2d42;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1140px;
+      padding: 14px 20px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 10px 22px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      border: 3px solid #fff;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.48rem;
+      background: linear-gradient(90deg, #2563eb, #7209b7, #f77f00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    .score-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      padding: 8px 18px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      font-size: 1.08rem;
+      font-weight: 800;
+      flex-wrap: wrap;
+    }
+
+    .star-badge { color: #f4a261; display: flex; align-items: center; gap: 4px; }
+    .done-badge { color: #06d6a0; display: flex; align-items: center; gap: 4px; }
+
+    /* Semester Tabs */
+    .semester-tabs {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 8px 16px 12px;
+    }
+
+    .sem-btn {
+      border: none;
+      background: #fff;
+      color: var(--text-dark);
+      padding: 12px 24px;
+      border-radius: 22px;
+      font-size: 1.12rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #d9d9d9, 0 8px 15px rgba(0,0,0,0.08);
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sem-btn:hover { transform: translateY(-2px); }
+    .sem-btn:active { transform: translateY(3px); box-shadow: 0 2px 0 #d9d9d9; }
+
+    .sem-btn.active[data-sem="1a"] {
+      background: linear-gradient(135deg, #06d6a0, #05b384);
+      color: #fff;
+      box-shadow: 0 5px 0 #037f5d, 0 8px 18px rgba(6,214,160,0.3);
+    }
+
+    .sem-btn.active[data-sem="1b"] {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 5px 0 #1e3a8a, 0 8px 18px rgba(37,99,235,0.3);
+    }
+
+    /* Main Workspace Card */
+    main {
+      width: 96%;
+      max-width: 1120px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 22px 24px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.09);
+      border: 4px solid #fff;
+      margin-bottom: 24px;
+    }
+
+    /* Lesson Pills */
+    .lesson-bar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 2px dashed #e9ecef;
+    }
+
+    .lesson-pill {
+      padding: 8px 15px;
+      border-radius: 50px;
+      border: 2px solid #dee2e6;
+      background: #fff;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .lesson-pill:hover {
+      border-color: var(--blue);
+      background: #f0f7ff;
+    }
+
+    .lesson-pill.active {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(37,99,235,0.28);
+      transform: scale(1.03);
+    }
+
+    /* Character Selector Strip */
+    .char-strip-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .lesson-badge-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #1d3557;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .char-strip {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #f8f9fa;
+      padding: 12px;
+      border-radius: 22px;
+      margin-bottom: 20px;
+      border: 2px solid #edf2f7;
+    }
+
+    .char-mini-btn {
+      width: 68px;
+      height: 78px;
+      border-radius: 16px;
+      border: 3px solid #dee2e6;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      position: relative;
+      padding: 4px;
+      box-shadow: 0 4px 0 #e2e8f0;
+    }
+
+    .char-mini-btn:hover {
+      transform: translateY(-2px);
+      border-color: #90caf9;
+    }
+
+    .char-mini-btn.active {
+      border-color: #ff6b6b;
+      background: #fff0f3;
+      box-shadow: 0 4px 0 #ff6b6b;
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .char-mini-btn.practiced::after {
+      content: "⭐";
+      position: absolute;
+      top: -7px;
+      right: -7px;
+      font-size: 0.95rem;
+      background: #fff;
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .char-mini-kanji {
+      font-family: var(--font-kai);
+      font-size: 1.95rem;
+      font-weight: 700;
+      line-height: 1.05;
+      color: #1d3557;
+    }
+
+    .char-mini-zy {
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #e63946;
+      margin-top: 2px;
+      white-space: nowrap;
+    }
+
+    /* Practice Grid: Left = Tianzige Pad, Right = Info & Actions */
+    .practice-grid {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 26px;
+      align-items: start;
+    }
+
+    @media (max-width: 860px) {
+      .practice-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Left Column: Writing Pad Container */
+    .pad-card {
+      background: linear-gradient(145deg, #fffdf9, #fff8eb);
+      border: 3px solid #ffe5b4;
+      border-radius: 28px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--card-shadow);
+    }
+
+    .pad-mode-switch {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .pad-mode-btn {
+      flex: 1;
+      padding: 8px 10px;
+      border-radius: 14px;
+      border: 2px solid #ddd;
+      background: #fff;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .pad-mode-btn.active {
+      background: #7209b7;
+      color: #fff;
+      border-color: #7209b7;
+    }
+
+    /* Large TianZiGe (米字格/田字格) */
+    .tianzige-stage {
+      width: 300px;
+      height: 300px;
+      border: 4px solid #e63946;
+      border-radius: 18px;
+      background: #fffefb;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 12px rgba(230,57,70,0.06);
+      touch-action: none;
+      overflow: hidden;
+    }
+
+    .tianzige-grid-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    #hanziWriterTarget {
+      position: relative;
+      z-index: 2;
+      width: 300px;
+      height: 300px;
+      touch-action: none;
+    }
+
+    /* Freehand Canvas Mode */
+    #freehandWrapper {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .freehand-ghost-char {
+      font-family: var(--font-kai);
+      font-size: 240px;
+      color: rgba(29, 53, 87, 0.16);
+      line-height: 1;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #freehandCanvas {
+      position: absolute;
+      inset: 0;
+      width: 300px;
+      height: 300px;
+      touch-action: none;
+      cursor: crosshair;
+    }
+
+    .stroke-status-bar {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #2b2d42;
+      min-height: 30px;
+      text-align: center;
+      padding: 4px 12px;
+      border-radius: 12px;
+      background: #fff;
+      border: 2px solid #f1f3f5;
+      width: 100%;
+    }
+
+    .pad-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .ctrl-btn {
+      border: none;
+      padding: 11px 14px;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.12s;
+      color: #fff;
+    }
+
+    .ctrl-btn:active { transform: translateY(3px); }
+    .ctrl-btn.animate { background: #2563eb; box-shadow: 0 4px 0 #1e40af; }
+    .ctrl-btn.quiz { background: #f77f00; box-shadow: 0 4px 0 #b45309; }
+    .ctrl-btn.hint { background: #8338ec; box-shadow: 0 4px 0 #5a189a; }
+    .ctrl-btn.speak { background: #06d6a0; box-shadow: 0 4px 0 #049a73; }
+
+    .nav-prev-next {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .nav-char-btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 14px;
+      border: 2px solid #ced4da;
+      background: #fff;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .nav-char-btn:hover {
+      background: #f1f3f5;
+    }
+
+    /* Right Column: Character Info & MOE Official Links */
+    .info-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .char-hero-box {
+      background: linear-gradient(135deg, #f8faff 0%, #fff5f8 100%);
+      border: 3px solid #e2e8f0;
+      border-radius: 26px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .char-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .char-title-group {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .big-kai-preview {
+      font-family: var(--font-kai);
+      font-size: 4rem;
+      font-weight: 700;
+      color: #1d3557;
+      background: #fff;
+      width: 86px;
+      height: 86px;
+      border-radius: 20px;
+      border: 3px solid #ffccd5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .meta-badges {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .zhuyin-pill {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: #e63946;
+      background: #fff0f3;
+      padding: 4px 16px;
+      border-radius: 50px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 2px solid #ffccd5;
+    }
+
+    .stroke-meta-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      background: #e7f0ff;
+      color: #1e40af;
+      font-weight: 800;
+      font-size: 0.92rem;
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+
+    .words-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px 20px;
+      border: 2px solid #edf2f7;
+    }
+
+    .words-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #6c757d;
+      margin-bottom: 8px;
+    }
+
+    .word-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .word-chip {
+      background: #fff9db;
+      border: 2px solid #ffec99;
+      color: #5c3d00;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s;
+    }
+
+    .word-chip:hover {
+      transform: scale(1.04);
+      background: #fff3bf;
+    }
+
+    /* Step-by-step Stroke Order Progression Bar */
+    .stroke-order-box {
+      background: #fff;
+      border-radius: 20px;
+      padding: 16px 20px;
+      border: 2px solid #edf2f7;
+    }
+
+    .stroke-steps-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+      align-items: center;
+    }
+
+    .step-mini-box {
+      width: 54px;
+      height: 54px;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      background: #fffdf9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .step-num-badge {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      font-size: 0.68rem;
+      font-weight: 900;
+      color: #888;
+    }
+
+    /* Official MOE & External Links Box */
+    .moe-links-box {
+      background: linear-gradient(135deg, #eef7ff, #f3e8ff);
+      border: 2px dashed #7209b7;
+      border-radius: 22px;
+      padding: 16px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .moe-btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .moe-link-btn {
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.96rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      transition: transform 0.15s;
+    }
+
+    .moe-link-btn:hover { transform: translateY(-2px); }
+    .moe-link-btn.primary { background: #1d3557; box-shadow: 0 4px 0 #0f172a; }
+    .moe-link-btn.secondary { background: #7209b7; box-shadow: 0 4px 0 #4c1d95; }
+    .moe-link-btn.gsyan { background: #047857; box-shadow: 0 4px 0 #064e3b; }
+
+    .teacher-bar {
+      max-width: 1120px;
+      width: 96%;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 16px 24px;
+      margin-bottom: 30px;
+      font-size: 0.96rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Portal Navigation Bar -->
+  <div class="top-portal-bar">
+    <span>🎒 小一國語文快樂學系列：</span>
+    <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
+    <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
+    <a class="portal-link current" href="strokes.html">✍️ 目前所在：《康軒分課生字筆順練習館》</a>
+  </div>
+
+  <header>
+    <div class="brand">
+      <span style="font-size: 2.1rem;">✍️</span>
+      <h1>康軒小一分課生字筆順練習館</h1>
+    </div>
+    <div class="score-bar">
+      <div class="star-badge">⭐ 筆順星星：<span id="starCount">0</span></div>
+      <div class="done-badge">✅ 已練生字：<span id="doneCount">0</span> 字</div>
+      <button onclick="openLessonShareModal()" style="border:none;background:#06d6a0;color:#fff;padding:8px 16px;border-radius:20px;font-weight:800;cursor:pointer;box-shadow:0 3px 0 #049a73;">📲 派發本課 QR Code</button>
+    </div>
+  </header>
+
+  <!-- Share Lesson QR Code Modal -->
+  <div id="shareModal" onclick="if(event.target===this)closeShareModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:#fff;border-radius:28px;max-width:460px;width:100%;padding:26px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.25);position:relative;">
+      <button onclick="closeShareModal()" style="position:absolute;top:14px;right:18px;border:none;background:#f0f0f0;border-radius:50%;width:36px;height:36px;font-size:1.2rem;cursor:pointer;font-weight:bold;">✕</button>
+      <h3 style="margin:0 0 6px;font-size:1.35rem;color:#2b2d42;" id="modalLessonTitle">📲 掃描練習本課生字筆順</h3>
+      <p style="margin:0 0 14px;color:#555;font-size:0.93rem;">學生用平板掃描下方 QR Code，即可直接打開<strong>這一課</strong>的生字筆順練習：</p>
+      <img id="qrImage" src="" alt="本課筆順練習 QR Code" style="width:210px;height:210px;border:4px solid #2563eb;border-radius:18px;padding:8px;background:#fff;" />
+      <div style="margin:12px 0;background:#f8f9fa;padding:10px 12px;border-radius:12px;font-size:0.85rem;word-break:break-all;font-weight:700;color:#1d4ed8;" id="shareUrlText"></div>
+      <div style="display:flex;gap:8px;flex-direction:column;">
+        <button onclick="copyShareUrl()" id="copyUrlBtn" style="border:none;background:#2563eb;color:#fff;padding:12px 20px;border-radius:50px;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1e40af;width:100%;">📋 複製「本課專屬」練習網址</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Semester Switcher -->
+  <div class="semester-tabs">
+    <button class="sem-btn active" data-sem="1a" onclick="selectSemester('1a')">
+      🟢 康軒一上（第一冊：第 1～6 課）
+    </button>
+    <button class="sem-btn" data-sem="1b" onclick="selectSemester('1b')">
+      🔵 康軒一下（第二冊：第 1～12 課）
+    </button>
+  </div>
+
+  <main>
+    <!-- Lesson Selector Pills -->
+    <div class="lesson-bar" id="lessonBar"></div>
+
+    <!-- Current Lesson Character Strip -->
+    <div class="char-strip-header">
+      <div class="lesson-badge-title" id="currentLessonHeader"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button onclick="speakCurrentLessonWords()" style="border:none;background:#ffbe0b;color:#2b2d42;padding:7px 14px;border-radius:50px;font-weight:800;cursor:pointer;">🔊 朗讀本課全部生字</button>
+        <button onclick="openLessonShareModal()" style="border:none;background:#e7f0ff;color:#1d4ed8;padding:7px 14px;border-radius:50px;font-weight:800;cursor:pointer;">🔗 取得本課連結</button>
+      </div>
+    </div>
+    <div class="char-strip" id="charStrip"></div>
+
+    <!-- Main Interactive Practice Area -->
+    <div class="practice-grid">
+      <!-- Left: Tablet Touch TianZiGe -->
+      <div class="pad-card">
+        <div class="pad-mode-switch">
+          <button class="pad-mode-btn active" id="modeQuizBtn" onclick="setPadMode('hanzi')">🎯 智慧筆順跟寫</button>
+          <button class="pad-mode-btn" id="modeFreeBtn" onclick="setPadMode('free')">🖌️ 自由描紅手寫板</button>
+        </div>
+
+        <div class="tianzige-stage">
+          <!-- Standard TianZiGe + MiZiGe Guidelines -->
+          <svg class="tianzige-grid-svg" viewBox="0 0 300 300">
+            <line x1="150" y1="0" x2="150" y2="300" stroke="#f4a261" stroke-width="2" stroke-dasharray="7,5" />
+            <line x1="0" y1="150" x2="300" y2="150" stroke="#f4a261" stroke-width="2" stroke-dasharray="7,5" />
+            <line x1="0" y1="0" x2="300" y2="300" stroke="#fde2e4" stroke-width="1.5" stroke-dasharray="5,5" />
+            <line x1="300" y1="0" x2="0" y2="300" stroke="#fde2e4" stroke-width="1.5" stroke-dasharray="5,5" />
+          </svg>
+
+          <!-- HanziWriter Interactive Target -->
+          <div id="hanziWriterTarget"></div>
+
+          <!-- Freehand Tracing Fallback / Practice Layer -->
+          <div id="freehandWrapper">
+            <div class="freehand-ghost-char" id="freehandGhostChar">拍</div>
+            <canvas id="freehandCanvas" width="300" height="300"></canvas>
+          </div>
+        </div>
+
+        <div class="stroke-status-bar" id="strokeStatusText">
+          👆 請用手指或觸控筆在田字格裡依筆順描寫！
+        </div>
+
+        <!-- Controls for HanziWriter Mode -->
+        <div class="pad-controls" id="hanziControls">
+          <button class="ctrl-btn animate" onclick="animateCurrentChar()">▶️ 筆順動畫示範</button>
+          <button class="ctrl-btn quiz" onclick="startStrokeQuiz()">✍️ 重新描紅測驗</button>
+          <button class="ctrl-btn hint" onclick="giveStrokeHint()">💡 提示下一筆</button>
+          <button class="ctrl-btn speak" onclick="speakCurrentCharDetail()">🔊 聽發音與造詞</button>
+        </div>
+
+        <!-- Controls for Freehand Mode -->
+        <div class="pad-controls" id="freehandControls" style="display:none;">
+          <button class="ctrl-btn quiz" onclick="clearFreehandCanvas()">🧹 擦掉重寫</button>
+          <button class="ctrl-btn animate" onclick="completeFreehandPractice()">✅ 我寫好了（加星星）</button>
+        </div>
+
+        <div class="nav-prev-next">
+          <button class="nav-char-btn" onclick="stepChar(-1)">⬅️ 上一個生字</button>
+          <button class="nav-char-btn" onclick="stepChar(1)">下一個生字 ➡️</button>
+        </div>
+      </div>
+
+      <!-- Right: Character Details, Step-by-step Strokes & Official MOE Links -->
+      <div class="info-panel">
+        <div class="char-hero-box">
+          <div class="char-header-row">
+            <div class="char-title-group">
+              <div class="big-kai-preview" id="infoBigChar">拍</div>
+              <div class="meta-badges">
+                <div class="zhuyin-pill">
+                  <span id="infoZhuyin">ㄆㄞ</span>
+                  <span id="infoEmoji" style="font-size:1.5rem;">👏</span>
+                </div>
+                <div class="stroke-meta-row">
+                  <span class="meta-tag" id="infoRadical">部首：手部 (扌)</span>
+                  <span class="meta-tag" id="infoStrokeCount">總筆畫：8 畫</span>
+                </div>
+              </div>
+            </div>
+            <button onclick="speakCurrentCharDetail()" style="border:none;background:#2563eb;color:#fff;padding:12px 20px;border-radius:50px;font-size:1.05rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1e40af;">
+              🔊 點此聽國字與造詞
+            </button>
+          </div>
+
+          <div class="words-card">
+            <div class="words-title">📘 課本與生活常見造詞（點擊語詞可聽發音）：</div>
+            <div class="word-chips" id="infoWordChips"></div>
+          </div>
+
+          <div class="stroke-order-box">
+            <div class="words-title" style="display:flex;justify-content:space-between;align-items:center;">
+              <span>✏️ 一筆一畫分解圖（由左至右依序書寫）：</span>
+              <span id="strokeProgressLabel" style="color:#2563eb;font-weight:900;"></span>
+            </div>
+            <div class="stroke-steps-row" id="strokeStepsRow">
+              <span style="color:#888;font-size:0.9rem;">載入筆順分解圖中...</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Direct Links to MOE Official Stroke Order & External Tools -->
+        <div class="moe-links-box">
+          <div style="font-weight:900;color:#2b2d42;font-size:1.02rem;">
+            🏛️ 教育部標準筆順與外部延伸資源（點擊直接開啟該字／該課）：
+          </div>
+          <div class="moe-btn-row">
+            <a id="moeSingleLink" class="moe-link-btn primary" href="https://stroke-order.learningweb.moe.edu.tw/characterQueryResult.do?word=%E6%8B%8D" target="_blank" rel="noopener">
+              🏛️ 教育部標準筆順網（查看「<span id="moeCharSpan">拍</span>」）
+            </a>
+            <a id="willhLink" class="moe-link-btn secondary" href="https://stroke.gh.miniasp.com/" target="_blank" rel="noopener">
+              🏆 保哥標準筆順練習網
+            </a>
+            <a id="gsyanLink" class="moe-link-btn gsyan" href="https://gsyan888.blogspot.com/2021/05/blog-post.html" target="_blank" rel="noopener">
+              📚 雄老師分課筆順選單
+            </a>
+          </div>
+          <div style="font-size:0.86rem;color:#555;">
+            💡 小提示：老師可點擊右上角「📲 派發本課 QR Code」，將本課專屬網址貼給學生，學生在平板點開就會直接鎖定在這一課喔！
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="teacher-bar">
+    <strong>👩‍🏫 康軒小一國語（108課綱）分課筆順教學指南：</strong>
+    <span>
+      本館完整收錄<strong>康軒版一年級上學期（第 1～6 課）</strong>與<strong>一年級下學期（第 1～12 課）</strong>核心生字。
+      支援平板觸控筆與手指直接進行「🎯 智慧筆順跟寫」（寫錯筆畫或順序會即時溫柔提示）與「🖌️ 自由描紅手寫板」，並附有「一筆一畫分解圖」及「🏛️ 教育部標準字體筆順學習網」一鍵直達按鈕。
+    </span>
+  </section>
+
+  <script>
+    // ========= 1. 康軒版小一（一上 1~6 課 ＋ 一下 1~12 課）完整生字資料庫 =========
+    const KANG_HSUAN_DATA = {
+      '1a': {
+        name: '一年級上學期（一上）',
+        lessons: [
+          {
+            lesson: 1,
+            title: '拍拍手',
+            chars: [
+              { char: '拍', zhuyin: 'ㄆㄞ', radical: '手部 (扌)', emoji: '👏', words: ['拍手', '拍拍手', '拍球'] },
+              { char: '手', zhuyin: 'ㄕㄡˇ', radical: '手部', emoji: '✋', words: ['小手', '拍手', '手拉手'] },
+              { char: '大', zhuyin: 'ㄉㄚˋ', radical: '大部', emoji: '🐘', words: ['大小', '大人', '大聲'] },
+              { char: '小', zhuyin: 'ㄒㄧㄠˇ', radical: '小部', emoji: '🐣', words: ['小鳥', '大小', '小手'] },
+              { char: '你', zhuyin: 'ㄋㄧˇ', radical: '人部 (亻)', emoji: '🫵', words: ['你好', '你們', '謝謝你'] },
+              { char: '我', zhuyin: 'ㄨㄛˇ', radical: '戈部', emoji: '🙋', words: ['我們', '我的', '你我'] },
+              { char: '好', zhuyin: 'ㄏㄠˇ', radical: '女部', emoji: '👍', words: ['你好', '好人', '好朋友'] },
+              { char: '朋', zhuyin: 'ㄆㄥˊ', radical: '月部', emoji: '👫', words: ['朋友', '好朋友', '小朋友'] },
+              { char: '友', zhuyin: 'ㄧㄡˇ', radical: '又部', emoji: '🤝', words: ['朋友', '友善', '友愛'] }
+            ]
+          },
+          {
+            lesson: 2,
+            title: '這是誰的？',
+            chars: [
+              { char: '這', zhuyin: 'ㄓㄜˋ', radical: '辵部 (辶)', emoji: '👇', words: ['這是', '這裡', '這個'] },
+              { char: '是', zhuyin: 'ㄕˋ', radical: '日部', emoji: '⭕', words: ['這是', '是不是', '也是'] },
+              { char: '誰', zhuyin: 'ㄕㄨㄟˊ', radical: '言部', emoji: '❓', words: ['是誰', '誰的', '誰家'] },
+              { char: '的', zhuyin: 'ㄉㄜ˙', radical: '白部', emoji: '🎀', words: ['我的', '誰的', '好的'] },
+              { char: '他', zhuyin: 'ㄊㄚ', radical: '人部 (亻)', emoji: '👦', words: ['他們', '他的', '他人'] },
+              { char: '們', zhuyin: 'ㄇㄣ˙', radical: '人部 (亻)', emoji: '👨‍👩‍👧', words: ['我們', '他們', '你們'] },
+              { char: '看', zhuyin: 'ㄎㄢˋ', radical: '目部', emoji: '👀', words: ['看見', '看書', '好看'] },
+              { char: '見', zhuyin: 'ㄐㄧㄢˋ', radical: '見部', emoji: '👁️', words: ['看見', '再見', '聽見'] },
+              { char: '快', zhuyin: 'ㄎㄨㄞˋ', radical: '心部 (忄)', emoji: '🏃', words: ['快樂', '快跑', '很快'] },
+              { char: '樂', zhuyin: 'ㄌㄜˋ', radical: '木部', emoji: '😄', words: ['快樂', '笑呵呵', '樂意'] }
+            ]
+          },
+          {
+            lesson: 3,
+            title: '秋千',
+            chars: [
+              { char: '秋', zhuyin: 'ㄑㄧㄡ', radical: '禾部', emoji: '🍂', words: ['秋千', '秋天', '秋季'] },
+              { char: '千', zhuyin: 'ㄑㄧㄢ', radical: '十部', emoji: '🎠', words: ['秋千', '千萬', '一千'] },
+              { char: '陪', zhuyin: 'ㄆㄟˊ', radical: '阜部 (阝)', emoji: '🤗', words: ['陪伴', '陪我', '陪著'] },
+              { char: '玩', zhuyin: 'ㄨㄢˊ', radical: '玉部 (王)', emoji: '🧸', words: ['玩具', '好玩', '出去玩'] },
+              { char: '高', zhuyin: 'ㄍㄠ', radical: '高部', emoji: '🦒', words: ['高山', '長高', '高興'] },
+              { char: '山', zhuyin: 'ㄕㄢ', radical: '山部', emoji: '⛰️', words: ['高山', '山上', '爬山'] },
+              { char: '海', zhuyin: 'ㄏㄞˇ', radical: '水部 (氵)', emoji: '🌊', words: ['大海', '海邊', '海水'] },
+              { char: '飛', zhuyin: 'ㄈㄟ', radical: '飛部', emoji: '🕊️', words: ['起飛', '飛高', '飛機'] },
+              { char: '起', zhuyin: 'ㄑㄧˇ', radical: '走部', emoji: '⬆️', words: ['起來', '一起', '起飛'] },
+              { char: '來', zhuyin: 'ㄌㄞˊ', radical: '人部', emoji: '👋', words: ['起來', '回來', '出來'] }
+            ]
+          },
+          {
+            lesson: 4,
+            title: '大個子，小個子',
+            chars: [
+              { char: '個', zhuyin: 'ㄍㄜˋ', radical: '人部 (亻)', emoji: '🧍', words: ['大個子', '小個子', '一個'] },
+              { char: '子', zhuyin: 'ㄗˇ', radical: '子部', emoji: '👶', words: ['個子', '孩子', '種子'] },
+              { char: '上', zhuyin: 'ㄕㄤˋ', radical: '一部', emoji: '⬆️', words: ['上課', '上學', '山上'] },
+              { char: '課', zhuyin: 'ㄎㄜˋ', radical: '言部', emoji: '📖', words: ['上課', '下課', '課本'] },
+              { char: '兩', zhuyin: 'ㄌㄧㄤˇ', radical: '入部', emoji: '✌️', words: ['兩個人', '兩個', '兩隻'] },
+              { char: '人', zhuyin: 'ㄖㄣˊ', radical: '人部', emoji: '🧑', words: ['大人', '好人', '兩個人'] },
+              { char: '左', zhuyin: 'ㄗㄨㄛˇ', radical: '工部', emoji: '👈', words: ['左邊', '左手', '左右'] },
+              { char: '右', zhuyin: 'ㄧㄡˋ', radical: '口部', emoji: '👉', words: ['右邊', '右手', '左右'] },
+              { char: '找', zhuyin: 'ㄓㄠˇ', radical: '手部 (扌)', emoji: '🔍', words: ['找到', '找朋友', '找一找'] },
+              { char: '青', zhuyin: 'ㄑㄧㄥ', radical: '青部', emoji: '🌿', words: ['青蛙', '青草', '青山'] },
+              { char: '蛙', zhuyin: 'ㄨㄚ', radical: '虫部', emoji: '🐸', words: ['青蛙', '樹蛙', '小蛙'] }
+            ]
+          },
+          {
+            lesson: 5,
+            title: '比一比',
+            chars: [
+              { char: '比', zhuyin: 'ㄅㄧˇ', radical: '比部', emoji: '⚖️', words: ['比一比', '比賽', '比較'] },
+              { char: '一', zhuyin: 'ㄧ', radical: '一部', emoji: '1️⃣', words: ['一個', '一起', '比一比'] },
+              { char: '門', zhuyin: 'ㄇㄣˊ', radical: '門部', emoji: '🚪', words: ['大門', '門口', '出門'] },
+              { char: '裡', zhuyin: 'ㄌㄧˇ', radical: '衣部 (衤)', emoji: '🏠', words: ['門裡', '裡面', '家裡'] },
+              { char: '外', zhuyin: 'ㄨㄞˋ', radical: '夕部', emoji: '🌳', words: ['門外', '外面', '外頭'] },
+              { char: '早', zhuyin: 'ㄗㄠˇ', radical: '日部', emoji: '🌅', words: ['早上', '早安', '一早'] },
+              { char: '晚', zhuyin: 'ㄨㄢˇ', radical: '日部', emoji: '🌙', words: ['晚上', '晚安', '早晚'] },
+              { char: '有', zhuyin: 'ㄧㄡˇ', radical: '月部', emoji: '✨', words: ['沒有', '有人', '有趣'] },
+              { char: '什', zhuyin: 'ㄕㄣˊ', radical: '人部 (亻)', emoji: '❔', words: ['什麼', '為什麼'] },
+              { char: '麼', zhuyin: 'ㄇㄜ˙', radical: '麻部', emoji: '💭', words: ['什麼', '多麼', '這麼'] },
+              { char: '不', zhuyin: 'ㄅㄨˋ', radical: '一部', emoji: '🙅', words: ['不同', '不要', '好不好'] },
+              { char: '同', zhuyin: 'ㄊㄨㄥˊ', radical: '口部', emoji: '👯', words: ['不同', '同學', '一同'] },
+              { char: '又', zhuyin: 'ㄧㄡˋ', radical: '又部', emoji: '➕', words: ['又大又圓', '又高又大'] }
+            ]
+          },
+          {
+            lesson: 6,
+            title: '小路',
+            chars: [
+              { char: '路', zhuyin: 'ㄌㄨˋ', radical: '足部', emoji: '🛤️', words: ['小路', '走路', '馬路'] },
+              { char: '長', zhuyin: 'ㄔㄤˊ', radical: '長部', emoji: '📏', words: ['長長', '很長', '長短'] },
+              { char: '開', zhuyin: 'ㄎㄞ', radical: '門部', emoji: '🌸', words: ['開花', '開門', '開心'] },
+              { char: '白', zhuyin: 'ㄅㄞˊ', radical: '白部', emoji: '🦢', words: ['小白花', '白雲', '白色'] },
+              { char: '紅', zhuyin: 'ㄏㄨㄥˊ', radical: '糸部', emoji: '🌺', words: ['小紅花', '紅花', '紅色'] },
+              { char: '花', zhuyin: 'ㄏㄨㄚ', radical: '艸部 (艹)', emoji: '🌼', words: ['花朵', '開花', '小花'] },
+              { char: '走', zhuyin: 'ㄗㄡˇ', radical: '走部', emoji: '🚶', words: ['走路', '走過', '走來走去'] },
+              { char: '說', zhuyin: 'ㄕㄨㄛ', radical: '言部', emoji: '💬', words: ['說話', '說明', '說你好'] },
+              { char: '頭', zhuyin: 'ㄊㄡˊ', radical: '頁部', emoji: '🙂', words: ['點頭', '這一頭', '頭上'] },
+              { char: '朵', zhuyin: 'ㄉㄨㄛˇ', radical: '木部', emoji: '🌷', words: ['一朵花', '花朵', '雲朵'] },
+              { char: '和', zhuyin: 'ㄏㄢˋ', radical: '口部', emoji: '🤝', words: ['我和你', '和好', '溫和'] }
+            ]
+          }
+        ]
+      },
+      '1b': {
+        name: '一年級下學期（一下）',
+        lessons: [
+          {
+            lesson: 1,
+            title: '今天早上真熱鬧',
+            chars: [
+              { char: '今', zhuyin: 'ㄐㄧㄣ', radical: '人部', emoji: '📅', words: ['今天', '今年', '今日'] },
+              { char: '天', zhuyin: 'ㄊㄧㄢ', radical: '大部', emoji: '☀️', words: ['今天', '天空', '春天'] },
+              { char: '真', zhuyin: 'ㄓㄣ', radical: '目部', emoji: '✨', words: ['真好', '真熱鬧', '認真'] },
+              { char: '熱', zhuyin: 'ㄖㄜˋ', radical: '火部 (灬)', emoji: '🔥', words: ['熱鬧', '天氣熱', '熱心'] },
+              { char: '鬧', zhuyin: 'ㄋㄠˋ', radical: '鬥部', emoji: '🎉', words: ['熱鬧', '吵鬧', '鬧鐘'] },
+              { char: '唱', zhuyin: 'ㄔㄤˋ', radical: '口部', emoji: '🎤', words: ['唱歌', '歡唱', '合唱'] },
+              { char: '歌', zhuyin: 'ㄍㄜ', radical: '欠部', emoji: '🎵', words: ['唱歌', '兒歌', '歌聲'] },
+              { char: '雲', zhuyin: 'ㄩㄣˊ', radical: '雨部', emoji: '☁️', words: ['白雲', '雲朵', '烏雲'] },
+              { char: '出', zhuyin: 'ㄔㄨ', radical: '凵部', emoji: '🌱', words: ['出來', '日出', '長出'] },
+              { char: '新', zhuyin: 'ㄒㄧㄣ', radical: '斤部', emoji: '🆕', words: ['新芽', '新年', '新衣'] },
+              { char: '芽', zhuyin: 'ㄧㄚˊ', radical: '艸部 (艹)', emoji: '🌱', words: ['新芽', '發芽', '豆芽'] }
+            ]
+          },
+          {
+            lesson: 2,
+            title: '花園裡有什麼？',
+            chars: [
+              { char: '園', zhuyin: 'ㄩㄢˊ', radical: '囗部', emoji: '🏡', words: ['花園', '公園', '校園'] },
+              { char: '蟲', zhuyin: 'ㄔㄨㄥˊ', radical: '虫部', emoji: '🐛', words: ['小蟲', '毛毛蟲', '昆蟲'] },
+              { char: '鳥', zhuyin: 'ㄋㄧㄠˇ', radical: '鳥部', emoji: '🐦', words: ['小鳥', '鳥兒', '飛鳥'] },
+              { char: '草', zhuyin: 'ㄘㄠˇ', radical: '艸部 (艹)', emoji: '🌿', words: ['小草', '草地', '青草'] },
+              { char: '聞', zhuyin: 'ㄨㄣˊ', radical: '耳部', emoji: '👃', words: ['聞一聞', '好聞', '新聞'] },
+              { char: '身', zhuyin: 'ㄕㄣ', radical: '身部', emoji: '🧍', words: ['身體', '身上', '轉身'] },
+              { char: '香', zhuyin: 'ㄒㄧㄤ', radical: '香部', emoji: '🌸', words: ['花香', '好香', '香氣'] },
+              { char: '過', zhuyin: 'ㄍㄨㄛˋ', radical: '辵部 (辶)', emoji: '🚶', words: ['走過', '過去', '過年'] },
+              { char: '吃', zhuyin: 'ㄔ', radical: '口部', emoji: '🍽️', words: ['吃飯', '好吃', '吃東西'] },
+              { char: '菜', zhuyin: 'ㄘㄞˋ', radical: '艸部 (艹)', emoji: '🥬', words: ['青菜', '種菜', '菜園'] },
+              { char: '就', zhuyin: 'ㄐㄧㄡˋ', radical: '尤部', emoji: '⚡', words: ['就是', '一來就', '馬上就'] }
+            ]
+          },
+          {
+            lesson: 3,
+            title: '媽媽的音樂會',
+            chars: [
+              { char: '媽', zhuyin: 'ㄇㄚ', radical: '女部', emoji: '👩', words: ['媽媽', '姨媽', '姑媽'] },
+              { char: '音', zhuyin: 'ㄧㄣ', radical: '音部', emoji: '🎶', words: ['音樂', '聲音', '注音'] },
+              { char: '會', zhuyin: 'ㄏㄨㄟˋ', radical: '曰部', emoji: '🎻', words: ['音樂會', '開會', '學會'] },
+              { char: '聽', zhuyin: 'ㄊㄧㄥ', radical: '耳部', emoji: '👂', words: ['好聽', '聽見', '聽音樂'] },
+              { char: '輕', zhuyin: 'ㄑㄧㄥ', radical: '車部', emoji: '🪶', words: ['輕快', '輕輕的', '年輕'] },
+              { char: '問', zhuyin: 'ㄨㄣˋ', radical: '門部', emoji: '🙋', words: ['問題', '請問', '問好'] },
+              { char: '怎', zhuyin: 'ㄗㄣˇ', radical: '心部', emoji: '🤔', words: ['怎麼', '怎樣'] },
+              { char: '它', zhuyin: 'ㄊㄚ', radical: '宀部', emoji: '🐾', words: ['它們', '它的'] },
+              { char: '才', zhuyin: 'ㄘㄞˊ', radical: '手部', emoji: '💡', words: ['剛才', '才能', '天才'] },
+              { char: '光', zhuyin: 'ㄍㄨㄤ', radical: '儿部', emoji: '🌟', words: ['陽光', '月光', '星光'] },
+              { char: '放', zhuyin: 'ㄈㄤˋ', radical: '攴部 (攵)', emoji: '🎈', words: ['放學', '放心', '開放'] },
+              { char: '院', zhuyin: 'ㄩㄢˋ', radical: '阜部 (阝)', emoji: '🏡', words: ['院子', '庭院', '醫院'] }
+            ]
+          },
+          {
+            lesson: 4,
+            title: '鞋',
+            chars: [
+              { char: '鞋', zhuyin: 'ㄒㄧㄝˊ', radical: '革部', emoji: '👟', words: ['鞋子', '雨鞋', '布鞋'] },
+              { char: '回', zhuyin: 'ㄏㄨㄟˊ', radical: '囗部', emoji: '🏠', words: ['回家', '回來', '回答'] },
+              { char: '家', zhuyin: 'ㄐㄧㄚ', radical: '宀部', emoji: '🏡', words: ['回家', '家人', '大家'] },
+              { char: '把', zhuyin: 'ㄅㄚˇ', radical: '手部 (扌)', emoji: '☂️', words: ['一把傘', '把手', '把門打開'] },
+              { char: '脫', zhuyin: 'ㄊㄨㄛ', radical: '肉部 (月)', emoji: '🧦', words: ['脫鞋', '脫下', '脫衣服'] },
+              { char: '爸', zhuyin: 'ㄅㄚˋ', radical: '父部', emoji: '👨', words: ['爸爸', '老爸'] },
+              { char: '送', zhuyin: 'ㄙㄨㄥˋ', radical: '辵部 (辶)', emoji: '🎁', words: ['送禮', '送給', '歡送'] },
+              { char: '喜', zhuyin: 'ㄒㄧˇ', radical: '口部', emoji: '😊', words: ['喜歡', '歡喜', '恭喜'] },
+              { char: '歡', zhuyin: 'ㄏㄨㄢ', radical: '欠部', emoji: '🥳', words: ['喜歡', '歡樂', '歡迎'] },
+              { char: '狗', zhuyin: 'ㄍㄡˇ', radical: '犬部 (犭)', emoji: '🐶', words: ['小狗', '母狗', '狗兒'] },
+              { char: '冷', zhuyin: 'ㄌㄥˇ', radical: '冫部', emoji: '❄️', words: ['寒冷', '冷水', '好冷'] },
+              { char: '風', zhuyin: 'ㄈㄥ', radical: '風部', emoji: '🌬️', words: ['春風', '吹風', '風雨'] },
+              { char: '愛', zhuyin: 'ㄞˋ', radical: '心部', emoji: '❤️', words: ['可愛', '愛心', '親愛'] },
+              { char: '還', zhuyin: 'ㄏㄞˊ', radical: '辵部 (辶)', emoji: '➕', words: ['還有', '還是', '還要'] }
+            ]
+          },
+          {
+            lesson: 5,
+            title: '小種子快長大',
+            chars: [
+              { char: '種', zhuyin: 'ㄓㄨㄥˇ', radical: '禾部', emoji: '🌰', words: ['種子', '小種子', '各種'] },
+              { char: '泥', zhuyin: 'ㄋㄧˊ', radical: '水部 (氵)', emoji: '🟫', words: ['泥土', '泥巴', '水泥'] },
+              { char: '土', zhuyin: 'ㄊㄨˇ', radical: '土部', emoji: '🌱', words: ['泥土', '土地', '國土'] },
+              { char: '綠', zhuyin: 'ㄌㄩˋ', radical: '糸部', emoji: '🟢', words: ['綠色', '綠葉', '綠草'] },
+              { char: '牛', zhuyin: 'ㄋㄧㄡˊ', radical: '牛部', emoji: '🐮', words: ['小牛', '水牛', '牛奶'] },
+              { char: '直', zhuyin: 'ㄓˊ', radical: '目部', emoji: '📏', words: ['一直', '筆直', '直走'] },
+              { char: '伸', zhuyin: 'ㄕㄣ', radical: '人部 (亻)', emoji: '🙆', words: ['伸手', '伸懶腰', '伸長'] },
+              { char: '覺', zhuyin: 'ㄐㄩㄝˊ', radical: '見部', emoji: '💭', words: ['覺得', '感覺', '睡覺'] },
+              { char: '得', zhuyin: 'ㄉㄜ˙', radical: '彳部', emoji: '🏆', words: ['覺得', '得到', '跑得快'] },
+              { char: '溫', zhuyin: 'ㄨㄣ', radical: '水部 (氵)', emoji: '🌤️', words: ['溫暖', '溫柔', '氣溫'] },
+              { char: '暖', zhuyin: 'ㄋㄨㄢˇ', radical: '日部', emoji: '☀️', words: ['溫暖', '暖和', '春暖花開'] },
+              { char: '地', zhuyin: 'ㄉㄧˋ', radical: '土部', emoji: '🌍', words: ['草地', '土地', '地上'] }
+            ]
+          },
+          {
+            lesson: 6,
+            title: '奶奶的小跟班',
+            chars: [
+              { char: '奶', zhuyin: 'ㄋㄞˇ', radical: '女部', emoji: '👵', words: ['奶奶', '牛奶', '老奶奶'] },
+              { char: '跟', zhuyin: 'ㄍㄣ', radical: '足部', emoji: '👣', words: ['跟班', '跟著', '跟隨'] },
+              { char: '班', zhuyin: 'ㄅㄢ', radical: '玉部', emoji: '🏫', words: ['跟班', '班長', '上班'] },
+              { char: '坐', zhuyin: 'ㄗㄨㄛˋ', radical: '土部', emoji: '🪑', words: ['坐車', '請坐', '坐下'] },
+              { char: '車', zhuyin: 'ㄔㄜ', radical: '車部', emoji: '🚌', words: ['公車', '坐車', '火車'] },
+              { char: '姐', zhuyin: 'ㄐㄧㄝˇ', radical: '女部', emoji: '👧', words: ['姐姐', '小姐', '姐妹'] },
+              { char: '張', zhuyin: 'ㄓㄤ', radical: '弓部', emoji: '📄', words: ['一張紙', '張開', '緊張'] },
+              { char: '畫', zhuyin: 'ㄏㄨㄚˋ', radical: '田部', emoji: '🎨', words: ['畫畫', '圖畫', '畫家'] },
+              { char: '毛', zhuyin: 'ㄇㄠˊ', radical: '毛部', emoji: '🪶', words: ['羽毛', '毛筆', '毛衣'] },
+              { char: '站', zhuyin: 'ㄓㄢˋ', radical: '立部', emoji: '🚏', words: ['站起來', '車站', '罰站'] },
+              { char: '邊', zhuyin: 'ㄅㄧㄢ', radical: '辵部 (辶)', emoji: '⬅️', words: ['這邊', '旁邊', '海邊'] },
+              { char: '游', zhuyin: 'ㄧㄡˊ', radical: '水部 (氵)', emoji: '🏊', words: ['游泳', '游來游去', '上游'] },
+              { char: '幫', zhuyin: 'ㄅㄤ', radical: '巾部', emoji: '🤝', words: ['幫忙', '幫助', '好幫手'] },
+              { char: '葉', zhuyin: 'ㄧㄝˋ', radical: '艸部 (艹)', emoji: '🍃', words: ['樹葉', '葉子', '荷葉'] },
+              { char: '推', zhuyin: 'ㄊㄨㄟ', radical: '手部 (扌)', emoji: '🛒', words: ['推車', '推開', '推動'] }
+            ]
+          },
+          {
+            lesson: 7,
+            title: '作夢的雲',
+            chars: [
+              { char: '作', zhuyin: 'ㄗㄨㄛˋ', radical: '人部 (亻)', emoji: '💭', words: ['作夢', '工作', '作業'] },
+              { char: '夢', zhuyin: 'ㄇㄥˋ', radical: '夕部', emoji: '🌙', words: ['作夢', '美夢', '夢想'] },
+              { char: '躺', zhuyin: 'ㄊㄤˇ', radical: '身部', emoji: '🛌', words: ['躺下', '躺著', '躺在草地'] },
+              { char: '變', zhuyin: 'ㄅㄧㄢˋ', radical: '言部', emoji: '🪄', words: ['變成', '變化', '改變'] },
+              { char: '成', zhuyin: 'ㄔㄥˊ', radical: '戈部', emoji: '🌟', words: ['變成', '成功', '長大成人'] },
+              { char: '黑', zhuyin: 'ㄏㄟ', radical: '黑部', emoji: '⬛', words: ['黑色', '天黑', '黑板'] },
+              { char: '鵝', zhuyin: 'ㄜˊ', radical: '鳥部', emoji: '🦢', words: ['白鵝', '天鵝', '企鵝'] },
+              { char: '更', zhuyin: 'ㄍㄥˋ', radical: '曰部', emoji: '📈', words: ['更好', '更加', '更高'] },
+              { char: '借', zhuyin: 'ㄐㄧㄝˋ', radical: '人部 (亻)', emoji: '🤲', words: ['借書', '借筆', '借東西'] },
+              { char: '筆', zhuyin: 'ㄅㄧˇ', radical: '竹部', emoji: '✏️', words: ['鉛筆', '毛筆', '畫筆'] },
+              { char: '拿', zhuyin: 'ㄋㄚˊ', radical: '手部', emoji: '✊', words: ['拿著', '拿出來', '拿筆'] },
+              { char: '很', zhuyin: 'ㄏㄣˇ', radical: '彳部', emoji: '👍', words: ['很好', '很多', '很快'] },
+              { char: '每', zhuyin: 'ㄇㄟˇ', radical: '毋部', emoji: '🗓️', words: ['每天', '每個人', '每次'] },
+              { char: '背', zhuyin: 'ㄅㄟ', radical: '肉部 (月)', emoji: '🎒', words: ['背書包', '背後', '背心'] },
+              { char: '書', zhuyin: 'ㄕㄨ', radical: '曰部', emoji: '📚', words: ['看書', '書包', '讀書'] },
+              { char: '包', zhuyin: 'ㄅㄠ', radical: '勹部', emoji: '🎒', words: ['書包', '麵包', '包子'] }
+            ]
+          },
+          {
+            lesson: 8,
+            title: '妹妹的紅雨鞋',
+            chars: [
+              { char: '妹', zhuyin: 'ㄇㄟˋ', radical: '女部', emoji: '👧', words: ['妹妹', '姐妹', '表妹'] },
+              { char: '雨', zhuyin: 'ㄩˇ', radical: '雨部', emoji: '🌧️', words: ['下雨', '雨鞋', '雨傘'] },
+              { char: '雙', zhuyin: 'ㄕㄨㄤ', radical: '隹部', emoji: '👟', words: ['一雙鞋', '雙手', '成雙'] },
+              { char: '穿', zhuyin: 'ㄔㄨㄢ', radical: '穴部', emoji: '🧥', words: ['穿鞋', '穿衣服', '穿上'] },
+              { char: '珠', zhuyin: 'ㄓㄨ', radical: '玉部 (王)', emoji: '💧', words: ['水珠', '珍珠', '眼珠'] },
+              { char: '落', zhuyin: 'ㄌㄨㄛˋ', radical: '艸部 (艹)', emoji: '🍂', words: ['落下', '落葉', '降落'] },
+              { char: '面', zhuyin: 'ㄇㄧㄢˋ', radical: '面部', emoji: '🪞', words: ['地面', '裡面', '外面'] },
+              { char: '國', zhuyin: 'ㄍㄨㄛˊ', radical: '囗部', emoji: '🏰', words: ['國家', '國語', '國王'] },
+              { char: '掃', zhuyin: 'ㄙㄠˇ', radical: '手部 (扌)', emoji: '🧹', words: ['掃地', '打掃', '掃把'] },
+              { char: '淨', zhuyin: 'ㄐㄧㄥˋ', radical: '水部 (氵)', emoji: '✨', words: ['乾淨', '清淨', '洗乾淨'] },
+              { char: '馬', zhuyin: 'ㄇㄚˇ', radical: '馬部', emoji: '🐴', words: ['小馬', '馬路', '馬上'] },
+              { char: '刷', zhuyin: 'ㄕㄨㄚ', radical: '刀部 (刂)', emoji: '🪥', words: ['刷牙', '刷洗', '牙刷'] },
+              { char: '認', zhuyin: 'ㄖㄣˋ', radical: '言部', emoji: '📖', words: ['認真', '認識', '認字'] },
+              { char: '化', zhuyin: 'ㄏㄨㄚˋ', radical: '匕部', emoji: '🦋', words: ['變化', '融化', '文化'] },
+              { char: '趣', zhuyin: 'ㄑㄩˋ', radical: '走部', emoji: '🎈', words: ['有趣', '興趣', '趣味'] },
+              { char: '線', zhuyin: 'ㄒㄧㄢˋ', radical: '糸部', emoji: '🧵', words: ['毛線', '直線', '光線'] }
+            ]
+          },
+          {
+            lesson: 9,
+            title: '七彩的虹',
+            chars: [
+              { char: '七', zhuyin: 'ㄑㄧ', radical: '一部', emoji: '7️⃣', words: ['七彩', '七個', '七月'] },
+              { char: '彩', zhuyin: 'ㄘㄞˇ', radical: '彡部', emoji: '🌈', words: ['彩虹', '七彩', '彩色'] },
+              { char: '虹', zhuyin: 'ㄏㄨㄥˊ', radical: '虫部', emoji: '🌈', words: ['彩虹', '長虹'] },
+              { char: '藍', zhuyin: 'ㄌㄢˊ', radical: '艸部 (艹)', emoji: '🔵', words: ['藍天', '藍色', '大海藍'] },
+              { char: '中', zhuyin: 'ㄓㄨㄥ', radical: '丨部', emoji: '🎯', words: ['空中', '中間', '中午'] },
+              { char: '坡', zhuyin: 'ㄆㄛ', radical: '土部', emoji: '⛰️', words: ['山坡', '斜坡', '草坡'] },
+              { char: '場', zhuyin: 'ㄔㄤˇ', radical: '土部', emoji: '🏟️', words: ['操場', '廣場', '場地'] },
+              { char: '入', zhuyin: 'ㄖㄨˋ', radical: '入部', emoji: '🚪', words: ['入口', '進入', '出入'] },
+              { char: '林', zhuyin: 'ㄌㄧㄣˊ', radical: '木部', emoji: '🌲', words: ['樹林', '森林', '林間'] },
+              { char: '柔', zhuyin: 'ㄖㄡˊ', radical: '木部', emoji: '☁️', words: ['溫柔', '柔軟', '輕柔'] },
+              { char: '勇', zhuyin: 'ㄩㄥˇ', radical: '力部', emoji: '🦁', words: ['勇敢', '勇氣', '勇士'] },
+              { char: '敢', zhuyin: 'ㄍㄢˇ', radical: '攴部 (攵)', emoji: '💪', words: ['勇敢', '敢做', '果敢'] },
+              { char: '錯', zhuyin: 'ㄘㄨㄛˋ', radical: '金部', emoji: '❌', words: ['錯誤', '寫錯', '不錯'] },
+              { char: '久', zhuyin: 'ㄐㄧㄡˇ', radical: '丿部', emoji: '⏳', words: ['好久', '不久', '長久'] },
+              { char: '哭', zhuyin: 'ㄎㄨ', radical: '口部', emoji: '😢', words: ['哭泣', '大哭', '別哭'] },
+              { char: '試', zhuyin: 'ㄕˋ', radical: '言部', emoji: '📝', words: ['試一試', '考試', '嘗試'] },
+              { char: '進', zhuyin: 'ㄐㄧㄣˋ', radical: '辵部 (辶)', emoji: '⏩', words: ['進步', '進來', '前進'] },
+              { char: '步', zhuyin: 'ㄅㄨˋ', radical: '止部', emoji: '👣', words: ['進步', '散步', '跑步'] }
+            ]
+          },
+          {
+            lesson: 10,
+            title: '和你在一起',
+            chars: [
+              { char: '在', zhuyin: 'ㄗㄞˋ', radical: '土部', emoji: '📍', words: ['在一起', '現在', '正在'] },
+              { char: '記', zhuyin: 'ㄐㄧˋ', radical: '言部', emoji: '📒', words: ['記得', '日記', '記住'] },
+              { char: '時', zhuyin: 'ㄕˊ', radical: '日部', emoji: '⏰', words: ['時間', '有時候', '準時'] },
+              { char: '收', zhuyin: 'ㄕㄡ', radical: '攴部 (攵)', emoji: '📦', words: ['收拾', '收到', '收好'] },
+              { char: '學', zhuyin: 'ㄒㄩㄝˊ', radical: '子部', emoji: '🎓', words: ['上學', '學習', '同學'] },
+              { char: '燈', zhuyin: 'ㄉㄥ', radical: '火部', emoji: '💡', words: ['電燈', '路燈', '燈光'] },
+              { char: '點', zhuyin: 'ㄉㄧㄢˇ', radical: '黑部', emoji: '🕘', words: ['點頭', '一點點', '九點'] },
+              { char: '半', zhuyin: 'ㄅㄢˋ', radical: '十部', emoji: '🌗', words: ['一半', '半天', '八點半'] },
+              { char: '清', zhuyin: 'ㄑㄧㄥ', radical: '水部 (氵)', emoji: '💧', words: ['清楚', '清新', '清水'] },
+              { char: '楚', zhuyin: 'ㄔㄨˇ', radical: '木部', emoji: '👓', words: ['清楚', '一清二楚'] },
+              { char: '休', zhuyin: 'ㄒㄧㄡ', radical: '人部 (亻)', emoji: '🛋️', words: ['休息', '休假', '午休'] },
+              { char: '息', zhuyin: 'ㄒㄧˊ', radical: '心部', emoji: '😌', words: ['休息', '作息', '消息'] },
+              { char: '慢', zhuyin: 'ㄇㄢˋ', radical: '心部 (忄)', emoji: '🐢', words: ['慢慢走', '快慢', '慢跑'] },
+              { char: '數', zhuyin: 'ㄕㄨˇ', radical: '攴部 (攵)', emoji: '🔢', words: ['數一數', '數學', '數字'] }
+            ]
+          },
+          {
+            lesson: 11,
+            title: '生日快樂',
+            chars: [
+              { char: '生', zhuyin: 'ㄕㄥ', radical: '生部', emoji: '🎂', words: ['生日', '生氣', '學生'] },
+              { char: '日', zhuyin: 'ㄖˋ', radical: '日部', emoji: '🌞', words: ['生日', '日記', '日子'] },
+              { char: '蛋', zhuyin: 'ㄉㄢˋ', radical: '虫部', emoji: '🥚', words: ['蛋糕', '雞蛋', '鳥蛋'] },
+              { char: '糕', zhuyin: 'ㄍㄠ', radical: '米部', emoji: '🍰', words: ['蛋糕', '年糕', '花糕'] },
+              { char: '氣', zhuyin: 'ㄑㄧˋ', radical: '氣部', emoji: '🎈', words: ['氣球', '天氣', '勇氣'] },
+              { char: '該', zhuyin: 'ㄍㄞ', radical: '言部', emoji: '💡', words: ['應該', '該不會'] },
+              { char: '東', zhuyin: 'ㄉㄨㄥ', radical: '木部', emoji: '🧭', words: ['東西', '東邊', '東方'] },
+              { char: '西', zhuyin: 'ㄒㄧ', radical: '襾部', emoji: '🍉', words: ['東西', '西瓜', '西邊'] },
+              { char: '越', zhuyin: 'ㄩㄝˋ', radical: '走部', emoji: '🚀', words: ['越來越好', '超越', '飛越'] },
+              { char: '能', zhuyin: 'ㄋㄥˊ', radical: '肉部', emoji: '💪', words: ['能夠', '才能', '能力'] },
+              { char: '對', zhuyin: 'ㄉㄨㄟˋ', radical: '寸部', emoji: '⭕', words: ['對不起', '答對', '面對'] },
+              { char: '教', zhuyin: 'ㄐㄧㄠˋ', radical: '攴部 (攵)', emoji: '🏫', words: ['教室', '教書', '請教'] },
+              { char: '室', zhuyin: 'ㄕˋ', radical: '宀部', emoji: '🚪', words: ['教室', '室內', '臥室'] },
+              { char: '意', zhuyin: 'ㄧˋ', radical: '心部', emoji: '💝', words: ['意思', '心意', '注意'] },
+              { char: '思', zhuyin: 'ㄙ', radical: '心部', emoji: '💭', words: ['意思', '思考', '想念'] }
+            ]
+          },
+          {
+            lesson: 12,
+            title: '我們都是第一名',
+            chars: [
+              { char: '都', zhuyin: 'ㄉㄡ', radical: '邑部 (阝)', emoji: '🌟', words: ['都是', '大家都有', '全都'] },
+              { char: '第', zhuyin: 'ㄉㄧˋ', radical: '竹部', emoji: '🥇', words: ['第一名', '第一課', '等第'] },
+              { char: '名', zhuyin: 'ㄇㄧㄥˊ', radical: '口部', emoji: '🏷️', words: ['第一名', '名字', '有名'] },
+              { char: '影', zhuyin: 'ㄧㄥˇ', radical: '彡部', emoji: '👤', words: ['影子', '電影', '身影'] },
+              { char: '台', zhuyin: 'ㄊㄞˊ', radical: '口部', emoji: '🎭', words: ['舞台', '講台', '台灣'] },
+              { char: '期', zhuyin: 'ㄑㄧˊ', radical: '月部', emoji: '📅', words: ['學期', '星期', '期待'] },
+              { char: '全', zhuyin: 'ㄑㄩㄢˊ', radical: '入部', emoji: '💯', words: ['全部', '全班', '安全'] },
+              { char: '故', zhuyin: 'ㄍㄨˋ', radical: '攴部 (攵)', emoji: '📖', words: ['故事', '故鄉'] },
+              { char: '事', zhuyin: 'ㄕˋ', radical: '亅部', emoji: '📋', words: ['故事', '事情', '好事'] },
+              { char: '動', zhuyin: 'ㄉㄨㄥˋ', radical: '力部', emoji: '🐾', words: ['動物', '運動', '活動'] },
+              { char: '物', zhuyin: 'ㄨˋ', radical: '牛部', emoji: '🦊', words: ['動物', '禮物', '食物'] },
+              { char: '方', zhuyin: 'ㄈㄤ', radical: '方部', emoji: '🧭', words: ['地方', '方向', '正方形'] },
+              { char: '理', zhuyin: 'ㄌㄧˇ', radical: '玉部 (王)', emoji: '🧩', words: ['整理', '道理', '理由'] }
+            ]
+          }
+        ]
+      }
+    };
+
+    // ========= 2. 全域狀態與網址參數同步 =========
+    let currentSem = '1a';
+    let currentLessonIdx = 0;
+    let currentCharIdx = 0;
+    let padMode = 'hanzi'; // 'hanzi' or 'free'
+    let writerInstance = null;
+    let stars = 0;
+    let practicedSet = new Set();
+
+    // Web Audio API Sound Effects
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function playSound(type) {
+      try {
+        if (!audioCtx) audioCtx = new AudioCtx();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        if (type === 'correct') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now);
+          osc.frequency.setValueAtTime(659.25, now + 0.09);
+          osc.frequency.setValueAtTime(783.99, now + 0.18);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+          osc.start(now);
+          osc.stop(now + 0.42);
+        } else if (type === 'stroke') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(680, now);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now);
+          osc.frequency.setValueAtTime(175, now + 0.12);
+          gain.gain.setValueAtTime(0.16, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(580, now);
+          gain.gain.setValueAtTime(0.12, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+          osc.start(now);
+          osc.stop(now + 0.07);
+        }
+      } catch (e) {}
+    }
+
+    function speakText(text) {
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'zh-TW';
+      utter.rate = 0.85;
+      utter.pitch = 1.06;
+      const voices = window.speechSynthesis.getVoices();
+      const twVoice = voices.find(v => v.lang.includes('zh-TW') || v.name.includes('Meijia') || v.name.includes('Taiwan'));
+      if (twVoice) utter.voice = twVoice;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function addScore(charStr) {
+      stars += 1;
+      practicedSet.add(charStr);
+      document.getElementById('starCount').textContent = stars;
+      document.getElementById('doneCount').textContent = practicedSet.size;
+      renderCharStrip();
+    }
+
+    function getCurrentLessonObj() {
+      return KANG_HSUAN_DATA[currentSem].lessons[currentLessonIdx];
+    }
+
+    function getCurrentCharObj() {
+      return getCurrentLessonObj().chars[currentCharIdx];
+    }
+
+    // Read URL Query Parameters (?sem=1a&lesson=1&char=0)
+    function initFromUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      const sem = params.get('sem');
+      const lessonNum = parseInt(params.get('lesson'), 10);
+      const charParam = params.get('char');
+
+      if (sem && KANG_HSUAN_DATA[sem]) {
+        currentSem = sem;
+      }
+      if (!isNaN(lessonNum)) {
+        const idx = KANG_HSUAN_DATA[currentSem].lessons.findIndex(l => l.lesson === lessonNum);
+        if (idx !== -1) currentLessonIdx = idx;
+      }
+      if (charParam) {
+        const cIdx = getCurrentLessonObj().chars.findIndex(c => c.char === charParam);
+        if (cIdx !== -1) currentCharIdx = cIdx;
+      }
+    }
+
+    function updateUrlParams() {
+      try {
+        const lessonNum = getCurrentLessonObj().lesson;
+        const newUrl = `${window.location.pathname}?sem=${currentSem}&lesson=${lessonNum}`;
+        window.history.replaceState({}, '', newUrl);
+      } catch (e) {}
+    }
+
+    // ========= 3. 介面渲染 =========
+    function selectSemester(sem) {
+      currentSem = sem;
+      currentLessonIdx = 0;
+      currentCharIdx = 0;
+      playSound('click');
+      document.querySelectorAll('.sem-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sem === sem);
+      });
+      updateUrlParams();
+      renderAll();
+    }
+
+    function selectLesson(idx) {
+      currentLessonIdx = idx;
+      currentCharIdx = 0;
+      playSound('click');
+      updateUrlParams();
+      renderAll();
+    }
+
+    function selectChar(idx) {
+      currentCharIdx = idx;
+      playSound('click');
+      renderCharStrip();
+      loadCurrentCharacter();
+    }
+
+    function stepChar(delta) {
+      const chars = getCurrentLessonObj().chars;
+      currentCharIdx = (currentCharIdx + delta + chars.length) % chars.length;
+      playSound('click');
+      renderCharStrip();
+      loadCurrentCharacter();
+    }
+
+    function renderLessonBar() {
+      const lessons = KANG_HSUAN_DATA[currentSem].lessons;
+      const bar = document.getElementById('lessonBar');
+      bar.innerHTML = lessons.map((l, idx) => `
+        <button class="lesson-pill ${idx === currentLessonIdx ? 'active' : ''}" onclick="selectLesson(${idx})">
+          第 ${l.lesson} 課：${l.title}
+        </button>
+      `).join('');
+    }
+
+    function renderCharStrip() {
+      const lessonObj = getCurrentLessonObj();
+      const semName = KANG_HSUAN_DATA[currentSem].name;
+      document.getElementById('currentLessonHeader').innerHTML = `
+        <span>📖 ${semName} — 第 ${lessonObj.lesson} 課《${lessonObj.title}》</span>
+        <span style="font-size:0.92rem;background:#e7f0ff;color:#1d4ed8;padding:3px 12px;border-radius:50px;">共 ${lessonObj.chars.length} 個核心生字</span>
+      `;
+
+      const strip = document.getElementById('charStrip');
+      strip.innerHTML = lessonObj.chars.map((item, idx) => {
+        const isDone = practicedSet.has(item.char);
+        return `
+          <button class="char-mini-btn ${idx === currentCharIdx ? 'active' : ''} ${isDone ? 'practiced' : ''}" onclick="selectChar(${idx})">
+            <span class="char-mini-kanji">${item.char}</span>
+            <span class="char-mini-zy">${item.zhuyin}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderAll() {
+      document.querySelectorAll('.sem-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sem === currentSem);
+      });
+      renderLessonBar();
+      renderCharStrip();
+      loadCurrentCharacter();
+    }
+
+    // ========= 4. 載入單字筆順與互動描紅 =========
+    function loadCurrentCharacter() {
+      const cObj = getCurrentCharObj();
+
+      // Update Right Info Panel
+      document.getElementById('infoBigChar').textContent = cObj.char;
+      document.getElementById('infoZhuyin').textContent = cObj.zhuyin;
+      document.getElementById('infoEmoji').textContent = cObj.emoji;
+      document.getElementById('infoRadical').textContent = `部首：${cObj.radical}`;
+      document.getElementById('freehandGhostChar').textContent = cObj.char;
+
+      // Render Word Chips
+      const chipsEl = document.getElementById('infoWordChips');
+      chipsEl.innerHTML = cObj.words.map(w => `
+        <span class="word-chip" onclick="speakText('${w}')">
+          🔊 ${w}
+        </span>
+      `).join('');
+
+      // Update Official MOE Links
+      document.getElementById('moeCharSpan').textContent = cObj.char;
+      document.getElementById('moeSingleLink').href = `https://stroke-order.learningweb.moe.edu.tw/characterQueryResult.do?word=${encodeURIComponent(cObj.char)}`;
+
+      clearFreehandCanvas();
+
+      // Initialize HanziWriter
+      const target = document.getElementById('hanziWriterTarget');
+      target.innerHTML = '';
+      document.getElementById('strokeStepsRow').innerHTML = '<span style="color:#888;font-size:0.9rem;">載入筆畫分解中...</span>';
+      document.getElementById('strokeStatusText').textContent = `👆 請在田字格裡依筆順描寫「${cObj.char}」！`;
+      document.getElementById('strokeStatusText').style.color = '#2b2d42';
+
+      if (typeof HanziWriter === 'undefined') {
+        document.getElementById('strokeStatusText').textContent = '⚠️ 處於離線模式，已自動開啟「自由描紅手寫板」！';
+        setPadMode('free');
+        return;
+      }
+
+      try {
+        writerInstance = HanziWriter.create('hanziWriterTarget', cObj.char, {
+          width: 300,
+          height: 300,
+          padding: 18,
+          showOutline: true,
+          showCharacter: false,
+          strokeColor: '#1d3557',
+          radicalColor: '#e63946',
+          outlineColor: '#dcdcdc',
+          drawingColor: '#2563eb',
+          drawingWidth: 26,
+          strokeAnimationSpeed: 1,
+          delayBetweenStrokes: 180,
+          showHintAfterMisses: 2,
+          highlightOnComplete: true,
+          highlightColor: '#06d6a0',
+          onLoadCharDataSuccess: function(charData) {
+            const totalStrokes = charData.strokes.length;
+            document.getElementById('infoStrokeCount').textContent = `總筆畫：${totalStrokes} 畫`;
+            document.getElementById('strokeProgressLabel').textContent = `共 ${totalStrokes} 畫`;
+            renderStepByStepFanningStrokes(charData.strokes);
+            startStrokeQuiz();
+          },
+          onLoadCharDataError: function() {
+            document.getElementById('infoStrokeCount').textContent = '標準標楷體模式';
+            document.getElementById('strokeStepsRow').innerHTML = '<span style="color:#666;">此字可直接使用左側「🖌️ 自由描紅手寫板」或點擊下方「🏛️ 教育部標準筆順網」練習！</span>';
+            setPadMode('free');
+          }
+        });
+      } catch (e) {
+        setPadMode('free');
+      }
+    }
+
+    // Render Step-by-Step Stroke Order SVG Boxes
+    function renderStepByStepFanningStrokes(strokes) {
+      const container = document.getElementById('strokeStepsRow');
+      container.innerHTML = '';
+      strokes.forEach((_, idx) => {
+        const box = document.createElement('div');
+        box.className = 'step-mini-box';
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('width', '50');
+        svg.setAttribute('height', '50');
+        svg.setAttribute('viewBox', '0 0 1024 1024');
+
+        const group = document.createElementNS(svgNS, 'g');
+        group.setAttribute('transform', 'scale(1, -1) translate(0, -900)');
+
+        for (let i = 0; i <= idx; i++) {
+          const path = document.createElementNS(svgNS, 'path');
+          path.setAttribute('d', strokes[i]);
+          path.setAttribute('fill', i === idx ? '#e63946' : '#1d3557');
+          group.appendChild(path);
+        }
+
+        svg.appendChild(group);
+        const badge = document.createElement('span');
+        badge.className = 'step-num-badge';
+        badge.textContent = idx + 1;
+        box.appendChild(badge);
+        box.appendChild(svg);
+        container.appendChild(box);
+      });
+    }
+
+    function animateCurrentChar() {
+      if (padMode !== 'hanzi') setPadMode('hanzi');
+      if (!writerInstance) return;
+      const cObj = getCurrentCharObj();
+      playSound('click');
+      speakText(cObj.char);
+      document.getElementById('strokeStatusText').style.color = '#2563eb';
+      document.getElementById('strokeStatusText').textContent = `🎬 正在示範「${cObj.char}」的標準筆順動畫...`;
+      writerInstance.animateCharacter({
+        onComplete: function() {
+          document.getElementById('strokeStatusText').style.color = '#2b2d42';
+          document.getElementById('strokeStatusText').textContent = `✨ 動畫示範完成！現在換你動手描寫「${cObj.char}」吧！`;
+          setTimeout(() => startStrokeQuiz(), 400);
+        }
+      });
+    }
+
+    function startStrokeQuiz() {
+      if (padMode !== 'hanzi') setPadMode('hanzi');
+      if (!writerInstance) return;
+      const cObj = getCurrentCharObj();
+      writerInstance.quiz({
+        onCorrectStroke: function(strokeData) {
+          playSound('stroke');
+          const currentStep = strokeData.strokeNum + 1;
+          const total = strokeData.strokeNum + strokeData.strokesRemaining + 1;
+          document.getElementById('strokeStatusText').style.color = '#047857';
+          document.getElementById('strokeStatusText').textContent = `👍 第 ${currentStep} 畫正確！（進度：${currentStep} / ${total} 畫）`;
+        },
+        onMistake: function(strokeData) {
+          playSound('wrong');
+          const nextStep = strokeData.strokeNum + 1;
+          document.getElementById('strokeStatusText').style.color = '#e63946';
+          document.getElementById('strokeStatusText').textContent = `💡 順序或方向不對喔！請看第 ${nextStep} 畫的提示再試一次`;
+        },
+        onComplete: function() {
+          playSound('correct');
+          addScore(cObj.char);
+          document.getElementById('strokeStatusText').style.color = '#d97706';
+          document.getElementById('strokeStatusText').textContent = `🎉 太棒了！「${cObj.char}」筆順全部正確！獲得一顆星星 ⭐`;
+          speakText(`太棒了！${cObj.char}，${cObj.words[0]}`);
+        }
+      });
+    }
+
+    function giveStrokeHint() {
+      if (!writerInstance) return;
+      playSound('click');
+      writerInstance.animateStroke(0);
+      document.getElementById('strokeStatusText').style.color = '#7209b7';
+      document.getElementById('strokeStatusText').textContent = '👀 請看右側「一筆一畫分解圖」紅色標示的那一筆喔！';
+    }
+
+    function speakCurrentCharDetail() {
+      const cObj = getCurrentCharObj();
+      playSound('click');
+      speakText(`${cObj.char}，${cObj.words.join('，')}`);
+    }
+
+    function speakCurrentLessonWords() {
+      const lessonObj = getCurrentLessonObj();
+      const text = `第${lessonObj.lesson}課，${lessonObj.title}。生字有：${lessonObj.chars.map(c => c.char).join('、')}`;
+      speakText(text);
+    }
+
+    // ========= 5. 自由描紅手寫板（支援平板觸控筆與手指） =========
+    function setPadMode(mode) {
+      padMode = mode;
+      document.getElementById('modeQuizBtn').classList.toggle('active', mode === 'hanzi');
+      document.getElementById('modeFreeBtn').classList.toggle('active', mode === 'free');
+      document.getElementById('hanziWriterTarget').style.display = mode === 'hanzi' ? 'block' : 'none';
+      document.getElementById('freehandWrapper').style.display = mode === 'free' ? 'flex' : 'none';
+      document.getElementById('hanziControls').style.display = mode === 'hanzi' ? 'grid' : 'none';
+      document.getElementById('freehandControls').style.display = mode === 'free' ? 'grid' : 'none';
+
+      if (mode === 'free') {
+        const cObj = getCurrentCharObj();
+        document.getElementById('strokeStatusText').style.color = '#7209b7';
+        document.getElementById('strokeStatusText').textContent = `🖌️ 自由描紅模式：請跟著底下的標楷體「${cObj.char}」描寫！`;
+      } else {
+        loadCurrentCharacter();
+      }
+    }
+
+    const canvas = document.getElementById('freehandCanvas');
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+
+    function setupFreehandCanvas() {
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.lineWidth = 14;
+      ctx.strokeStyle = '#2563eb';
+
+      function getPos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return {
+          x: (clientX - rect.left) * (canvas.width / rect.width),
+          y: (clientY - rect.top) * (canvas.height / rect.height)
+        };
+      }
+
+      canvas.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        isDrawing = true;
+        const pos = getPos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+      });
+
+      canvas.addEventListener('pointermove', (e) => {
+        if (!isDrawing) return;
+        e.preventDefault();
+        const pos = getPos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      });
+
+      window.addEventListener('pointerup', () => {
+        isDrawing = false;
+      });
+    }
+
+    function clearFreehandCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function completeFreehandPractice() {
+      const cObj = getCurrentCharObj();
+      playSound('correct');
+      addScore(cObj.char);
+      document.getElementById('strokeStatusText').style.color = '#047857';
+      document.getElementById('strokeStatusText').textContent = `🎉 完成「${cObj.char}」描紅練習！獲得一顆星星 ⭐`;
+      speakText(`寫得真棒！${cObj.char}，${cObj.words[0]}`);
+    }
+
+    // ========= 6. 本課專屬 QR Code 與連結分享 =========
+    function getPublicLessonUrl() {
+      const lessonObj = getCurrentLessonObj();
+      const base = 'https://a0930799617-maker.github.io/bopomofo-game/strokes.html';
+      return `${base}?sem=${currentSem}&lesson=${lessonObj.lesson}`;
+    }
+
+    function openLessonShareModal() {
+      const lessonObj = getCurrentLessonObj();
+      const semLabel = currentSem === '1a' ? '康軒一上' : '康軒一下';
+      const url = getPublicLessonUrl();
+
+      document.getElementById('modalLessonTitle').textContent = `📲 ${semLabel} 第 ${lessonObj.lesson} 課《${lessonObj.title}》筆順練習`;
+      document.getElementById('shareUrlText').textContent = url;
+      document.getElementById('qrImage').src = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(url);
+      document.getElementById('shareModal').style.display = 'flex';
+    }
+
+    function closeShareModal() {
+      document.getElementById('shareModal').style.display = 'none';
+    }
+
+    function copyShareUrl() {
+      const url = getPublicLessonUrl();
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('copyUrlBtn');
+        btn.textContent = '✅ 已複製本課網址！可直接貼給學生或家長';
+        btn.style.background = '#06d6a0';
+        setTimeout(() => {
+          btn.textContent = '📋 複製「本課專屬」練習網址';
+          btn.style.background = '#2563eb';
+        }, 2500);
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupFreehandCanvas();
+      initFromUrlParams();
+      renderAll();
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+      }
+    });
+  </script>
+</body>
+</html>
