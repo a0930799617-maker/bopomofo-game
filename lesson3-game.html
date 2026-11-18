@@ -1,0 +1,1714 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>🍂 第三課《秋千》互動遊戲樂園｜康軒國語一上</title>
+  <style>
+    :root {
+      --kai: "BiauKai", "BiauKaiTC", "標楷體", "DFKai-SB", "TW-Kai", "Kaiti TC", "STKaiti", "KaiTi", serif;
+      --ui: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+      --orange: #f07c1b;
+      --deep: #d9480f;
+      --navy: #23395d;
+      --blue: #1c64c8;
+      --green: #2fa04f;
+      --cream: #fff8ec;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: var(--ui);
+      color: var(--navy);
+      background: #f7e3c0 url("games/l3_autumn_bg.jpg") center / cover fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 248, 236, 0.30), rgba(255, 238, 210, 0.55));
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    button { font-family: inherit; color: inherit; cursor: pointer; }
+
+    /* ===== Top portal bar (shared with other pages) ===== */
+    .top-portal-bar {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      background: #2b2d42;
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.94rem;
+      flex-wrap: wrap;
+    }
+
+    .portal-link {
+      color: #ffe66d;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.13);
+      padding: 5px 14px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .portal-link:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-1px); }
+    .portal-link.current { background: #ffe66d; color: #2b2d42; }
+
+    /* ===== Header ===== */
+    header {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 18px 4px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+      font-weight: 900;
+      color: #7a3b0c;
+      text-shadow: 0 2px 0 #fff, 0 0 12px rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+    }
+
+    .tools { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .tool {
+      border: none;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      box-shadow: 0 3px 0 rgba(122, 59, 12, 0.25);
+    }
+
+    .tool.off { opacity: 0.55; }
+
+    /* ===== Screens ===== */
+    .screen {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 8px 18px 40px;
+    }
+
+    .hidden { display: none !important; }
+
+    .panel {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 26px;
+      box-shadow: 0 10px 30px rgba(120, 60, 10, 0.18);
+      padding: 18px;
+      border: 3px solid #fff;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: clamp(1rem, 1.6vw, 1.2rem);
+      font-weight: 900;
+      color: #fff;
+      background: var(--orange);
+      box-shadow: 0 5px 0 rgba(0, 0, 0, 0.18);
+      transition: transform 0.1s, box-shadow 0.1s, filter 0.2s;
+    }
+
+    .btn:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(0, 0, 0, 0.18); }
+    .btn:disabled { filter: grayscale(0.8); opacity: 0.6; }
+    .btn.teal { background: #17a2b8; }
+    .btn.green { background: var(--green); }
+    .btn.gray { background: #8d99ae; }
+    .btn.purple { background: #8e44ad; }
+    .btn.light { background: #fff; color: var(--navy); border: 3px solid #ffd59a; }
+
+    /* ===== Character + vertical Zhuyin (textbook style) ===== */
+    .cz {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 0.03em;
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .cz .c {
+      font-family: var(--kai);
+      line-height: 1.15;
+      display: inline-block;
+      transition: transform 0.18s, color 0.18s;
+    }
+
+    .z {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--kai);
+      font-size: 0.28em;
+      line-height: 1.02;
+      margin-left: 0.08em;
+      font-weight: normal;
+    }
+
+    .zc { display: flex; flex-direction: column; align-items: center; }
+    .zc .lt { line-height: 0.55; }
+    .tn { align-self: flex-end; margin-bottom: 0.2em; margin-left: 0.02em; }
+    .tn.mid { align-self: center; margin-bottom: 0; }
+
+    body.no-zy .z { display: none; }
+
+    .p { font-family: var(--kai); display: inline-block; width: 0.62em; }
+
+    .cz.new .c, .cz.new .z { color: var(--blue); }
+    .cz.lit .c { color: var(--deep) !important; transform: scale(1.14); text-shadow: 0 0 12px #ffd27a; }
+
+    /* ===== Swing stage ===== */
+    .stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 8 / 5;
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 4px #fff, 0 8px 20px rgba(0, 0, 0, 0.15);
+      background: #bfe6ff;
+    }
+
+    .stage svg { width: 100%; height: 100%; display: block; }
+
+    .stage .deco-e {
+      position: absolute;
+      font-size: clamp(16px, 2.4vw, 32px);
+      pointer-events: none;
+    }
+
+    .dolphin { animation: jump 3.8s ease-in-out infinite; }
+    .dolphin.d2 { animation-delay: 1.9s; }
+
+    @keyframes jump {
+      0%, 55%, 100% { transform: translate(0, 0) rotate(0); opacity: 0.0; }
+      62% { transform: translate(6px, -10px) rotate(-30deg); opacity: 1; }
+      74% { transform: translate(22px, -34px) rotate(0deg); opacity: 1; }
+      86% { transform: translate(38px, -10px) rotate(35deg); opacity: 1; }
+      92% { transform: translate(44px, 4px) rotate(45deg); opacity: 0; }
+    }
+
+    .fish { animation: swim 6s linear infinite; }
+    @keyframes swim { 0% { transform: translateX(0); } 50% { transform: translateX(-30px); } 100% { transform: translateX(0); } }
+
+    .leaf { top: -10%; animation: leafFall 7s linear infinite; }
+    @keyframes leafFall {
+      0% { transform: translate(0, 0) rotate(0); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translate(-40px, 360px) rotate(400deg); opacity: 0; }
+    }
+
+    .pop {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      font-family: var(--kai);
+      font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+      color: var(--deep);
+      font-weight: 900;
+      text-shadow: 0 2px 0 #fff, 0 0 10px #fff, 0 0 18px #fff;
+      animation: popUp 1.3s ease-out forwards;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @keyframes popUp {
+      0% { opacity: 0; transform: translate(-50%, 12px) scale(0.6); }
+      20% { opacity: 1; transform: translate(-50%, 0) scale(1.15); }
+      100% { opacity: 0; transform: translate(-50%, -80px) scale(1); }
+    }
+
+    .meter {
+      margin-top: 10px;
+      height: 18px;
+      background: #fff3dc;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: inset 0 0 0 2px #f3c27a;
+    }
+
+    .meter i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #ffd166, #f07c1b);
+      border-radius: 999px;
+      transition: width 0.6s ease;
+    }
+
+    .meter-label { text-align: center; font-weight: 800; color: #8a4b12; margin-top: 6px; font-size: 0.98rem; }
+
+    /* ===== Hub ===== */
+    .hub-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(260px, 1fr); gap: 18px; }
+
+    .hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; align-items: center; }
+
+    .badge {
+      display: inline-block;
+      background: #ffe8c2;
+      color: #a3500e;
+      font-weight: 900;
+      padding: 4px 12px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+    }
+
+    .hero h1 { font-size: clamp(56px, 7vw, 92px); color: #b4460f; margin: 6px 0 2px; font-weight: 400; }
+    .hero h1 .sub { font-family: var(--ui); font-size: 0.3em; font-weight: 900; color: #7a3b0c; display: block; }
+    .hero p { font-size: 1.05rem; line-height: 1.6; font-weight: 700; color: #6b4a2b; }
+
+    .stamps h3 { font-size: 1.3rem; color: #a3500e; display: flex; justify-content: space-between; align-items: center; }
+    .stamp-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 14px 0; }
+
+    .stamp {
+      aspect-ratio: 1;
+      border-radius: 50%;
+      border: 3px dashed #e6c79a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(20px, 2.6vw, 30px);
+      filter: grayscale(1);
+      opacity: 0.45;
+      background: #fffaf0;
+    }
+
+    .stamp small { font-size: 0.7rem; font-weight: 900; }
+
+    .stamp.on {
+      filter: none;
+      opacity: 1;
+      border: 4px solid var(--c);
+      background: #fff;
+      transform: rotate(-8deg);
+      box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.8), 0 4px 10px rgba(0, 0, 0, 0.15);
+      animation: stampIn 0.5s ease;
+    }
+
+    @keyframes stampIn { 0% { transform: scale(1.6) rotate(-20deg); opacity: 0; } 100% { transform: scale(1) rotate(-8deg); opacity: 1; } }
+
+    .teacher-tip { font-size: 0.92rem; line-height: 1.6; color: #6b4a2b; background: #fff6e3; border-radius: 14px; padding: 10px 12px; }
+
+    .mini { border: none; background: #ffe8c2; color: #a3500e; font-weight: 900; padding: 8px 12px; border-radius: 999px; margin-top: 10px; width: 100%; }
+
+    .cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: 18px; }
+
+    .card {
+      position: relative;
+      border: none;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      padding: 18px 10px 14px;
+      border-bottom: 8px solid var(--c);
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(120, 60, 10, 0.15);
+      transition: transform 0.15s;
+    }
+
+    .card:hover { transform: translateY(-4px); }
+    .card:active { transform: translateY(2px); }
+    .card .num { position: absolute; top: 10px; left: 12px; background: var(--c); color: #fff; border-radius: 50%; width: 30px; height: 30px; line-height: 30px; font-weight: 900; }
+    .card .ic { font-size: 3rem; }
+    .card .nm { font-size: 1.3rem; font-weight: 900; margin-top: 4px; }
+    .card .ds { font-size: 0.92rem; color: #6b5b4b; margin-top: 4px; min-height: 2.6em; font-weight: 700; }
+    .card .st { color: #f5b301; font-size: 1.5rem; letter-spacing: 2px; margin-top: 4px; }
+
+    /* ===== Game layout ===== */
+    .gbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 10px 14px;
+      box-shadow: 0 6px 16px rgba(120, 60, 10, 0.12);
+    }
+
+    .gbar h2 { font-size: clamp(1.3rem, 2.4vw, 1.75rem); color: #7a3b0c; }
+    .gstat { margin-left: auto; font-weight: 900; font-size: 1.1rem; color: #a3500e; }
+
+    .glayout { display: grid; grid-template-columns: minmax(0, 2.15fr) minmax(250px, 1fr); gap: 18px; align-items: start; }
+    .side .panel { padding: 12px; }
+
+    .dots { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-bottom: 8px; }
+    .dots span { width: 22px; height: 22px; border-radius: 50%; background: #f3e2c4; display: inline-flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+    .dots span.cur { background: #ffd166; animation: pulse 1.2s infinite; }
+    .dots span.ok { background: #3cc463; color: #fff; }
+    .dots span.retry { background: #ffa94d; color: #fff; }
+
+    @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.18); } }
+
+    .instr { text-align: center; font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 900; color: #7a3b0c; margin: 4px 0 10px; }
+
+    .opts { display: flex; gap: clamp(12px, 2vw, 26px); justify-content: center; flex-wrap: wrap; margin: 16px 0 6px; }
+
+    .opt {
+      font-family: var(--kai);
+      font-size: clamp(60px, 8.6vw, 112px);
+      width: clamp(110px, 13.5vw, 165px);
+      height: clamp(110px, 13.5vw, 165px);
+      background: #fff;
+      border-radius: 26px;
+      border: 5px solid #ffd59a;
+      box-shadow: 0 8px 0 #f0b25c;
+      line-height: 1;
+      transition: transform 0.1s;
+    }
+
+    .opt:active { transform: translateY(4px); box-shadow: 0 4px 0 #f0b25c; }
+    .opt.correct { background: #e6ffe9; border-color: #3cc463; box-shadow: 0 8px 0 #2fa04f; color: var(--green); animation: bounce 0.6s ease; }
+    .opt.wrong { animation: shake 0.45s ease; opacity: 0.38; }
+
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-12px); } 40% { transform: translateX(12px); } 60% { transform: translateX(-8px); } 80% { transform: translateX(8px); } }
+    @keyframes bounce { 0% { transform: scale(1); } 40% { transform: scale(1.18); } 70% { transform: scale(0.95); } 100% { transform: scale(1); } }
+
+    .shake { animation: shake 0.45s ease; }
+
+    /* Read-along */
+    .poem-title { text-align: center; font-size: clamp(40px, 5vw, 64px); color: #b4460f; margin-bottom: 6px; }
+    .poem-title .author { font-family: var(--ui); font-size: 0.32em; color: #8a6d4b; font-weight: 800; margin-left: 10px; }
+
+    .poem { font-size: clamp(36px, 4.6vw, 60px); display: flex; flex-direction: column; gap: 2px; }
+
+    .line {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      padding: 4px 14px;
+      border-radius: 18px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .line:hover { background: rgba(255, 236, 190, 0.5); }
+    .line.active { background: #fff2c6; box-shadow: inset 0 0 0 3px #ffc04d; }
+    .line.stair { padding: 14px 14px 14px 2.2em; }
+    .line .deco { font-size: 0.7em; margin-left: 0.5em; }
+
+    .ctrls { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
+
+    .echo {
+      margin: 12px auto 0;
+      max-width: 420px;
+      text-align: center;
+      background: #e8f9ff;
+      border: 3px solid #7fd3e8;
+      border-radius: 18px;
+      padding: 10px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0b7285;
+    }
+
+    .echo .bar { height: 10px; background: #c5eef8; border-radius: 999px; margin-top: 8px; overflow: hidden; }
+    .echo .bar i { display: block; height: 100%; width: 100%; background: #22b8cf; }
+
+    /* Listen */
+    .prompt { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; }
+
+    .bigspk {
+      width: clamp(96px, 11vw, 124px);
+      height: clamp(96px, 11vw, 124px);
+      border-radius: 50%;
+      border: none;
+      font-size: clamp(2.4rem, 4vw, 3.2rem);
+      background: radial-gradient(circle at 35% 30%, #ffe08a, #ff9f43);
+      box-shadow: 0 8px 0 #d9730d;
+      animation: pulse 1.8s infinite;
+    }
+
+    .hintbox { min-height: 1.4em; font-size: clamp(44px, 5.4vw, 70px); text-align: center; margin-top: 6px; }
+
+    .blank .c {
+      color: #e0a85a;
+      border: 4px dashed #f0b25c;
+      border-radius: 14px;
+      width: 1.15em;
+      text-align: center;
+      background: #fffaf0;
+    }
+
+    .blank.filled .c { color: var(--green); border-style: solid; border-color: #3cc463; background: #eaffef; animation: bounce 0.6s ease; }
+
+    /* Build */
+    .build-target { text-align: center; font-size: clamp(1.2rem, 2vw, 1.5rem); font-weight: 900; color: #7a3b0c; }
+    .build-target .cz { font-size: clamp(40px, 4.6vw, 58px); }
+
+    .eq { display: flex; align-items: center; justify-content: center; gap: clamp(8px, 1.5vw, 16px); font-size: clamp(28px, 4vw, 48px); font-weight: 900; color: #c08a4a; margin: 14px 0; flex-wrap: wrap; }
+
+    .slot, .result {
+      width: clamp(96px, 11.5vw, 145px);
+      height: clamp(110px, 13vw, 165px);
+      border: 4px dashed #e0b77a;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--kai);
+      font-size: clamp(56px, 7.6vw, 100px);
+      background: #fffaf0;
+      color: var(--navy);
+      line-height: 1;
+      transition: transform 0.4s ease;
+    }
+
+    .slot small { font-family: var(--ui); font-size: 0.95rem; color: #8a6d4b; font-weight: 900; margin-top: 6px; }
+    .slot.filled { border-style: solid; border-color: #9fb6de; background: #fff; animation: bounce 0.45s ease; }
+    .slot.rad { color: var(--orange); border-color: #ffb74d; }
+    .eq.merge .s0 { transform: translateX(18px) scale(0.92); }
+    .eq.merge .s1 { transform: translateX(-18px) scale(0.92); }
+
+    .result { border-color: #c7e9cf; }
+    .result .ghost { opacity: 0.16; }
+    .result.done { border: 5px solid #3cc463; background: #eaffef; }
+    .result .made { color: var(--navy); animation: bounce 0.6s ease; }
+
+    .pieces { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 10px; }
+
+    .piece {
+      font-family: var(--kai);
+      font-size: clamp(48px, 6vw, 78px);
+      width: clamp(84px, 10vw, 118px);
+      height: clamp(84px, 10vw, 118px);
+      background: #fff;
+      border: 4px solid #c7d7f2;
+      border-radius: 20px;
+      box-shadow: 0 6px 0 #9fb6de;
+      color: var(--navy);
+      line-height: 1;
+    }
+
+    .piece:active { transform: translateY(3px); box-shadow: 0 3px 0 #9fb6de; }
+    .piece.used { visibility: hidden; }
+
+    /* Fill */
+    .sent {
+      font-size: clamp(44px, 6vw, 80px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 10px 0;
+      padding: 16px 10px;
+      background: #fffaf0;
+      border-radius: 22px;
+      border: 3px solid #ffe2b3;
+    }
+
+    /* Order */
+    .oslots { display: flex; gap: 10px; justify-content: center; align-items: center; flex-wrap: wrap; margin: 14px 0; min-height: 140px; padding: 10px; background: #fffaf0; border-radius: 22px; border: 3px solid #ffe2b3; }
+
+    .oslot {
+      min-width: clamp(100px, 12vw, 160px);
+      min-height: clamp(96px, 11vw, 130px);
+      border: 4px dashed #e0b77a;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .oslot.full { border: none; }
+    .oend { font-family: var(--kai); font-size: clamp(40px, 5vw, 64px); }
+    .obank { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; min-height: 120px; margin-top: 8px; }
+
+    .chunk {
+      font-size: clamp(40px, 5vw, 64px);
+      padding: 6px 14px;
+      background: #fff;
+      border: 4px solid #ffcf8a;
+      border-radius: 20px;
+      box-shadow: 0 6px 0 #f0b25c;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .chunk.ok { border-color: #3cc463; box-shadow: 0 6px 0 #2fa04f; background: #eaffef; }
+    .chunk.ghost { visibility: hidden; }
+
+    /* Modal */
+    .modal { position: fixed; inset: 0; background: rgba(43, 45, 66, 0.55); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 20px; }
+
+    .modal-card {
+      background: #fff;
+      border-radius: 30px;
+      padding: 26px 30px;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      border: 6px solid #ffd59a;
+      animation: bounce 0.5s ease;
+    }
+
+    .m-emoji { font-size: 4.5rem; }
+    .modal-card h2 { font-size: 2rem; color: #b4460f; margin: 6px 0; }
+    .m-stars { font-size: 3rem; color: #f5b301; letter-spacing: 6px; }
+    .modal-card p { font-size: 1.2rem; font-weight: 800; color: #6b4a2b; margin: 8px 0 16px; line-height: 1.6; }
+    .m-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+    .vcard { max-width: 900px; padding: 14px; }
+    .vcard video { width: 100%; border-radius: 18px; background: #000; display: block; }
+
+    .conf { position: fixed; top: -60px; z-index: 80; pointer-events: none; animation: confFall linear forwards; }
+    @keyframes confFall { to { transform: translateY(115vh) rotate(560deg); } }
+
+    @media (max-width: 1000px) {
+      .cards { grid-template-columns: repeat(3, 1fr); }
+      .hub-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 860px) {
+      .glayout { grid-template-columns: 1fr; }
+      .side { order: -1; max-width: 460px; width: 100%; margin: 0 auto; }
+      .hero { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .cards { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-portal-bar">
+    <span>🌟 快速切換：</span>
+    <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
+    <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
+    <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
+    <a class="portal-link" href="forest-theater.html">🎬 《3D 童話拼字大劇院》</a>
+    <a class="portal-link current" href="lesson3-game.html">🎢 目前所在：《秋千》互動遊戲樂園</a>
+  </div>
+
+  <header>
+    <div class="logo" id="logoHome">🍂 第三課《秋千》互動遊戲樂園</div>
+    <div class="tools">
+      <button class="tool" id="homeBtn">🏠 遊戲大廳</button>
+      <button class="tool" id="zyBtn">ㄅ 注音：開</button>
+      <button class="tool" id="sfxBtn">🎵 音效：開</button>
+      <button class="tool" id="fsBtn">⛶ 全螢幕</button>
+    </div>
+  </header>
+
+  <!-- ================= HUB ================= -->
+  <section id="hub" class="screen">
+    <div class="hub-grid">
+      <div class="panel hero">
+        <div>
+          <span class="badge">康軒國語一上・第三課</span>
+          <h1 id="heroTitle"></h1>
+          <p>完成 5 個遊戲關卡，集滿秋千印章！<br>答得越好，鞦韆就盪得越高喔！🎢</p>
+        </div>
+        <div class="stage-slot">
+          <div class="stage-wrap" id="stageWrap">
+            <div class="stage" id="stage">
+              <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#a9dcff" />
+                    <stop offset="1" stop-color="#fff1d0" />
+                  </linearGradient>
+                  <linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#6fdbe6" />
+                    <stop offset="1" stop-color="#1e8fb3" />
+                  </linearGradient>
+                  <linearGradient id="mtG" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#c8e27a" />
+                    <stop offset="1" stop-color="#5aa84a" />
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="250" fill="url(#skyG)" />
+                <circle cx="345" cy="40" r="20" fill="#ffd45c" />
+                <ellipse cx="90" cy="70" rx="38" ry="12" fill="#fff" opacity="0.85" />
+                <ellipse cx="280" cy="55" rx="30" ry="9" fill="#fff" opacity="0.8" />
+                <path d="M200 250 L300 72 L335 118 L362 90 L400 140 L400 250 Z" fill="url(#mtG)" />
+                <path d="M300 72 L318 98 L306 94 L296 104 L288 92 Z" fill="#fff8e0" opacity="0.9" />
+                <path d="M0 172 Q 25 164 50 172 T 100 172 T 150 172 T 200 174 T 240 176 L240 250 L0 250 Z" fill="url(#seaG)" />
+                <path d="M10 190 q10 -6 20 0 M70 205 q10 -6 20 0 M130 192 q10 -6 20 0" stroke="#fff" stroke-width="2" fill="none" opacity="0.8" />
+                <path d="M150 250 Q 205 214 270 222 L 400 228 L400 250 Z" fill="#e9b85c" />
+                <path d="M-10 14 Q 120 -2 270 24" stroke="#7a4a22" stroke-width="13" fill="none" stroke-linecap="round" />
+                <text x="40" y="22" font-size="22">🍁</text>
+                <text x="110" y="16" font-size="20">🍂</text>
+                <text x="160" y="22" font-size="18">🍁</text>
+                <text x="240" y="34" font-size="20">🍁</text>
+                <g id="swingG">
+                  <line x1="184" y1="16" x2="184" y2="150" stroke="#b07a3c" stroke-width="3" />
+                  <line x1="216" y1="16" x2="216" y2="150" stroke="#b07a3c" stroke-width="3" />
+                  <rect x="172" y="148" width="56" height="9" rx="3" fill="#8b5a2b" />
+                  <text x="200" y="149" font-size="42" text-anchor="middle">👧</text>
+                </g>
+              </svg>
+              <span class="deco-e" style="left:72%;top:52%">🌲</span>
+              <span class="deco-e" style="left:84%;top:60%">🌳</span>
+              <span class="deco-e" style="left:64%;top:66%">🌲</span>
+              <span class="deco-e" style="left:90%;top:76%">🌺</span>
+              <span class="deco-e dolphin" style="left:8%;top:74%">🐬</span>
+              <span class="deco-e dolphin d2" style="left:30%;top:80%">🐬</span>
+              <span class="deco-e fish" style="left:42%;top:88%">🐟</span>
+              <span class="deco-e leaf" style="left:30%;animation-delay:0s">🍂</span>
+              <span class="deco-e leaf" style="left:55%;animation-delay:2.4s">🍁</span>
+              <span class="deco-e leaf" style="left:80%;animation-delay:4.6s">🍂</span>
+            </div>
+            <div class="meter"><i id="meterFill"></i></div>
+            <div class="meter-label" id="meterLabel">盪得越高，表現越棒！</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel stamps">
+        <h3>🍁 我的秋千集章卡 <span id="stampCount">0 / 5</span></h3>
+        <div class="stamp-grid" id="stampGrid"></div>
+        <div class="teacher-tip">
+          👩‍🏫 <b>老師小提示：</b>建議依序 1→5 進行：先讀課文、再認字、拼部件、填課文、排句子。點任何一個字都能聽到發音；右上角可切換注音與全螢幕投影。
+        </div>
+        <button class="mini" id="resetBtn">🔄 清除集章（換下一位同學）</button>
+      </div>
+    </div>
+
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <!-- ================= GAME 1: READ ================= -->
+  <section id="read" class="screen hidden">
+    <div class="gbar">
+      <button class="btn gray back">← 回大廳</button>
+      <h2>📖 關卡 1：盪鞦韆讀課文</h2>
+      <div class="gstat">點一點字或句子，聽聽看！</div>
+    </div>
+    <div class="glayout">
+      <div class="panel">
+        <div class="poem-title" id="poemTitle"></div>
+        <div class="poem" id="poem"></div>
+        <div class="echo hidden" id="echo">🗣️ 換你唸囉！<div class="bar"><i></i></div></div>
+        <div class="ctrls">
+          <button class="btn" id="readAll">▶ 老師唸全文</button>
+          <button class="btn teal" id="readEcho">🗣️ 一句一句跟我唸</button>
+          <button class="btn gray" id="readStop">⏹ 停止</button>
+        </div>
+      </div>
+      <div class="side">
+        <div class="panel">
+          <div class="stage-slot"></div>
+          <div class="teacher-tip" style="margin-top:10px">💡 藍色的字是本課生字。唸到「上上上」鞦韆盪上高山，唸到「下下下」鞦韆盪向大海！</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAME 2: LISTEN ================= -->
+  <section id="listen" class="screen hidden">
+    <div class="gbar">
+      <button class="btn gray back">← 回大廳</button>
+      <h2>🎧 關卡 2：聽音找生字</h2>
+      <div class="gstat" id="lStat"></div>
+    </div>
+    <div class="glayout">
+      <div class="panel">
+        <div class="dots" id="lDots"></div>
+        <div class="instr">聽一聽，找出正確的字！</div>
+        <div class="prompt">
+          <button class="bigspk" id="lSpeak" title="再聽一次">🔊</button>
+          <button class="btn light" id="lHintBtn">💡 給我提示</button>
+        </div>
+        <div class="hintbox" id="lHint"></div>
+        <div class="opts" id="lOpts"></div>
+      </div>
+      <div class="side"><div class="panel"><div class="stage-slot"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ================= GAME 3: BUILD ================= -->
+  <section id="build" class="screen hidden">
+    <div class="gbar">
+      <button class="btn gray back">← 回大廳</button>
+      <h2>🧩 關卡 3：部件拼拼樂</h2>
+      <div class="gstat" id="bStat"></div>
+    </div>
+    <div class="glayout">
+      <div class="panel">
+        <div class="dots" id="bDots"></div>
+        <div class="build-target" id="bTarget"></div>
+        <div class="eq" id="bEq">
+          <div class="slot s0" id="bS0"></div>
+          <span>＋</span>
+          <div class="slot s1" id="bS1"></div>
+          <span>＝</span>
+          <div class="result" id="bRes"></div>
+        </div>
+        <div class="pieces" id="bPieces"></div>
+        <div class="ctrls">
+          <button class="btn purple hidden" id="bVideo">🎬 看 3D 拼字動畫</button>
+          <button class="btn green hidden" id="bNext">下一題 ▶</button>
+        </div>
+      </div>
+      <div class="side">
+        <div class="panel">
+          <div class="stage-slot"></div>
+          <div class="teacher-tip" style="margin-top:10px">💡 拼對之後，<b style="color:#f07c1b">橘色</b>的部件就是這個字的部首，跟課本一樣喔！</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= GAME 4: FILL ================= -->
+  <section id="fill" class="screen hidden">
+    <div class="gbar">
+      <button class="btn gray back">← 回大廳</button>
+      <h2>✏️ 關卡 4：課文填空</h2>
+      <div class="gstat" id="fStat"></div>
+    </div>
+    <div class="glayout">
+      <div class="panel">
+        <div class="dots" id="fDots"></div>
+        <div class="instr">看注音，把正確的字放回課文裡！</div>
+        <div class="sent" id="fSent"></div>
+        <div class="opts" id="fOpts"></div>
+        <div class="ctrls"><button class="btn light" id="fSpeak">🔊 聽這一句</button></div>
+      </div>
+      <div class="side"><div class="panel"><div class="stage-slot"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ================= GAME 5: ORDER ================= -->
+  <section id="order" class="screen hidden">
+    <div class="gbar">
+      <button class="btn gray back">← 回大廳</button>
+      <h2>🚂 關卡 5：句子排排隊</h2>
+      <div class="gstat" id="oStat"></div>
+    </div>
+    <div class="glayout">
+      <div class="panel">
+        <div class="dots" id="oDots"></div>
+        <div class="instr">依照順序點詞語，排成通順的句子！（點上面的詞可以拿回來）</div>
+        <div class="oslots" id="oSlots"></div>
+        <div class="obank" id="oBank"></div>
+        <div class="ctrls"><button class="btn light" id="oSpeak">🔊 聽正確句子</button></div>
+      </div>
+      <div class="side"><div class="panel"><div class="stage-slot"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ================= MODALS ================= -->
+  <div class="modal hidden" id="modal">
+    <div class="modal-card">
+      <div class="m-emoji" id="mEmoji">🎉</div>
+      <h2 id="mTitle"></h2>
+      <div class="m-stars" id="mStars"></div>
+      <p id="mMsg"></p>
+      <div class="m-btns">
+        <button class="btn teal" id="mAgain">🔁 再玩一次</button>
+        <button class="btn" id="mHome">🏠 回遊戲大廳</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="vmodal">
+    <div class="modal-card vcard">
+      <video id="vPlayer" controls playsinline preload="none"></video>
+      <div class="m-btns" style="margin-top:12px"><button class="btn" id="vClose">✖ 關閉影片</button></div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    /* ====================== DATA ====================== */
+    const ZY = {
+      秋: "ㄑㄧㄡ", 千: "ㄑㄧㄢ", 和: "ㄏㄢˋ", 我: "ㄨㄛˇ", 玩: "ㄨㄢˊ", 上: "ㄕㄤˋ", 陪: "ㄆㄟˊ",
+      高: "ㄍㄠ", 山: "ㄕㄢ", 下: "ㄒㄧㄚˋ", 到: "ㄉㄠˋ", 大: "ㄉㄚˋ", 海: "ㄏㄞˇ", 的: "˙ㄉㄜ",
+      好: "ㄏㄠˇ", 朋: "ㄆㄥˊ", 友: "ㄧㄡˇ", 們: "˙ㄇㄣ", 一: "ㄧˋ", 起: "ㄑㄧˇ", 是: "ㄕˋ",
+      三: "ㄙㄢ", 嚴: "ㄧㄢˊ", 淑: "ㄕㄨˊ", 女: "ㄋㄩˇ"
+    };
+
+    const NEWCHARS = [..."秋千和玩陪高山到大海朋友們起"];
+    const NEW = new Set(NEWCHARS);
+    const PUNCT = "，。、！？";
+
+    const POEM = [
+      "秋千，秋千，和我玩。",
+      "上上上",
+      "陪我上高山。",
+      "下下下",
+      "陪我到大海。",
+      "秋千，秋千，我的好朋友，",
+      "秋千，秋千，我們一起玩。"
+    ];
+
+    const WORD = { 秋: "秋千", 千: "秋千", 和: "和我玩", 玩: "一起玩", 陪: "陪我", 高: "高山", 山: "高山", 到: "到大海", 大: "大海", 海: "大海", 朋: "朋友", 友: "朋友", 們: "我們", 起: "一起" };
+
+    const LOOK = { 秋: "科", 千: "干", 和: "知", 玩: "完", 陪: "倍", 高: "亮", 山: "出", 到: "倒", 大: "太", 海: "每", 朋: "明", 友: "有", 們: "門", 起: "走" };
+
+    // r = index of the textbook orange radical
+    const PARTS = [
+      { ch: "秋", p: ["禾", "火"], r: 0 },
+      { ch: "和", p: ["禾", "口"], r: 1 },
+      { ch: "玩", p: ["王", "元"], r: 0 },
+      { ch: "陪", p: ["阝", "咅"], r: 0 },
+      { ch: "到", p: ["至", "刂"], r: 1 },
+      { ch: "海", p: ["氵", "每"], r: 0 },
+      { ch: "朋", p: ["月", "月"], r: 0 },
+      { ch: "們", p: ["亻", "門"], r: 0 },
+      { ch: "起", p: ["走", "己"], r: 0 }
+    ];
+
+    const PLABEL = { 禾: "禾字旁", 王: "王字旁", 阝: "左耳旁", 刂: "立刀旁", 氵: "三點水", 亻: "單人旁", 走: "走字旁" };
+
+    const FILL = [
+      { s: "□千，秋千，和我玩。", a: "秋", o: ["秋", "和", "火"] },
+      { s: "秋千，秋千，□我玩。", a: "和", o: ["和", "禾", "知"] },
+      { s: "□我上高山。", a: "陪", o: ["陪", "倍", "部"] },
+      { s: "陪我上□山。", a: "高", o: ["高", "亮", "京"] },
+      { s: "陪我上高□。", a: "山", o: ["山", "出", "川"] },
+      { s: "陪我□大海。", a: "到", o: ["到", "倒", "至"] },
+      { s: "陪我到大□。", a: "海", o: ["海", "每", "梅"] },
+      { s: "我的好朋□，", a: "友", o: ["友", "有", "反"] },
+      { s: "我□一起玩。", a: "們", o: ["們", "門", "問"] },
+      { s: "我們一□玩。", a: "起", o: ["起", "走", "己"] }
+    ];
+
+    const ORDER = [
+      { w: ["秋千", "和我", "玩"] },
+      { w: ["陪我", "上", "高山"] },
+      { w: ["陪我", "到", "大海"] },
+      { w: ["我的", "好", "朋友"] },
+      { w: ["我們", "一起", "玩"] },
+      { w: ["秋千", "是", "我的", "好朋友"] }
+    ];
+
+    const GAMES = [
+      { id: "read", icon: "📖", name: "盪鞦韆讀課文", short: "讀課文", desc: "聽老師唸，再一句一句跟著唸", color: "#ff9f43" },
+      { id: "listen", icon: "🎧", name: "聽音找生字", short: "找生字", desc: "聽一聽，找出正確的字", color: "#17a2b8" },
+      { id: "build", icon: "🧩", name: "部件拼拼樂", short: "拼部件", desc: "把兩個部件拼成生字", color: "#8e44ad" },
+      { id: "fill", icon: "✏️", name: "課文填空", short: "填課文", desc: "看注音，把字放回課文", color: "#2fa04f" },
+      { id: "order", icon: "🚂", name: "句子排排隊", short: "排句子", desc: "把詞語排成通順句子", color: "#e74c3c" }
+    ];
+
+    /* ====================== HELPERS ====================== */
+    const $ = s => document.querySelector(s);
+    const $$ = s => [...document.querySelectorAll(s)];
+    const wait = ms => new Promise(r => setTimeout(r, ms));
+    const shuffle = arr => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+    const state = { sfx: true, zy: true };
+    let curScreen = "hub";
+    let SID = 0; // session id: increases whenever the screen changes
+
+    function zyHTML(zy) {
+      if (!zy) return "";
+      let light = false, tone = "";
+      if (zy.startsWith("˙")) { light = true; zy = zy.slice(1); }
+      const last = zy.slice(-1);
+      if ("ˊˇˋ".includes(last)) { tone = last; zy = zy.slice(0, -1); }
+      const syms = [...zy];
+      return `<span class="z"><span class="zc">${light ? '<span class="lt">˙</span>' : ""}${syms.map(s => `<span>${s}</span>`).join("")}</span>${tone ? `<span class="tn${syms.length === 1 ? " mid" : ""}">${tone}</span>` : ""}</span>`;
+    }
+
+    function czHTML(ch, opts = {}) {
+      if (PUNCT.includes(ch)) return `<span class="p">${ch}</span>`;
+      const cls = ["cz"];
+      if (opts.newc && NEW.has(ch)) cls.push("new");
+      return `<span class="${cls.join(" ")}" data-ch="${ch}"><span class="c">${ch}</span>${zyHTML(ZY[ch])}</span>`;
+    }
+
+    const textHTML = (s, opts) => [...s].map(c => czHTML(c, opts)).join("");
+
+    /* ====================== SPEECH ====================== */
+    let VOICE = null;
+    let speakToken = 0;
+    const liveUtter = [];
+
+    function pickVoice() {
+      if (!("speechSynthesis" in window)) return;
+      const vs = speechSynthesis.getVoices();
+      VOICE = vs.find(v => /zh[-_]TW/i.test(v.lang)) ||
+        vs.find(v => /Mei-?Jia|Yating|Hanhan|Zhiwei|HsiaoChen/i.test(v.name)) ||
+        vs.find(v => /^zh/i.test(v.lang)) || null;
+    }
+
+    if ("speechSynthesis" in window) {
+      pickVoice();
+      speechSynthesis.onvoiceschanged = pickVoice;
+    }
+
+    // 「和」in this lesson is read ㄏㄢˋ; stair words get pauses.
+    function ttsFix(s) {
+      return s.replace(/□/g, "").replace(/和/g, "汗").replace(/上上上/g, "上，上，上").replace(/下下下/g, "下，下，下");
+    }
+
+    function speak(text, rate = 0.8) {
+      return new Promise(resolve => {
+        if (!("speechSynthesis" in window)) { setTimeout(resolve, 400); return; }
+        speechSynthesis.cancel();
+        const u = new SpeechSynthesisUtterance(ttsFix(text));
+        u.lang = "zh-TW";
+        u.rate = rate;
+        if (VOICE) u.voice = VOICE;
+        let done = false;
+        const fin = () => {
+          if (done) return;
+          done = true;
+          clearTimeout(timer);
+          const i = liveUtter.indexOf(u);
+          if (i >= 0) liveUtter.splice(i, 1);
+          resolve();
+        };
+        const timer = setTimeout(fin, 1800 + text.length * 520 / rate);
+        u.onend = fin;
+        u.onerror = fin;
+        liveUtter.push(u);
+        speechSynthesis.speak(u);
+      });
+    }
+
+    function stopSpeech() {
+      speakToken++;
+      if ("speechSynthesis" in window) speechSynthesis.cancel();
+    }
+
+    /* ====================== SOUND EFFECTS ====================== */
+    let AC = null;
+    function audioCtx() {
+      if (!AC) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        if (C) AC = new C();
+      }
+      if (AC && AC.state === "suspended") AC.resume();
+      return AC;
+    }
+
+    function tone(freq, start, dur, type = "sine", vol = 0.18) {
+      const a = audioCtx();
+      if (!a) return;
+      const o = a.createOscillator();
+      const g = a.createGain();
+      const t0 = a.currentTime + start;
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(vol, t0 + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      o.connect(g);
+      g.connect(a.destination);
+      o.start(t0);
+      o.stop(t0 + dur + 0.05);
+    }
+
+    const SFX = {
+      ok() { tone(784, 0, 0.18, "triangle"); tone(1175, 0.12, 0.32, "triangle"); },
+      bad() { tone(240, 0, 0.22, "square", 0.06); tone(190, 0.16, 0.3, "square", 0.05); },
+      tap() { tone(700, 0, 0.08, "sine", 0.12); },
+      win() { [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, i * 0.11, 0.38, "triangle", 0.16)); }
+    };
+
+    function sfx(name) { if (state.sfx) { try { SFX[name](); } catch (e) { /* ignore */ } } }
+
+    /* ====================== SWING STAGE ====================== */
+    const stageWrap = $("#stageWrap");
+    const swingG = $("#swingG");
+    const swing = { amp: 8, target: 8, t: 0, last: 0 };
+
+    function swingLoop(ts) {
+      const dt = Math.min(50, ts - (swing.last || ts));
+      swing.last = ts;
+      swing.t += dt / 1000;
+      swing.amp += (swing.target - swing.amp) * Math.min(1, dt / 700);
+      const a = swing.amp * Math.sin(swing.t * 2 * Math.PI / 2.3);
+      swingG.setAttribute("transform", `rotate(${a.toFixed(2)} 200 16)`);
+      requestAnimationFrame(swingLoop);
+    }
+    requestAnimationFrame(swingLoop);
+
+    function setSwingProgress(p, label) {
+      p = Math.max(0, Math.min(1, p));
+      swing.target = 8 + p * 40;
+      $("#meterFill").style.width = (p * 100).toFixed(0) + "%";
+      if (label) $("#meterLabel").textContent = label;
+    }
+
+    function popText(txt) {
+      const s = document.createElement("span");
+      s.className = "pop";
+      s.textContent = txt;
+      $("#stage").appendChild(s);
+      setTimeout(() => s.remove(), 1350);
+    }
+
+    function cheer(p) {
+      swing.amp = Math.min(62, swing.amp + 14);
+      setSwingProgress(p, p >= 1 ? "🎉 盪到最高了！" : "答對了！鞦韆盪得更高囉！");
+      const words = ["上！", "上上上！", "好棒！", "盪高高！", "真厲害！"];
+      popText(words[Math.floor(Math.random() * words.length)]);
+    }
+
+    /* ====================== CONFETTI ====================== */
+    function confetti(n = 28) {
+      const em = ["🍁", "🍂", "⭐", "✨", "🎉"];
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement("span");
+        s.className = "conf";
+        s.textContent = em[i % em.length];
+        s.style.left = (Math.random() * 100) + "vw";
+        s.style.fontSize = (20 + Math.random() * 24) + "px";
+        s.style.animationDuration = (2.3 + Math.random() * 1.8) + "s";
+        s.style.animationDelay = (Math.random() * 0.6) + "s";
+        document.body.appendChild(s);
+        setTimeout(() => s.remove(), 5000);
+      }
+    }
+
+    /* ====================== SAVE / HUB ====================== */
+    const SAVE_KEY = "kh1a_l3_swing_v1";
+    let save = {};
+    try { save = JSON.parse(localStorage.getItem(SAVE_KEY) || "{}") || {}; } catch (e) { save = {}; }
+    function persist() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) { /* private mode */ } }
+
+    function doneCount() { return GAMES.filter(g => save[g.id] && save[g.id].done).length; }
+
+    function award(id, stars) {
+      const prev = (save[id] && save[id].stars) || 0;
+      save[id] = { done: true, stars: Math.max(prev, stars) };
+      persist();
+    }
+
+    function renderHub() {
+      $("#cards").innerHTML = GAMES.map((g, i) => {
+        const s = (save[g.id] && save[g.id].stars) || 0;
+        return `<button class="card" data-g="${g.id}" style="--c:${g.color}">
+          <span class="num">${i + 1}</span>
+          <div class="ic">${g.icon}</div>
+          <div class="nm">${g.name}</div>
+          <div class="ds">${g.desc}</div>
+          <div class="st">${"★".repeat(s)}${"☆".repeat(3 - s)}</div>
+        </button>`;
+      }).join("");
+      $("#stampGrid").innerHTML = GAMES.map(g => `<div class="stamp ${save[g.id] && save[g.id].done ? "on" : ""}" style="--c:${g.color}"><span>${g.icon}</span><small>${g.short}</small></div>`).join("");
+      const d = doneCount();
+      $("#stampCount").textContent = `${d} / 5`;
+      setSwingProgress(d / 5, d === 5 ? "🏅 秋千小達人！盪到最高了！" : `已集 ${d} 個印章，繼續加油！`);
+    }
+
+    function show(id) {
+      stopSpeech();
+      SID++;
+      curScreen = id;
+      $$(".screen").forEach(s => s.classList.toggle("hidden", s.id !== id));
+      const slot = document.querySelector(`#${id} .stage-slot`);
+      if (slot) slot.appendChild(stageWrap);
+      $("#modal").classList.add("hidden");
+      closeVideo();
+      window.scrollTo(0, 0);
+      if (id === "hub") renderHub();
+    }
+
+    function renderDots(sel, n) {
+      $(sel).innerHTML = Array.from({ length: n }, () => "<span></span>").join("");
+    }
+
+    function setDot(sel, i, cls) {
+      const d = $$(`${sel} span`)[i];
+      if (!d) return;
+      d.className = cls;
+      if (cls === "ok") d.textContent = "★";
+      if (cls === "retry") d.textContent = "✓";
+    }
+
+    /* ====================== MODAL ====================== */
+    let againFn = null;
+
+    function finishGame(id, score, total, name) {
+      const ratio = total ? score / total : 1;
+      const stars = ratio >= 0.9 ? 3 : ratio >= 0.6 ? 2 : 1;
+      const wasAll = doneCount() === 5;
+      award(id, stars);
+      sfx("win");
+      confetti();
+      setSwingProgress(1, "🎉 盪到最高了！");
+      const nowAll = doneCount() === 5;
+      let msg = id === "read" ? "你把整篇課文都唸完了，好棒！" : `一次就答對 ${score} / ${total} 題！`;
+      let emoji = stars === 3 ? "🏆" : stars === 2 ? "🎉" : "👍";
+      if (nowAll && !wasAll) { msg += "<br>🏅 集滿 5 個印章，你是「秋千小達人」！"; emoji = "🏅"; }
+      $("#mEmoji").textContent = emoji;
+      $("#mTitle").textContent = `${name} 完成！`;
+      $("#mStars").textContent = "★".repeat(stars) + "☆".repeat(3 - stars);
+      $("#mMsg").innerHTML = msg;
+      againFn = START[id];
+      $("#modal").classList.remove("hidden");
+      speak(nowAll && !wasAll ? "太棒了！你是秋千小達人！" : "太棒了！闖關成功！");
+    }
+
+    /* ====================== GAME 1: READ ====================== */
+    function renderPoem() {
+      $("#poemTitle").innerHTML = textHTML("三") + "、" + textHTML("秋千", { newc: true }) + `<span class="author">嚴淑女</span>`;
+      const box = $("#poem");
+      box.innerHTML = "";
+      POEM.forEach((line, i) => {
+        const d = document.createElement("div");
+        d.className = "line";
+        d.dataset.i = i;
+        const stair = line === "上上上" ? "up" : line === "下下下" ? "down" : "";
+        d.innerHTML = textHTML(line, { newc: true }) + (stair === "up" ? '<span class="deco">⛰️</span>' : stair === "down" ? '<span class="deco">🌊</span>' : "");
+        if (stair) {
+          d.classList.add("stair");
+          [...d.querySelectorAll(".cz")].forEach((el, k) => {
+            const off = stair === "up" ? (1 - k) * 0.4 : (k - 1) * 0.4;
+            el.style.transform = `translateY(${off}em)`;
+          });
+        }
+        box.appendChild(d);
+      });
+    }
+
+    function charPhrase(ch) {
+      return NEW.has(ch) ? `${ch}，${WORD[ch]}的${ch}` : ch;
+    }
+
+    function flash(el) {
+      el.classList.add("lit");
+      setTimeout(() => el.classList.remove("lit"), 900);
+    }
+
+    async function readLine(i, tk) {
+      const lines = $$("#poem .line");
+      const line = lines[i];
+      if (!line) return;
+      lines.forEach(l => l.classList.remove("active"));
+      $$("#poem .cz.lit").forEach(c => c.classList.remove("lit"));
+      line.classList.add("active");
+      const text = POEM[i];
+      if (text === "上上上") { swing.amp = 55; popText("上上上！⛰️"); }
+      if (text === "下下下") { swing.amp = 55; popText("下下下！🌊"); }
+      const czs = [...line.querySelectorAll(".cz")];
+      let k = 0;
+      const step = () => { if (tk !== speakToken) return; if (k < czs.length) { czs[k].classList.add("lit"); k++; } };
+      step();
+      const timer = setInterval(step, text.length <= 3 ? 520 : 420);
+      await speak(text, 0.75);
+      clearInterval(timer);
+      if (tk === speakToken) czs.forEach(c => c.classList.add("lit"));
+    }
+
+    async function echoTurn(text, tk) {
+      const b = $("#echo");
+      const n = [...text].filter(c => !PUNCT.includes(c)).length;
+      const dur = Math.max(2400, n * 720);
+      const bar = b.querySelector("i");
+      b.classList.remove("hidden");
+      bar.style.transition = "none";
+      bar.style.width = "100%";
+      void bar.offsetWidth;
+      bar.style.transition = `width ${dur}ms linear`;
+      bar.style.width = "0%";
+      const t0 = Date.now();
+      while (Date.now() - t0 < dur) {
+        if (tk !== speakToken) break;
+        await wait(100);
+      }
+      b.classList.add("hidden");
+    }
+
+    function setReadBusy(busy) {
+      $("#readAll").disabled = busy;
+      $("#readEcho").disabled = busy;
+    }
+
+    async function readAll(echo) {
+      stopSpeech();
+      const tk = speakToken;
+      setReadBusy(true);
+      setSwingProgress(0, echo ? "一句一句跟著唸！" : "仔細聽老師唸課文！");
+      await speak("第三課，秋千。", 0.8);
+      for (let i = 0; i < POEM.length; i++) {
+        if (tk !== speakToken) break;
+        setSwingProgress((i + 1) / POEM.length);
+        await readLine(i, tk);
+        if (tk !== speakToken) break;
+        if (echo) await echoTurn(POEM[i], tk);
+        else await wait(350);
+      }
+      const completed = tk === speakToken;
+      setReadBusy(false);
+      $("#echo").classList.add("hidden");
+      $$("#poem .line").forEach(l => l.classList.remove("active"));
+      if (completed && curScreen === "read") finishGame("read", 1, 1, "盪鞦韆讀課文");
+    }
+
+    $("#poem").addEventListener("click", e => {
+      const line = e.target.closest(".line");
+      if (!line) return;
+      const cz = e.target.closest(".cz");
+      stopSpeech();
+      setReadBusy(false);
+      $("#echo").classList.add("hidden");
+      if (cz) {
+        flash(cz);
+        speak(charPhrase(cz.dataset.ch));
+      } else {
+        readLine(+line.dataset.i, speakToken);
+      }
+    });
+
+    $("#poemTitle").addEventListener("click", e => {
+      const cz = e.target.closest(".cz");
+      if (cz) { flash(cz); speak(charPhrase(cz.dataset.ch)); }
+    });
+
+    $("#readAll").addEventListener("click", () => readAll(false));
+    $("#readEcho").addEventListener("click", () => readAll(true));
+    $("#readStop").addEventListener("click", () => {
+      stopSpeech();
+      setReadBusy(false);
+      $("#echo").classList.add("hidden");
+      $$("#poem .line").forEach(l => l.classList.remove("active"));
+    });
+
+    function startRead() {
+      show("read");
+      setSwingProgress(0, "點一點字，聽聽看！");
+    }
+
+    /* ====================== GAME 2: LISTEN ====================== */
+    const L = { list: [], i: 0, first: true, score: 0, lock: false };
+
+    function startListen() {
+      show("listen");
+      L.list = shuffle(NEWCHARS).slice(0, 10);
+      L.i = 0;
+      L.score = 0;
+      renderDots("#lDots", L.list.length);
+      setSwingProgress(0, "答對一題，鞦韆盪高一點！");
+      nextListen();
+    }
+
+    function nextListen() {
+      if (L.i >= L.list.length) { finishGame("listen", L.score, L.list.length, "聽音找生字"); return; }
+      const t = L.list[L.i];
+      L.first = true;
+      L.lock = false;
+      const others = shuffle(NEWCHARS.filter(c => c !== t && c !== LOOK[t])).slice(0, 2);
+      const opts = shuffle([t, LOOK[t], ...others]);
+      $("#lOpts").innerHTML = opts.map(c => `<button class="opt" data-ch="${c}">${c}</button>`).join("");
+      $("#lHint").innerHTML = "";
+      $("#lStat").textContent = `第 ${L.i + 1} / ${L.list.length} 題`;
+      setDot("#lDots", L.i, "cur");
+      const sid = SID;
+      setTimeout(() => { if (sid === SID) sayListen(); }, 400);
+    }
+
+    function sayListen() {
+      const t = L.list[L.i];
+      if (t) speak(`請找出，${t}，${WORD[t]}的${t}`);
+    }
+
+    function hintHTML(word, t) {
+      return [...word].map(c => c === t ? `<span class="cz blank"><span class="c">？</span>${zyHTML(ZY[t])}</span>` : czHTML(c)).join("");
+    }
+
+    $("#lSpeak").addEventListener("click", sayListen);
+    $("#lHintBtn").addEventListener("click", () => {
+      const t = L.list[L.i];
+      if (!t) return;
+      $("#lHint").innerHTML = hintHTML(WORD[t], t);
+      L.first = false;
+    });
+
+    $("#lOpts").addEventListener("click", async e => {
+      const b = e.target.closest(".opt");
+      if (!b || L.lock || b.disabled) return;
+      const t = L.list[L.i];
+      const sid = SID;
+      if (b.dataset.ch === t) {
+        L.lock = true;
+        b.classList.add("correct");
+        sfx("ok");
+        if (L.first) L.score++;
+        setDot("#lDots", L.i, L.first ? "ok" : "retry");
+        L.i++;
+        cheer(L.i / L.list.length);
+        await speak(`答對了！${WORD[t]}的${t}`);
+        await wait(250);
+        if (sid !== SID) return;
+        nextListen();
+      } else {
+        L.first = false;
+        b.classList.add("wrong");
+        b.disabled = true;
+        sfx("bad");
+        speak(`這是${b.dataset.ch}，再找找看`);
+      }
+    });
+
+    /* ====================== GAME 3: BUILD ====================== */
+    const B = { list: [], i: 0, first: true, score: 0, lock: false, filled: [null, null] };
+
+    function videoOf(ch) {
+      const idx = NEWCHARS.indexOf(ch) + 1;
+      return `videos/lesson36/L3_${String(idx).padStart(2, "0")}_${ch}.mp4`;
+    }
+
+    function spokenPart(p) {
+      return PLABEL[p] || (p === "咅" ? "右邊的部件" : p);
+    }
+
+    function startBuild() {
+      show("build");
+      B.list = shuffle(PARTS);
+      B.i = 0;
+      B.score = 0;
+      renderDots("#bDots", B.list.length);
+      setSwingProgress(0, "拼對一個字，鞦韆盪高一點！");
+      nextBuild();
+    }
+
+    function nextBuild() {
+      if (B.i >= B.list.length) { finishGame("build", B.score, B.list.length, "部件拼拼樂"); return; }
+      const it = B.list[B.i];
+      B.first = true;
+      B.lock = false;
+      B.filled = [null, null];
+      const others = [...new Set(PARTS.flatMap(x => x.p))].filter(p => !it.p.includes(p));
+      const pool = shuffle([...it.p, ...shuffle(others).slice(0, 4)]);
+      $("#bTarget").innerHTML = `請幫 ${czHTML(it.ch, { newc: true })} 找出兩個部件！`;
+      ["#bS0", "#bS1"].forEach(s => { $(s).className = "slot " + (s === "#bS0" ? "s0" : "s1"); $(s).innerHTML = ""; });
+      $("#bEq").classList.remove("merge");
+      $("#bRes").className = "result";
+      $("#bRes").innerHTML = `<span class="ghost">${it.ch}</span>`;
+      $("#bPieces").innerHTML = pool.map(p => `<button class="piece" data-p="${p}">${p}</button>`).join("");
+      $("#bNext").classList.add("hidden");
+      $("#bVideo").classList.add("hidden");
+      $("#bStat").textContent = `第 ${B.i + 1} / ${B.list.length} 題`;
+      setDot("#bDots", B.i, "cur");
+      const sid = SID;
+      setTimeout(() => { if (sid === SID) speak(`請幫${it.ch}找部件，${WORD[it.ch]}的${it.ch}`); }, 400);
+    }
+
+    $("#bTarget").addEventListener("click", e => {
+      const cz = e.target.closest(".cz");
+      if (cz) speak(charPhrase(cz.dataset.ch));
+    });
+
+    $("#bPieces").addEventListener("click", e => {
+      const b = e.target.closest(".piece");
+      if (!b || B.lock || b.classList.contains("used")) return;
+      const it = B.list[B.i];
+      const p = b.dataset.p;
+      let slot = -1;
+      for (let s = 0; s < 2; s++) {
+        if (B.filled[s] === null && it.p[s] === p) { slot = s; break; }
+      }
+      if (slot < 0) {
+        B.first = false;
+        b.classList.remove("shake");
+        void b.offsetWidth;
+        b.classList.add("shake");
+        sfx("bad");
+        speak(`${spokenPart(p)}，不對喔，再想想`);
+        return;
+      }
+      B.filled[slot] = p;
+      b.classList.add("used");
+      sfx("tap");
+      const el = $("#bS" + slot);
+      el.innerHTML = `${p}${PLABEL[p] ? `<small>${PLABEL[p]}</small>` : ""}`;
+      el.classList.add("filled");
+      if (slot === it.r) el.classList.add("rad");
+      if (B.filled.every(x => x !== null)) completeBuild();
+    });
+
+    async function completeBuild() {
+      const sid = SID;
+      B.lock = true;
+      const it = B.list[B.i];
+      if (B.first) B.score++;
+      setDot("#bDots", B.i, B.first ? "ok" : "retry");
+      $("#bEq").classList.add("merge");
+      await wait(450);
+      if (sid !== SID) return;
+      $("#bRes").innerHTML = `<span class="made">${it.ch}</span>`;
+      $("#bRes").classList.add("done");
+      sfx("ok");
+      cheer((B.i + 1) / B.list.length);
+      $("#bNext").classList.remove("hidden");
+      $("#bVideo").classList.remove("hidden");
+      speak(`${spokenPart(it.p[0])}，加上${spokenPart(it.p[1])}，拼成${it.ch}！${WORD[it.ch]}的${it.ch}`);
+    }
+
+    $("#bNext").addEventListener("click", () => { B.i++; nextBuild(); });
+    $("#bVideo").addEventListener("click", () => openVideo(videoOf(B.list[B.i].ch)));
+
+    /* ====================== GAME 4: FILL ====================== */
+    const F = { i: 0, first: true, score: 0, lock: false };
+
+    function startFill() {
+      show("fill");
+      F.i = 0;
+      F.score = 0;
+      renderDots("#fDots", FILL.length);
+      setSwingProgress(0, "填對一句，鞦韆盪高一點！");
+      nextFill();
+    }
+
+    function nextFill() {
+      if (F.i >= FILL.length) { finishGame("fill", F.score, FILL.length, "課文填空"); return; }
+      const q = FILL[F.i];
+      F.first = true;
+      F.lock = false;
+      $("#fSent").innerHTML = [...q.s].map(c => c === "□" ? `<span class="cz blank" id="fBlank"><span class="c">　</span>${zyHTML(ZY[q.a])}</span>` : czHTML(c)).join("");
+      $("#fOpts").innerHTML = shuffle(q.o).map(c => `<button class="opt" data-ch="${c}">${c}</button>`).join("");
+      $("#fStat").textContent = `第 ${F.i + 1} / ${FILL.length} 題`;
+      setDot("#fDots", F.i, "cur");
+    }
+
+    function fillSentence(q) { return q.s.replace("□", q.a); }
+
+    $("#fSpeak").addEventListener("click", () => {
+      const q = FILL[F.i];
+      if (q) { F.first = false; speak(fillSentence(q), 0.75); }
+    });
+
+    $("#fSent").addEventListener("click", e => {
+      const cz = e.target.closest(".cz");
+      if (cz && !cz.classList.contains("blank")) speak(cz.dataset.ch);
+    });
+
+    $("#fOpts").addEventListener("click", async e => {
+      const b = e.target.closest(".opt");
+      if (!b || F.lock || b.disabled) return;
+      const q = FILL[F.i];
+      const sid = SID;
+      if (b.dataset.ch === q.a) {
+        F.lock = true;
+        b.classList.add("correct");
+        const blank = $("#fBlank");
+        blank.querySelector(".c").textContent = q.a;
+        blank.classList.add("filled");
+        sfx("ok");
+        if (F.first) F.score++;
+        setDot("#fDots", F.i, F.first ? "ok" : "retry");
+        F.i++;
+        cheer(F.i / FILL.length);
+        await speak(fillSentence(q), 0.75);
+        await wait(400);
+        if (sid !== SID) return;
+        nextFill();
+      } else {
+        F.first = false;
+        b.classList.add("wrong");
+        b.disabled = true;
+        sfx("bad");
+        speak("不對喔，再看看注音");
+      }
+    });
+
+    /* ====================== GAME 5: ORDER ====================== */
+    const O = { i: 0, first: true, score: 0, lock: false, slots: [], ok: [], perm: [] };
+
+    function startOrder() {
+      show("order");
+      O.i = 0;
+      O.score = 0;
+      renderDots("#oDots", ORDER.length);
+      setSwingProgress(0, "排對一句，鞦韆盪高一點！");
+      nextOrder();
+      const sid = SID;
+      setTimeout(() => { if (sid === SID) speak("把詞語排一排，變成通順的句子"); }, 400);
+    }
+
+    function nextOrder() {
+      if (O.i >= ORDER.length) { finishGame("order", O.score, ORDER.length, "句子排排隊"); return; }
+      const q = ORDER[O.i];
+      O.first = true;
+      O.lock = false;
+      O.slots = new Array(q.w.length).fill(null);
+      O.ok = new Array(q.w.length).fill(false);
+      let perm;
+      do { perm = shuffle(q.w.map((_, k) => k)); } while (perm.every((v, k) => v === k));
+      O.perm = perm;
+      $("#oStat").textContent = `第 ${O.i + 1} / ${ORDER.length} 句`;
+      setDot("#oDots", O.i, "cur");
+      renderOrder();
+    }
+
+    function renderOrder() {
+      const q = ORDER[O.i];
+      $("#oSlots").innerHTML = O.slots.map((v, s) => v === null
+        ? `<div class="oslot" data-s="${s}"></div>`
+        : `<div class="oslot full" data-s="${s}"><span class="chunk ${O.ok[s] ? "ok" : ""}">${textHTML(q.w[v])}</span></div>`
+      ).join("") + `<span class="oend">。</span>`;
+      $("#oBank").innerHTML = O.perm.map(k => O.slots.includes(k)
+        ? `<span class="chunk ghost">${textHTML(q.w[k])}</span>`
+        : `<button class="chunk" data-k="${k}">${textHTML(q.w[k])}</button>`
+      ).join("");
+    }
+
+    function orderSentence(q) { return q.w.join("") + "。"; }
+
+    $("#oBank").addEventListener("click", e => {
+      const b = e.target.closest("button.chunk");
+      if (!b || O.lock) return;
+      const k = +b.dataset.k;
+      const s = O.slots.indexOf(null);
+      if (s < 0) return;
+      O.slots[s] = k;
+      sfx("tap");
+      speak(ORDER[O.i].w[k], 0.85);
+      renderOrder();
+      if (!O.slots.includes(null)) checkOrder();
+    });
+
+    $("#oSlots").addEventListener("click", e => {
+      const sl = e.target.closest(".oslot.full");
+      if (!sl || O.lock) return;
+      const s = +sl.dataset.s;
+      if (O.ok[s]) return;
+      O.slots[s] = null;
+      sfx("tap");
+      renderOrder();
+    });
+
+    $("#oSpeak").addEventListener("click", () => {
+      const q = ORDER[O.i];
+      if (q) { O.first = false; speak(orderSentence(q), 0.75); }
+    });
+
+    async function checkOrder() {
+      const q = ORDER[O.i];
+      const sid = SID;
+      const correct = O.slots.every((v, s) => v === s);
+      O.lock = true;
+      if (correct) {
+        O.ok = O.ok.map(() => true);
+        renderOrder();
+        sfx("ok");
+        if (O.first) O.score++;
+        setDot("#oDots", O.i, O.first ? "ok" : "retry");
+        O.i++;
+        cheer(O.i / ORDER.length);
+        await speak(orderSentence(q), 0.75);
+        await wait(500);
+        if (sid !== SID) return;
+        nextOrder();
+      } else {
+        O.first = false;
+        sfx("bad");
+        $("#oSlots").classList.remove("shake");
+        void $("#oSlots").offsetWidth;
+        $("#oSlots").classList.add("shake");
+        speak("有些位置不對喔，再試試看");
+        await wait(800);
+        if (sid !== SID) return;
+        O.slots = O.slots.map((v, s) => { if (v === s) { O.ok[s] = true; return v; } return null; });
+        O.lock = false;
+        renderOrder();
+      }
+    }
+
+    /* ====================== VIDEO ====================== */
+    function openVideo(src) {
+      stopSpeech();
+      const v = $("#vPlayer");
+      v.src = src;
+      $("#vmodal").classList.remove("hidden");
+      const p = v.play();
+      if (p && p.catch) p.catch(() => { /* user can press play */ });
+    }
+
+    function closeVideo() {
+      const v = $("#vPlayer");
+      if (!v) return;
+      v.pause();
+      v.removeAttribute("src");
+      v.load();
+      $("#vmodal").classList.add("hidden");
+    }
+
+    $("#vClose").addEventListener("click", closeVideo);
+
+    /* ====================== WIRING ====================== */
+    const START = { read: startRead, listen: startListen, build: startBuild, fill: startFill, order: startOrder };
+
+    $("#cards").addEventListener("click", e => {
+      const c = e.target.closest(".card");
+      if (!c) return;
+      audioCtx();
+      sfx("tap");
+      START[c.dataset.g]();
+    });
+
+    $$(".back").forEach(b => b.addEventListener("click", () => show("hub")));
+    $("#homeBtn").addEventListener("click", () => show("hub"));
+    $("#logoHome").addEventListener("click", () => show("hub"));
+    $("#mHome").addEventListener("click", () => show("hub"));
+    $("#mAgain").addEventListener("click", () => { $("#modal").classList.add("hidden"); if (againFn) againFn(); });
+
+    $("#resetBtn").addEventListener("click", () => {
+      if (!confirm("確定要清除集章紀錄，換下一位同學嗎？")) return;
+      save = {};
+      persist();
+      renderHub();
+    });
+
+    $("#zyBtn").addEventListener("click", () => {
+      state.zy = !state.zy;
+      document.body.classList.toggle("no-zy", !state.zy);
+      $("#zyBtn").textContent = `ㄅ 注音：${state.zy ? "開" : "關"}`;
+      $("#zyBtn").classList.toggle("off", !state.zy);
+    });
+
+    $("#sfxBtn").addEventListener("click", () => {
+      state.sfx = !state.sfx;
+      $("#sfxBtn").textContent = `🎵 音效：${state.sfx ? "開" : "關"}`;
+      $("#sfxBtn").classList.toggle("off", !state.sfx);
+    });
+
+    $("#fsBtn").addEventListener("click", () => {
+      const d = document;
+      const el = d.documentElement;
+      if (!(d.fullscreenElement || d.webkitFullscreenElement)) {
+        const req = el.requestFullscreen || el.webkitRequestFullscreen;
+        if (req) req.call(el);
+      } else {
+        const ex = d.exitFullscreen || d.webkitExitFullscreen;
+        if (ex) ex.call(d);
+      }
+    });
+
+    /* ====================== INIT ====================== */
+    $("#heroTitle").innerHTML = textHTML("秋千", { newc: false }) + '<span class="sub">遊戲樂園</span>';
+    renderPoem();
+    renderHub();
+
+    // Deep link: lesson3-game.html#listen etc.
+    const hash = location.hash.replace("#", "");
+    if (START[hash]) START[hash]();
+  </script>
+</body>
+</html>

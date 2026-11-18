@@ -509,6 +509,7 @@
     <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
     <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
     <a class="portal-link current" href="forest-theater.html">🎬 目前所在：《3D 童話拼字大劇院》</a>
+    <a class="portal-link" href="lesson3-game.html">🍂 《秋千》互動遊戲樂園</a>
   </div>
 
   <header>
@@ -564,8 +565,15 @@
 
   <main>
     <div class="world-banner">
-      <div class="world-title" id="worldTitle">🌲 第一課《拍拍手》— 3D 陽光魔法森林</div>
-      <div class="world-helpers" id="worldHelpers">小幫手：橘紅知更鳥 ＋ 天藍小鳥</div>
+      <div>
+        <div class="world-title" id="worldTitle">🌲 第一課《拍拍手》— 3D 陽光魔法森林</div>
+        <div class="world-helpers" id="worldHelpers">小幫手：橘紅知更鳥 ＋ 天藍小鳥</div>
+      </div>
+      <div id="worldGameLink" style="display:none;">
+        <a href="lesson3-game.html" style="display:inline-flex;align-items:center;gap:6px;background:#b4460f;color:#fff;text-decoration:none;font-weight:900;padding:8px 18px;border-radius:50px;box-shadow:0 4px 10px rgba(180,70,15,0.3);font-size:0.96rem;">
+          🍂 進入第三課《秋千》互動遊戲樂園 ➔
+        </a>
+      </div>
     </div>
 
     <!-- Character Selection Strip -->
@@ -780,6 +788,10 @@
       document.getElementById("brandEmoji").textContent = m.emoji;
       document.getElementById("worldTitle").textContent = `${m.emoji} ${m.title} — ${m.world}`;
       document.getElementById("worldHelpers").textContent = m.helpers;
+      const gameLinkEl = document.getElementById("worldGameLink");
+      if (gameLinkEl) {
+        gameLinkEl.style.display = (lessonNum === 3) ? "block" : "none";
+      }
     }
 
     function updateUrlParams() {
