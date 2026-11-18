@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D 森林小鳥拼字劇院 - 康軒小一上第一、二課部件動畫</title>
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #e6f7ed 0%, #fffbeb 50%, #eaf6ff 100%);
+      --forest: #2d6a4f;
+      --leaf: #52b788;
+      --orange: #e85d04;
+      --navy: #1d3557;
+      --blue: #2563eb;
+      --purple: #7209b7;
+      --gold: #ffbe0b;
+      --text-dark: #1f2937;
+      --card-shadow: 0 12px 28px rgba(15, 45, 30, 0.10), 0 4px 10px rgba(0, 0, 0, 0.05);
+      --font-kai: "DFKai-SB", "BiauKai", "標楷體", "Kaiti TC", "PingFang TC", "Microsoft JhengHei", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: "PingFang TC", "Microsoft JhengHei", "Heiti TC", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: var(--bg-gradient);
+      color: var(--text-dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-x: hidden;
+    }
+
+    /* Top Portal Switch Bar */
+    .top-portal-bar {
+      width: 100%;
+      background: #2b2d42;
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.94rem;
+      flex-wrap: wrap;
+    }
+
+    .portal-link {
+      color: #ffe66d;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255,255,255,0.13);
+      padding: 5px 14px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .portal-link:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    .portal-link.current {
+      background: #ffe66d;
+      color: #2b2d42;
+    }
+
+    header {
+      width: 100%;
+      max-width: 1180px;
+      padding: 14px 20px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.96);
+      padding: 10px 22px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      border: 3px solid #fff;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 1.45rem;
+      background: linear-gradient(90deg, #2d6a4f, #e85d04, #2563eb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 900;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stat-pill {
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 50px;
+      box-shadow: var(--card-shadow);
+      font-weight: 800;
+      color: #2d6a4f;
+      font-size: 1rem;
+    }
+
+    .share-btn {
+      border: none;
+      background: #06d6a0;
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #049a73;
+      transition: transform 0.12s;
+    }
+
+    .share-btn:active { transform: translateY(2px); }
+
+    /* Lesson Switcher Tabs */
+    .lesson-tabs {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin: 8px 16px 14px;
+    }
+
+    .lesson-tab-btn {
+      border: none;
+      background: #fff;
+      color: var(--text-dark);
+      padding: 12px 24px;
+      border-radius: 22px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #d9d9d9, 0 8px 15px rgba(0,0,0,0.08);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lesson-tab-btn:hover { transform: translateY(-2px); }
+
+    .lesson-tab-btn.active[data-lesson="1"] {
+      background: linear-gradient(135deg, #2d6a4f, #40916c);
+      color: #fff;
+      box-shadow: 0 5px 0 #1b4332, 0 8px 18px rgba(45,106,79,0.3);
+    }
+
+    .lesson-tab-btn.active[data-lesson="2"] {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #fff;
+      box-shadow: 0 5px 0 #1e3a8a, 0 8px 18px rgba(37,99,235,0.3);
+    }
+
+    main {
+      width: 96%;
+      max-width: 1180px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 30px;
+      padding: 20px 24px 26px;
+      box-shadow: var(--card-shadow);
+      border: 4px solid #fff;
+      margin-bottom: 24px;
+    }
+
+    /* Character Selection Strip */
+    .char-grid-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #f4faf6;
+      border: 2px solid #d8f3dc;
+      border-radius: 22px;
+      padding: 12px;
+      margin-bottom: 18px;
+    }
+
+    .char-btn {
+      width: 74px;
+      height: 84px;
+      border-radius: 16px;
+      border: 3px solid #d8e2dc;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: all 0.15s;
+      box-shadow: 0 4px 0 #d8e2dc;
+      padding: 2px;
+    }
+
+    .char-btn:hover {
+      transform: translateY(-2px);
+      border-color: #52b788;
+    }
+
+    .char-btn.active {
+      border-color: #e85d04;
+      background: #fff5eb;
+      box-shadow: 0 4px 0 #e85d04;
+      transform: translateY(-2px) scale(1.06);
+    }
+
+    .char-btn.watched::after {
+      content: "✓";
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 20px;
+      height: 20px;
+      background: #06d6a0;
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 900;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .ro-pill {
+      position: absolute;
+      top: -8px;
+      left: -4px;
+      background: #7209b7;
+      color: #fff;
+      font-size: 0.65rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .char-btn-kai {
+      font-family: var(--font-kai);
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: #1d3557;
+      line-height: 1.05;
+    }
+
+    .char-btn-zy {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #e63946;
+      margin-top: 2px;
+    }
+
+    /* Theater Layout: Video Left/Top + Teaching Side Panel */
+    .theater-grid {
+      display: grid;
+      grid-template-columns: 1.65fr 1fr;
+      gap: 22px;
+      align-items: start;
+    }
+
+    @media (max-width: 920px) {
+      .theater-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .video-stage {
+      background: #102a1d;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 14px 30px rgba(0,0,0,0.18);
+      border: 4px solid #52b788;
+      position: relative;
+    }
+
+    .video-stage video {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      background: #0d2117;
+    }
+
+    .player-controls-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .ctrl-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .p-btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 16px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s;
+      color: #fff;
+    }
+
+    .p-btn:active { transform: translateY(2px); }
+    .p-btn.nav { background: #1d3557; box-shadow: 0 4px 0 #0f172a; }
+    .p-btn.replay { background: #e85d04; box-shadow: 0 4px 0 #9d3c00; }
+    .p-btn.full { background: #2d6a4f; box-shadow: 0 4px 0 #1b4332; }
+    .p-btn.auto { background: #6c757d; box-shadow: 0 4px 0 #495057; }
+    .p-btn.auto.on { background: #7209b7; box-shadow: 0 4px 0 #4c1d95; }
+
+    /* Side Teaching Info Panel */
+    .info-card {
+      background: linear-gradient(160deg, #fffdf8, #f4fbf7);
+      border: 3px solid #d8f3dc;
+      border-radius: 24px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .info-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .big-char-tile {
+      width: 82px;
+      height: 82px;
+      border-radius: 18px;
+      border: 3px solid #e63946;
+      background: #fffdf6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-kai);
+      font-size: 3.6rem;
+      font-weight: 700;
+      color: #1d3557;
+      flex-shrink: 0;
+    }
+
+    .zy-badge {
+      display: inline-block;
+      background: #fff0f3;
+      color: #e63946;
+      border: 2px solid #ffccd5;
+      font-size: 1.35rem;
+      font-weight: 900;
+      padding: 3px 14px;
+      border-radius: 50px;
+      margin-bottom: 6px;
+    }
+
+    .rad-line {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #d9480f;
+    }
+
+    .formula-box {
+      background: #fff9db;
+      border: 2px dashed #fab005;
+      border-radius: 16px;
+      padding: 12px 14px;
+      font-size: 1.04rem;
+      font-weight: 900;
+      color: #7c3a00;
+      line-height: 1.45;
+    }
+
+    .words-wrap {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .word-tag {
+      background: #fff;
+      border: 2px solid #90caf9;
+      color: #1e3a8a;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: transform 0.12s;
+    }
+
+    .word-tag:hover {
+      transform: scale(1.05);
+      background: #e7f0ff;
+    }
+
+    .mnemonic-box {
+      background: #eef2ff;
+      border: 2px solid #818cf8;
+      border-radius: 16px;
+      padding: 10px 14px;
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #3730a3;
+      line-height: 1.5;
+    }
+
+    .action-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .jump-link {
+      flex: 1;
+      text-align: center;
+      text-decoration: none;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 800;
+      font-size: 0.94rem;
+      color: #fff;
+      background: #2563eb;
+      box-shadow: 0 4px 0 #1e40af;
+    }
+
+    .jump-link.moe {
+      background: #1d3557;
+      box-shadow: 0 4px 0 #0f172a;
+    }
+
+    .teacher-bar {
+      max-width: 1180px;
+      width: 96%;
+      background: rgba(255,255,255,0.9);
+      border-radius: 20px;
+      padding: 14px 22px;
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Portal Navigation Bar -->
+  <div class="top-portal-bar">
+    <span>🎒 小一國語文快樂學系列：</span>
+    <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
+    <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
+    <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
+    <a class="portal-link current" href="forest-theater.html">🎬 目前所在：《3D 森林小鳥拼字劇院》</a>
+  </div>
+
+  <header>
+    <div class="brand">
+      <span style="font-size: 2rem;">🐦</span>
+      <h1>3D 森林小鳥拼字劇院（康軒一上第一、二課）</h1>
+    </div>
+    <div class="header-actions">
+      <div class="stat-pill">🎬 已觀看：<span id="watchedCount">0</span> / 20 字</div>
+      <button class="share-btn" onclick="openShareModal()">📲 教室投影 / 平板 QR Code</button>
+    </div>
+  </header>
+
+  <!-- Share QR Code Modal -->
+  <div id="shareModal" onclick="if(event.target===this)closeShareModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.58);z-index:999;align-items:center;justify-content:center;padding:16px;">
+    <div style="background:#fff;border-radius:28px;max-width:450px;width:100%;padding:26px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.28);position:relative;">
+      <button onclick="closeShareModal()" style="position:absolute;top:14px;right:18px;border:none;background:#f0f0f0;border-radius:50%;width:36px;height:36px;font-size:1.2rem;cursor:pointer;font-weight:bold;">✕</button>
+      <h3 style="margin:0 0 6px;font-size:1.35rem;color:#2b2d42;" id="modalTitle">📲 掃描觀看 3D 森林小鳥拼字影片</h3>
+      <p style="margin:0 0 14px;color:#555;font-size:0.92rem;">教室大屏打開網址即可投影播放，學生平板掃描也能同步觀看：</p>
+      <img id="qrImage" src="" alt="QR Code" style="width:210px;height:210px;border:4px solid #2d6a4f;border-radius:18px;padding:8px;background:#fff;" />
+      <div style="margin:12px 0;background:#f4faf6;padding:10px 12px;border-radius:12px;font-size:0.85rem;word-break:break-all;font-weight:700;color:#2d6a4f;" id="shareUrlText"></div>
+      <button onclick="copyShareUrl()" id="copyUrlBtn" style="border:none;background:#2d6a4f;color:#fff;padding:12px 20px;border-radius:50px;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1b4332;width:100%;">📋 複製本課劇院網址</button>
+    </div>
+  </div>
+
+  <!-- Lesson Tabs -->
+  <div class="lesson-tabs">
+    <button class="lesson-tab-btn active" data-lesson="1" onclick="selectLesson(1)">
+      🌿 第一課《拍拍手》（9 個生字）
+    </button>
+    <button class="lesson-tab-btn" data-lesson="2" onclick="selectLesson(2)">
+      🌸 第二課《這是誰的？》（10 習寫字 ＋ 1 認讀字）
+    </button>
+  </div>
+
+  <main>
+    <!-- Character Bar -->
+    <div class="char-grid-bar" id="charGridBar"></div>
+
+    <!-- Video Theater + Info Card -->
+    <div class="theater-grid">
+      <div>
+        <div class="video-stage">
+          <video id="theaterVideo" controls playsinline preload="metadata"></video>
+        </div>
+
+        <div class="player-controls-bar">
+          <div class="ctrl-group">
+            <button class="p-btn nav" onclick="stepChar(-1)">⬅️ 上一字</button>
+            <button class="p-btn replay" onclick="replayVideo()">🔄 重播此字</button>
+            <button class="p-btn nav" onclick="stepChar(1)">下一字 ➡️</button>
+          </div>
+          <div class="ctrl-group">
+            <button class="p-btn auto" id="autoPlayBtn" onclick="toggleAutoPlay()">🔁 自動連播整課：關</button>
+            <button class="p-btn full" onclick="enterFullscreen()">🖥️ 教室全螢幕</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Teaching Info Panel -->
+      <div class="info-card">
+        <div class="info-top">
+          <div class="big-char-tile" id="infoChar">拍</div>
+          <div>
+            <div class="zy-badge" id="infoZy">ㄆㄞ</div>
+            <div class="rad-line" id="infoRad">部首：手部（扌）｜ 8 畫</div>
+          </div>
+        </div>
+
+        <div class="formula-box" id="infoFormula"></div>
+
+        <div>
+          <div style="font-size:0.88rem;font-weight:800;color:#666;margin-bottom:6px;">📘 課本與生活造詞（點一下聽發音）：</div>
+          <div class="words-wrap" id="infoWords"></div>
+        </div>
+
+        <div class="mnemonic-box" id="infoMnemonic"></div>
+
+        <div class="action-links">
+          <a class="jump-link" id="goStrokeLink" href="strokes.html">✍️ 去練這個字的筆順</a>
+          <a class="jump-link moe" id="goMoeLink" href="#" target="_blank" rel="noopener">🏛️ 教育部標準筆順</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <section class="teacher-bar">
+    <strong>👩‍🏫 學校大屏投影＆平板播放小技巧：</strong>
+    <span>
+      本劇院 100% 依照<strong>康軒版小一上課本原頁生字表</strong>製作（包含課本橘色部首標示、正確讀音如「誰 ㄕㄟˊ」、「的 ˙ㄉㄜ」、「了 ˙ㄌㄜ」以及認讀字「個」）。
+      上課時可開啟<strong>「🔁 自動連播整課」＋「🖥️ 教室全螢幕」</strong>一氣呵成帶全班看小鳥拼字，或點選單一生字反覆強調部件組合，看完還能一鍵跳轉至《筆順練習館》動手描寫！
+    </span>
+  </section>
+
+  <script>
+    const THEATER_DATA = {
+      1: {
+        title: "第一課《拍拍手》",
+        items: [
+          { idx: 1, char: "拍", zy: "ㄆㄞ", rad: "手部（扌）", strokes: 8, ro: false, video: "videos/lesson12/L1_01_拍.mp4", formula: "🟠 手部（扌） ＋ 🔵 白 ＝「拍」", words: ["拍拍手", "拍球", "拍手", "拍打"], mnemonic: "💡 記憶口訣：用手（扌）＋ 白 ＝ 拍拍手！" },
+          { idx: 2, char: "手", zy: "ㄕㄡˇ", rad: "手部（獨體字）", strokes: 4, ro: false, video: "videos/lesson12/L1_02_手.mp4", formula: "🟠 獨體象形字：「手」部", words: ["小手", "拍手", "左手", "手拉手"], mnemonic: "💡 記憶口訣：像五根手指頭張開的小手！" },
+          { idx: 3, char: "左", zy: "ㄗㄨㄛˇ", rad: "工部（工）", strokes: 5, ro: false, video: "videos/lesson12/L1_03_左.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 工部（工） ＝「左」", words: ["左手", "左邊", "左右", "向左轉"], mnemonic: "💡 記憶口訣：左手拿工具，下面是「工」！" },
+          { idx: 4, char: "右", zy: "ㄧㄡˋ", rad: "口部（口）", strokes: 5, ro: false, video: "videos/lesson12/L1_04_右.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 口部（口） ＝「右」", words: ["右手", "右邊", "左右", "向右看"], mnemonic: "💡 記憶口訣：右手拿湯匙吃一口，下面是「口」！" },
+          { idx: 5, char: "你", zy: "ㄋㄧˇ", rad: "人部（亻）", strokes: 7, ro: false, video: "videos/lesson12/L1_05_你.mp4", formula: "🟠 人部（亻） ＋ 🔵 尔 ＝「你」", words: ["你好", "你們", "謝謝你", "你和我"], mnemonic: "💡 記憶口訣：單人旁「亻」代表人，說聲你好！" },
+          { idx: 6, char: "他", zy: "ㄊㄚ", rad: "人部（亻）", strokes: 5, ro: false, video: "videos/lesson12/L1_06_他.mp4", formula: "🟠 人部（亻） ＋ 🔵 也 ＝「他」", words: ["他們", "他的", "他人", "他和她"], mnemonic: "💡 記憶口訣：人部（亻）＋ 也 ＝ 他們的「他」！" },
+          { idx: 7, char: "也", zy: "ㄧㄝˇ", rad: "乙部（乚）", strokes: 3, ro: false, video: "videos/lesson12/L1_07_也.mp4", formula: "🔵 上方折豎 ＋ 🟠 乙部（乚） ＝「也」", words: ["也是", "也有", "也好", "我也要"], mnemonic: "💡 記憶口訣：彎彎豎彎鉤，我「也」要拍拍手！" },
+          { idx: 8, char: "上", zy: "ㄕㄤˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_08_上.mp4", formula: "🔵 站在上面 ＋ 🟠 一部（地面長橫） ＝「上」", words: ["上學", "上課", "山上", "上下"], mnemonic: "💡 記憶口訣：短橫站在長橫的上面，就是「上」！" },
+          { idx: 9, char: "下", zy: "ㄒㄧㄚˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_09_下.mp4", formula: "🟠 一部（上方長橫） ＋ 🔵 躲在下面 ＝「下」", words: ["下課", "下雨", "下午", "樹下"], mnemonic: "💡 記憶口訣：點躲在長橫的下面，就是「下」！" }
+        ]
+      },
+      2: {
+        title: "第二課《這是誰的？》",
+        items: [
+          { idx: 1, char: "這", zy: "ㄓㄜˋ", rad: "辵部（辶）", strokes: 11, ro: false, video: "videos/lesson12/L2_01_這.mp4", formula: "🟠 辵部（辶） ＋ 🔵 言 ＝「這」", words: ["這是", "這裡", "這個", "這邊"], mnemonic: "💡 記憶口訣：小船「辶」載著「言」，就是「這」！" },
+          { idx: 2, char: "是", zy: "ㄕˋ", rad: "日部（日）", strokes: 9, ro: false, video: "videos/lesson12/L2_02_是.mp4", formula: "🟠 日部（日） ＋ 🔵 下方部件 ＝「是」", words: ["這是", "也是", "是不是", "就是"], mnemonic: "💡 記憶口訣：頭頂一個太陽「日」，合起來變成「是」！" },
+          { idx: 3, char: "誰", zy: "ㄕㄟˊ", rad: "言部（言）", strokes: 15, ro: false, video: "videos/lesson12/L2_03_誰.mp4", formula: "🟠 言部（言） ＋ 🔵 隹（小鳥） ＝「誰」", words: ["是誰", "誰的", "誰家", "問是誰"], mnemonic: "💡 記憶口訣：開口說話（言）問小鳥（隹）是「誰」！" },
+          { idx: 4, char: "的", zy: "˙ㄉㄜ", rad: "白部（白）", strokes: 8, ro: false, video: "videos/lesson12/L2_04_的.mp4", formula: "🟠 白部（白） ＋ 🔵 勺 ＝「的」", words: ["我的", "你的", "誰的", "好的"], mnemonic: "💡 記憶口訣：白白的「白」＋「勺」＝ 我的「的」！" },
+          { idx: 5, char: "我", zy: "ㄨㄛˇ", rad: "戈部（戈）", strokes: 7, ro: false, video: "videos/lesson12/L2_05_我.mp4", formula: "🔵 左邊部件 ＋ 🟠 戈部（戈） ＝「我」", words: ["我們", "我的", "你我", "自我"], mnemonic: "💡 記憶口訣：左邊像小手，右邊是「戈」，變成「我」！" },
+          { idx: 6, char: "分", zy: "ㄈㄣ", rad: "刀部（刀）", strokes: 4, ro: false, video: "videos/lesson12/L2_06_分.mp4", formula: "🔵 八 ＋ 🟠 刀部（刀） ＝「分」", words: ["分享", "分開", "分數", "十分"], mnemonic: "💡 記憶口訣：上面「八」下面「刀」，用刀分成兩半！" },
+          { idx: 7, char: "好", zy: "ㄏㄠˇ", rad: "女部（女）", strokes: 6, ro: false, video: "videos/lesson12/L2_07_好.mp4", formula: "🟠 女部（女） ＋ 🔵 子 ＝「好」", words: ["你好", "好人", "好玩", "好朋友"], mnemonic: "💡 記憶口訣：媽媽（女）抱著寶寶（子），真是「好」！" },
+          { idx: 8, char: "了", zy: "˙ㄌㄜ", rad: "亅部（亅）", strokes: 2, ro: false, video: "videos/lesson12/L2_08_了.mp4", formula: "🔵 上方橫撇（乛） ＋ 🟠 亅部（亅） ＝「了」", words: ["好了", "來了", "笑了", "懂了"], mnemonic: "💡 記憶口訣：只要兩畫寫成「了」，作業寫好了！" },
+          { idx: 9, char: "啊", zy: "ㄚ", rad: "口部（口）", strokes: 11, ro: false, video: "videos/lesson12/L2_09_啊.mp4", formula: "🟠 口部（口） ＋ 🔵 阿 ＝「啊」", words: ["好啊", "對啊", "來啊", "是啊"], mnemonic: "💡 記憶口訣：張開小嘴巴（口）＋ 阿 ＝ 好「啊」！" },
+          { idx: 10, char: "多", zy: "ㄉㄨㄛ", rad: "夕部（夕）", strokes: 6, ro: false, video: "videos/lesson12/L2_10_多.mp4", formula: "🔵 上面「夕」 ＋ 🟠 夕部（下面「夕」） ＝「多」", words: ["好多", "多少", "很多", "多多"], mnemonic: "💡 記憶口訣：兩個「夕」疊在一起，變成好「多」！" },
+          { idx: 11, char: "個", zy: "（ㄍㄜˋ）", rad: "人部（亻）", strokes: 10, ro: true, video: "videos/lesson12/L2_11_個.mp4", formula: "🟠 人部（亻） ＋ 🔵 固 ＝「個」（認讀字）", words: ["一個", "這個", "個子", "每個人"], mnemonic: "💡 記憶口訣：單人旁（亻）＋ 固 ＝ 一個的「個」！" }
+        ]
+      }
+    };
+
+    let currentLesson = 1;
+    let currentItemIdx = 0;
+    let autoPlayLesson = false;
+    const watchedSet = new Set();
+
+    const videoEl = document.getElementById("theaterVideo");
+
+    function speakText(text) {
+      if (!("speechSynthesis" in window)) return;
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = "zh-TW";
+      utter.rate = 0.88;
+      const voices = window.speechSynthesis.getVoices();
+      const tw = voices.find(v => v.lang.includes("zh-TW") || v.name.includes("Meijia"));
+      if (tw) utter.voice = tw;
+      window.speechSynthesis.speak(utter);
+    }
+
+    function updateUrlParams() {
+      try {
+        const item = THEATER_DATA[currentLesson].items[currentItemIdx];
+        const newUrl = `${window.location.pathname}?lesson=${currentLesson}&char=${encodeURIComponent(item.char)}`;
+        window.history.replaceState({}, "", newUrl);
+      } catch (e) {}
+    }
+
+    function selectLesson(lessonNum, itemIndex = 0, shouldPlay = true) {
+      currentLesson = lessonNum;
+      currentItemIdx = itemIndex;
+      document.querySelectorAll(".lesson-tab-btn").forEach(btn => {
+        btn.classList.toggle("active", Number(btn.dataset.lesson) === lessonNum);
+      });
+      renderCharGrid();
+      loadCurrentVideo(shouldPlay);
+    }
+
+    function selectChar(idx) {
+      currentItemIdx = idx;
+      renderCharGrid();
+      loadCurrentVideo(true);
+    }
+
+    function stepChar(delta) {
+      const items = THEATER_DATA[currentLesson].items;
+      currentItemIdx = (currentItemIdx + delta + items.length) % items.length;
+      renderCharGrid();
+      loadCurrentVideo(true);
+    }
+
+    function renderCharGrid() {
+      const items = THEATER_DATA[currentLesson].items;
+      const bar = document.getElementById("charGridBar");
+      bar.innerHTML = items.map((it, i) => `
+        <button class="char-btn ${i === currentItemIdx ? "active" : ""} ${watchedSet.has(it.char) ? "watched" : ""}" onclick="selectChar(${i})">
+          ${it.ro ? '<span class="ro-pill">認讀</span>' : ""}
+          <span class="char-btn-kai">${it.char}</span>
+          <span class="char-btn-zy">${it.zy}</span>
+        </button>
+      `).join("");
+    }
+
+    function loadCurrentVideo(shouldPlay) {
+      const item = THEATER_DATA[currentLesson].items[currentItemIdx];
+      updateUrlParams();
+
+      document.getElementById("infoChar").textContent = item.char;
+      document.getElementById("infoZy").textContent = item.zy + (item.ro ? " 認讀字" : "");
+      document.getElementById("infoRad").textContent = `部首：${item.rad} ｜ 共 ${item.strokes} 畫`;
+      document.getElementById("infoFormula").textContent = item.formula;
+      document.getElementById("infoMnemonic").textContent = item.mnemonic;
+
+      document.getElementById("infoWords").innerHTML = item.words.map(w => `
+        <span class="word-tag" onclick="speakText('${w}')">🔊 ${w}</span>
+      `).join("");
+
+      document.getElementById("goStrokeLink").href = `strokes.html?sem=1a&lesson=${currentLesson}&char=${encodeURIComponent(item.char)}`;
+      document.getElementById("goMoeLink").href = `https://stroke-order.learningweb.moe.edu.tw/characterQueryResult.do?word=${encodeURIComponent(item.char)}`;
+
+      videoEl.src = item.video;
+      videoEl.load();
+      if (shouldPlay) {
+        videoEl.play().catch(() => {});
+      }
+    }
+
+    function replayVideo() {
+      videoEl.currentTime = 0;
+      videoEl.play().catch(() => {});
+    }
+
+    function toggleAutoPlay() {
+      autoPlayLesson = !autoPlayLesson;
+      const btn = document.getElementById("autoPlayBtn");
+      btn.classList.toggle("on", autoPlayLesson);
+      btn.textContent = autoPlayLesson ? "🔁 自動連播整課：開" : "🔁 自動連播整課：關";
+    }
+
+    function enterFullscreen() {
+      if (videoEl.requestFullscreen) videoEl.requestFullscreen();
+      else if (videoEl.webkitEnterFullscreen) videoEl.webkitEnterFullscreen();
+      else if (videoEl.webkitRequestFullscreen) videoEl.webkitRequestFullscreen();
+    }
+
+    videoEl.addEventListener("ended", () => {
+      const item = THEATER_DATA[currentLesson].items[currentItemIdx];
+      watchedSet.add(item.char);
+      document.getElementById("watchedCount").textContent = watchedSet.size;
+      renderCharGrid();
+
+      if (autoPlayLesson) {
+        const items = THEATER_DATA[currentLesson].items;
+        if (currentItemIdx < items.length - 1) {
+          setTimeout(() => selectChar(currentItemIdx + 1), 900);
+        }
+      }
+    });
+
+    // Share Modal
+    function getPublicUrl() {
+      return `https://a0930799617-maker.github.io/bopomofo-game/forest-theater.html?lesson=${currentLesson}`;
+    }
+
+    function openShareModal() {
+      const url = getPublicUrl();
+      document.getElementById("modalTitle").textContent = `📲 康軒一上 ${THEATER_DATA[currentLesson].title} 3D 拼字劇院`;
+      document.getElementById("shareUrlText").textContent = url;
+      document.getElementById("qrImage").src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(url);
+      document.getElementById("shareModal").style.display = "flex";
+    }
+
+    function closeShareModal() {
+      document.getElementById("shareModal").style.display = "none";
+    }
+
+    function copyShareUrl() {
+      navigator.clipboard.writeText(getPublicUrl()).then(() => {
+        const btn = document.getElementById("copyUrlBtn");
+        btn.textContent = "✅ 已複製網址！可直接貼到教室電腦或 LINE";
+        btn.style.background = "#06d6a0";
+        setTimeout(() => {
+          btn.textContent = "📋 複製本課劇院網址";
+          btn.style.background = "#2d6a4f";
+        }, 2400);
+      });
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const params = new URLSearchParams(window.location.search);
+      const lNum = parseInt(params.get("lesson"), 10);
+      const cParam = params.get("char");
+      let startLesson = (lNum === 1 || lNum === 2) ? lNum : 1;
+      let startIdx = 0;
+      if (cParam) {
+        const found = THEATER_DATA[startLesson].items.findIndex(x => x.char === cParam);
+        if (found !== -1) startIdx = found;
+      }
+      selectLesson(startLesson, startIdx, false);
+      if ("speechSynthesis" in window) window.speechSynthesis.getVoices();
+    });
+  </script>
+</body>
+</html>
