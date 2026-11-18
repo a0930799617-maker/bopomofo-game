@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>⚡ 全班搶答大對決｜康軒國語一上・智慧課堂搶答擂台</title>
+  <style>
+    :root {
+      --kai: "BiauKai", "BiauKaiTC", "標楷體", "DFKai-SB", "TW-Kai", "Kaiti TC", "STKaiti", "KaiTi", serif;
+      --ui: "PingFang TC", "Microsoft JhengHei", "Noto Sans TC", "Heiti TC", sans-serif;
+      --t1: #e63946; /* Red Team */
+      --t2: #1d3557; /* Blue Team */
+      --t3: #2a9d8f; /* Green Team */
+      --t4: #e76f51; /* Orange Team */
+      --gold: #f4a261;
+      --bg: #f8f9fa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: var(--ui);
+      background: #1e222d radial-gradient(circle at 50% 30%, #2c3345 0%, #151821 100%);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    button { font-family: inherit; color: inherit; cursor: pointer; border: none; }
+
+    /* Top Portal Bar */
+    .top-portal-bar {
+      width: 100%;
+      background: #11141c;
+      color: #fff;
+      padding: 7px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      flex-wrap: wrap;
+      z-index: 20;
+    }
+
+    .portal-link {
+      color: #ffe66d;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 13px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .portal-link:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-1px); }
+    .portal-link.current { background: #ff4757; color: #fff; box-shadow: 0 0 10px rgba(255,71,87,0.6); }
+
+    /* Header Controls */
+    header {
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: rgba(0,0,0,0.25);
+      border-bottom: 2px solid rgba(255,255,255,0.08);
+      z-index: 10;
+    }
+
+    .title-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-group h1 {
+      font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+      font-weight: 900;
+      color: #ffeaa7;
+      letter-spacing: 1px;
+    }
+    .badge {
+      background: #e17055;
+      color: #fff;
+      font-size: 0.82rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 800;
+    }
+
+    .header-tools {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .tool-btn {
+      background: rgba(255,255,255,0.15);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      transition: background 0.2s;
+    }
+    .tool-btn:hover { background: rgba(255,255,255,0.28); }
+    .tool-btn.active { background: #fdcb6e; color: #2d3436; }
+
+    /* Main Stage Layout */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 18px 20px;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+      gap: 14px;
+    }
+
+    /* Scoreboard Top Bar */
+    .scoreboard {
+      display: grid;
+      gap: 14px;
+      transition: grid-template-columns 0.3s;
+    }
+    .scoreboard.teams-2 { grid-template-columns: 1fr 1fr; }
+    .scoreboard.teams-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .team-card {
+      background: rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 12px 18px;
+      border: 3px solid rgba(255,255,255,0.12);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+    }
+
+    .team-card.buzzed {
+      border-color: #ffd32a;
+      box-shadow: 0 0 25px rgba(255, 211, 42, 0.6);
+      transform: scale(1.02);
+      background: rgba(255, 211, 42, 0.15);
+      animation: pulseBuzzed 0.8s infinite alternate;
+    }
+
+    @keyframes pulseBuzzed {
+      0% { box-shadow: 0 0 15px rgba(255, 211, 42, 0.4); }
+      100% { box-shadow: 0 0 35px rgba(255, 211, 42, 0.85); }
+    }
+
+    .team-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .team-avatar {
+      font-size: clamp(2rem, 3.5vw, 3rem);
+      line-height: 1;
+    }
+    .team-name {
+      font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+      font-weight: 900;
+    }
+    .team-key-hint {
+      font-size: 0.82rem;
+      opacity: 0.75;
+      font-weight: 700;
+    }
+
+    .team-score-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .team-score {
+      font-size: clamp(2.4rem, 4vw, 3.8rem);
+      font-weight: 900;
+      color: #ffd32a;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+      min-width: 1.2em;
+      text-align: right;
+    }
+
+    .score-adjust {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .adj-btn {
+      width: 26px;
+      height: 24px;
+      background: rgba(255,255,255,0.18);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .adj-btn:hover { background: rgba(255,255,255,0.35); }
+
+    /* Question & Arena Area */
+    .arena {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 28px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 290px;
+      position: relative;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.3);
+    }
+
+    .status-bar {
+      position: absolute;
+      top: 14px;
+      display: flex;
+      gap: 14px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #dfe6e9;
+    }
+    .q-type-pill {
+      background: #0984e3;
+      padding: 4px 14px;
+      border-radius: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .q-box {
+      text-align: center;
+      margin: 20px 0 16px;
+      width: 100%;
+    }
+
+    .q-prompt {
+      font-size: clamp(1.2rem, 2.3vw, 1.85rem);
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .q-voice-btn {
+      background: #ff7675;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      font-size: 1.3rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 0 #d63031;
+    }
+    .q-voice-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #d63031; }
+
+    /* Character + Zhuyin */
+    .cz {
+      display: inline-flex;
+      align-items: center;
+      vertical-align: middle;
+      margin: 0 0.04em;
+    }
+    .cz .c {
+      font-family: var(--kai);
+      line-height: 1.15;
+      display: inline-block;
+    }
+    .z {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--kai);
+      font-size: 0.3em;
+      line-height: 1.05;
+      margin-left: 0.06em;
+      font-weight: normal;
+    }
+    .zc { display: flex; flex-direction: column; align-items: center; }
+    .zc .lt { line-height: 0.5; }
+    .tn { align-self: flex-end; margin-bottom: 0.2em; margin-left: 0.02em; }
+    .tn.mid { align-self: center; margin-bottom: 0; }
+    body.no-zy .z { display: none; }
+
+    .q-highlight {
+      font-family: var(--kai);
+      font-size: clamp(3rem, 5.5vw, 4.6rem);
+      color: #ffeaa7;
+      text-shadow: 0 0 20px rgba(255, 234, 167, 0.6);
+      margin: 8px 0;
+      min-height: 1.2em;
+    }
+
+    /* Buzzer Notification Banner */
+    .buzzer-alert {
+      background: linear-gradient(90deg, #f39c12, #e74c3c);
+      color: #fff;
+      padding: 10px 24px;
+      border-radius: 50px;
+      font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+      font-weight: 900;
+      box-shadow: 0 6px 20px rgba(231, 76, 60, 0.5);
+      animation: bounceAlert 0.4s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @keyframes bounceAlert {
+      0% { transform: scale(0.7); opacity: 0; }
+      70% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .timer-ring {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #fff;
+      color: #e74c3c;
+      font-weight: 900;
+      font-size: 1.4rem;
+    }
+
+    /* Options Grid (Answers) */
+    .options-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      width: 100%;
+      max-width: 1000px;
+      margin-top: 16px;
+    }
+
+    .opt-card {
+      background: #fff;
+      color: #2d3436;
+      border-radius: 20px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-family: var(--kai);
+      box-shadow: 0 8px 0 #b2bec3, 0 10px 20px rgba(0,0,0,0.25);
+      transition: transform 0.12s, box-shadow 0.12s, background 0.15s;
+      position: relative;
+    }
+
+    .opt-card:active {
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #b2bec3;
+    }
+
+    .opt-card .opt-letter {
+      font-family: var(--ui);
+      font-size: 1.1rem;
+      font-weight: 900;
+      background: #dfe6e9;
+      color: #636e72;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 14px;
+    }
+
+    .opt-card.correct {
+      background: #55efc4 !important;
+      color: #006266 !important;
+      box-shadow: 0 8px 0 #00b894 !important;
+      animation: correctPulse 0.6s ease;
+    }
+
+    @keyframes correctPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .opt-card.wrong {
+      background: #ff7675 !important;
+      color: #fff !important;
+      box-shadow: 0 8px 0 #d63031 !important;
+      animation: shake 0.4s ease;
+      opacity: 0.5;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    /* Giant Touch Buzzers for Students / Teams */
+    .buzzers-area {
+      display: grid;
+      gap: 14px;
+      margin-top: 6px;
+    }
+    .buzzers-area.teams-2 { grid-template-columns: 1fr 1fr; }
+    .buzzers-area.teams-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .buzzer-btn {
+      background: linear-gradient(180deg, #ff4757, #c0392b);
+      color: #fff;
+      border-radius: 26px;
+      padding: 16px 14px;
+      box-shadow: 0 10px 0 #962d22, 0 14px 25px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: transform 0.1s, box-shadow 0.1s, filter 0.2s;
+    }
+
+    .buzzer-btn:active {
+      transform: translateY(6px);
+      box-shadow: 0 4px 0 #962d22;
+    }
+
+    .buzzer-btn.t1 { background: linear-gradient(180deg, #ff4757, #e02f40); box-shadow: 0 10px 0 #b31d2c; }
+    .buzzer-btn.t2 { background: linear-gradient(180deg, #1e90ff, #0984e3); box-shadow: 0 10px 0 #0764ab; }
+    .buzzer-btn.t3 { background: linear-gradient(180deg, #2ed573, #26af61); box-shadow: 0 10px 0 #1b8548; }
+    .buzzer-btn.t4 { background: linear-gradient(180deg, #ffa502, #e67e22); box-shadow: 0 10px 0 #b85f10; }
+
+    .buzzer-icon { font-size: clamp(2.2rem, 3.8vw, 3.4rem); line-height: 1; }
+    .buzzer-label { font-size: clamp(1.1rem, 2vw, 1.6rem); font-weight: 900; }
+    .buzzer-key {
+      background: rgba(0,0,0,0.25);
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .buzzer-btn.disabled {
+      filter: grayscale(0.85);
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    /* Teacher Operations Bar */
+    .teacher-bar {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 10px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .main-action-btn {
+      background: #fdcb6e;
+      color: #2d3436;
+      font-weight: 900;
+      font-size: clamp(1rem, 1.6vw, 1.25rem);
+      padding: 12px 28px;
+      border-radius: 50px;
+      box-shadow: 0 6px 0 #e1b12c;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .main-action-btn:active { transform: translateY(3px); box-shadow: 0 3px 0 #e1b12c; }
+
+    .quick-settings {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .select-dropdown {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .select-dropdown option { background: #2c3e50; color: #fff; }
+
+    /* Victory Celebration Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal.hidden { display: none; }
+
+    .modal-content {
+      background: #fff;
+      color: #2d3436;
+      border-radius: 32px;
+      padding: 34px 30px;
+      text-align: center;
+      max-width: 520px;
+      width: 100%;
+      border: 8px solid #ffd32a;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+      animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes popIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .trophy { font-size: 5rem; line-height: 1; margin-bottom: 8px; }
+    .winner-team-name { font-size: 2.3rem; font-weight: 900; color: #d63031; margin: 6px 0; }
+    .winner-desc { font-size: 1.15rem; color: #636e72; font-weight: 700; margin-bottom: 20px; }
+
+    /* Confetti Particle */
+    .confetti {
+      position: fixed;
+      top: -30px;
+      z-index: 150;
+      pointer-events: none;
+      animation: fallDown linear forwards;
+    }
+    @keyframes fallDown {
+      to { transform: translateY(115vh) rotate(720deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Portal Bar -->
+  <div class="top-portal-bar">
+    <span>🎒 小一國語文快樂學系列：</span>
+    <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
+    <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
+    <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
+    <a class="portal-link" href="forest-theater.html">🎬 《3D 童話拼字大劇院》</a>
+    <a class="portal-link" href="lesson3-game.html">🍂 《秋千》互動遊戲樂園</a>
+    <a class="portal-link current" href="quiz-battle.html">⚡ 目前所在：《全班搶答大對決》</a>
+  </div>
+
+  <header>
+    <div class="title-group">
+      <span style="font-size: 1.8rem;">⚡</span>
+      <h1>全班搶答大對決</h1>
+      <span class="badge">智慧大螢幕 / 觸控搶答</span>
+    </div>
+    <div class="header-tools">
+      <button class="tool-btn" id="zyToggleBtn">ㄅ 注音：開</button>
+      <button class="tool-btn" id="sfxToggleBtn">🔊 音效：開</button>
+      <button class="tool-btn" id="fsBtn">⛶ 全螢幕投影</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Scoreboard -->
+    <div class="scoreboard teams-2" id="scoreboard">
+      <!-- Team 1 -->
+      <div class="team-card" id="teamCard1">
+        <div class="team-info">
+          <div class="team-avatar" id="t1Avatar">🐬</div>
+          <div>
+            <div class="team-name" id="t1Name" style="color:#ff6b81;">海豚隊</div>
+            <div class="team-key-hint">按鍵盤 [ A ] 搶答</div>
+          </div>
+        </div>
+        <div class="team-score-box">
+          <div class="team-score" id="score1">0</div>
+          <div class="score-adjust">
+            <button class="adj-btn" onclick="adjScore(0, 1)">▲</button>
+            <button class="adj-btn" onclick="adjScore(0, -1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team 2 -->
+      <div class="team-card" id="teamCard2">
+        <div class="team-info">
+          <div class="team-avatar" id="t2Avatar">🐿️</div>
+          <div>
+            <div class="team-name" id="t2Name" style="color:#70a1ff;">松鼠隊</div>
+            <div class="team-key-hint">按鍵盤 [ L ] 搶答</div>
+          </div>
+        </div>
+        <div class="team-score-box">
+          <div class="team-score" id="score2">0</div>
+          <div class="score-adjust">
+            <button class="adj-btn" onclick="adjScore(1, 1)">▲</button>
+            <button class="adj-btn" onclick="adjScore(1, -1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team 3 (for 4 teams mode) -->
+      <div class="team-card" id="teamCard3" style="display:none;">
+        <div class="team-info">
+          <div class="team-avatar">🐢</div>
+          <div>
+            <div class="team-name" style="color:#2ed573;">烏龜隊</div>
+            <div class="team-key-hint">按鍵盤 [ C ] 搶答</div>
+          </div>
+        </div>
+        <div class="team-score-box">
+          <div class="team-score" id="score3">0</div>
+          <div class="score-adjust">
+            <button class="adj-btn" onclick="adjScore(2, 1)">▲</button>
+            <button class="adj-btn" onclick="adjScore(2, -1)">▼</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Team 4 (for 4 teams mode) -->
+      <div class="team-card" id="teamCard4" style="display:none;">
+        <div class="team-info">
+          <div class="team-avatar">🦁</div>
+          <div>
+            <div class="team-name" style="color:#ffa502;">獅子隊</div>
+            <div class="team-key-hint">按鍵盤 [ M ] 搶答</div>
+          </div>
+        </div>
+        <div class="team-score-box">
+          <div class="team-score" id="score4">0</div>
+          <div class="score-adjust">
+            <button class="adj-btn" onclick="adjScore(3, 1)">▲</button>
+            <button class="adj-btn" onclick="adjScore(3, -1)">▼</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arena Stage -->
+    <div class="arena" id="arena">
+      <div class="status-bar">
+        <span class="q-type-pill" id="qTypeBadge">🎯 題目類型</span>
+        <span id="targetScoreDisplay">🏆 目標：先得 5 分獲勝</span>
+      </div>
+
+      <div class="q-box" id="qBox">
+        <div class="q-prompt" id="qPrompt">
+          <span>請按下方【出題 / 下一題】開始比賽！</span>
+          <button class="q-voice-btn" id="qVoiceBtn" title="朗讀題目" style="display:none;">🔊</button>
+        </div>
+        <div class="q-highlight" id="qHighlight">準備好了嗎？</div>
+      </div>
+
+      <!-- Buzzer Alert Notification -->
+      <div class="buzzer-alert" id="buzzerAlert" style="display:none;">
+        <span id="buzzerAlertIcon">🔔</span>
+        <span id="buzzerAlertText">恭喜【海豚隊】搶到！請作答：</span>
+        <span class="timer-ring" id="timerCount">5</span>
+      </div>
+
+      <!-- Answer Options (Cards) -->
+      <div class="options-grid" id="optionsGrid" style="display:none;"></div>
+    </div>
+
+    <!-- Touch Buzzers for Classroom Board -->
+    <div class="buzzers-area teams-2" id="buzzersArea">
+      <button class="buzzer-btn t1" id="buzzBtn1" onclick="triggerBuzzer(0)">
+        <div class="buzzer-icon">🔔</div>
+        <div class="buzzer-label">海豚隊 搶答！</div>
+        <div class="buzzer-key">觸控 或 按 [ A ]</div>
+      </button>
+
+      <button class="buzzer-btn t2" id="buzzBtn2" onclick="triggerBuzzer(1)">
+        <div class="buzzer-icon">🔔</div>
+        <div class="buzzer-label">松鼠隊 搶答！</div>
+        <div class="buzzer-key">觸控 或 按 [ L ]</div>
+      </button>
+
+      <button class="buzzer-btn t3" id="buzzBtn3" onclick="triggerBuzzer(2)" style="display:none;">
+        <div class="buzzer-icon">🔔</div>
+        <div class="buzzer-label">烏龜隊 搶答！</div>
+        <div class="buzzer-key">觸控 或 按 [ C ]</div>
+      </button>
+
+      <button class="buzzer-btn t4" id="buzzBtn4" onclick="triggerBuzzer(3)" style="display:none;">
+        <div class="buzzer-icon">🔔</div>
+        <div class="buzzer-label">獅子隊 搶答！</div>
+        <div class="buzzer-key">觸控 或 按 [ M ]</div>
+      </button>
+    </div>
+
+    <!-- Teacher Controls Bar -->
+    <div class="teacher-bar">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;">
+        <button class="main-action-btn" id="nextQBtn" onclick="nextQuestion()">
+          <span>▶</span>
+          <span>出題 / 下一題（空白鍵 Space）</span>
+        </button>
+        <button class="tool-btn" id="passBuzzerBtn" onclick="openStealBuzzer()" style="display:none;">
+          ⚡ 開放其他隊偷分搶答！
+        </button>
+      </div>
+
+      <div class="quick-settings">
+        <!-- Lesson Scope -->
+        <select class="select-dropdown" id="lessonScopeSelect" onchange="changeQuestionBank()">
+          <option value="3">🍂 第三課《秋千》專屬擂台（35題）</option>
+          <option value="all">🌟 第一至三課綜合大挑戰（55題）</option>
+          <option value="all6">👑 一至六課生字總挑戰（85題）</option>
+        </select>
+
+        <!-- Teams Mode -->
+        <select class="select-dropdown" id="teamModeSelect" onchange="changeTeamMode()">
+          <option value="2">👥 雙人/兩組 PK 模式（2隊）</option>
+          <option value="4">👨‍👩‍👧‍👦 全班四組大賽（4隊）</option>
+        </select>
+
+        <!-- Win Target -->
+        <select class="select-dropdown" id="targetScoreSelect" onchange="changeTargetScore()">
+          <option value="3">🏁 先得 3 分勝（速戰）</option>
+          <option value="5" selected>🏁 先得 5 分勝（標準）</option>
+          <option value="10">🏁 先得 10 分勝（長局）</option>
+        </select>
+
+        <!-- Reset Button -->
+        <button class="tool-btn" onclick="resetGameScores()" style="background:#d63031;color:#fff;">
+          🔄 分數歸零
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Victory Modal -->
+  <div class="modal hidden" id="victoryModal">
+    <div class="modal-content">
+      <div class="trophy">🏆</div>
+      <h2>🎉 搶答總冠軍誕生！</h2>
+      <div class="winner-team-name" id="winnerTeamName">海豚隊 獲勝！</div>
+      <div class="winner-desc" id="winnerDesc">率先達成 5 分！大家給獲勝隊伍熱烈掌聲！👏</div>
+      <button class="main-action-btn" onclick="restartMatch()" style="width:100%;justify-content:center;">
+        🔁 再比一局（重置分數）
+      </button>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    /* ========================================================
+       1. DATA & QUESTION BANKS
+       ======================================================== */
+    const ZY_DICT = {
+      秋: "ㄑㄧㄡ", 千: "ㄑㄧㄢ", 和: "ㄏㄢˋ", 我: "ㄨㄛˇ", 玩: "ㄨㄢˊ", 上: "ㄕㄤˋ", 陪: "ㄆㄟˊ",
+      高: "ㄍㄠ", 山: "ㄕㄢ", 下: "ㄒㄧㄚˋ", 到: "ㄉㄠˋ", 大: "ㄉㄚˋ", 海: "ㄏㄞˇ", 的: "˙ㄉㄜ",
+      好: "ㄏㄠˇ", 朋: "ㄆㄥˊ", 友: "ㄧㄡˇ", 們: "˙ㄇㄣ", 一: "ㄧˋ", 起: "ㄑㄧˇ", 是: "ㄕˋ",
+      拍: "ㄆㄞ", 手: "ㄕㄡˇ", 左: "ㄗㄨㄛˇ", 右: "ㄧㄡˋ", 你: "ㄋㄧˇ", 他: "ㄊㄚ", 也: "ㄧㄝˇ",
+      這: "ㄓㄜˋ", 誰: "ㄕㄟˊ", 分: "ㄈㄣ", 了: "˙ㄌㄜ", 啊: "ㄚ", 多: "ㄉㄨㄛ", 個: "˙ㄍㄜ"
+    };
+
+    // Kang Hsuan Lesson 3 Questions Bank
+    const QUESTIONS_L3 = [
+      // 聽音找字
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，秋千的，秋", highlight: "？", options: ["秋", "千", "和", "陪"], ans: 0 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，高山的高", highlight: "？", options: ["亮", "高", "京", "山"], ans: 1 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，大海的海", highlight: "？", options: ["每", "梅", "海", "水"], ans: 2 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，好朋友的，朋", highlight: "？", options: ["明", "月", "朋", "有"], ans: 2 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，好朋友的，友", highlight: "？", options: ["友", "有", "反", "右"], ans: 0 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，一起玩的，起", highlight: "？", options: ["走", "起", "己", "超"], ans: 1 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，我們的，們", highlight: "？", options: ["門", "問", "閃", "們"], ans: 3 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，陪我玩的，陪", highlight: "？", options: ["陪", "倍", "部", "部"], ans: 0 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，到大海的，到", highlight: "？", options: ["至", "倒", "到", "刀"], ans: 2 },
+      { type: "聽音找字", prompt: "請聽語音，搶答找出正確的生字！", voice: "請找出，和我玩的，玩", highlight: "？", options: ["元", "完", "玩", "院"], ans: 2 },
+
+      // 部件合成
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "禾字旁加上火，會變成什麼字？", highlight: "禾 ＋ 火 ＝ ？", options: ["秋", "科", "和", "香"], ans: 0 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "禾加上嘴巴的口，會變成什麼字？", highlight: "禾 ＋ 口 ＝ ？", options: ["知", "和", "加", "如"], ans: 1 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "王字旁加上元，會變成什麼字？", highlight: "王 ＋ 元 ＝ ？", options: ["完", "玩", "頑", "遠"], ans: 1 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "三點水加上每，會變成什麼字？", highlight: "氵 ＋ 每 ＝ ？", options: ["梅", "海", "洋", "江"], ans: 1 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "單人旁加上門，會變成什麼字？", highlight: "亻 ＋ 門 ＝ ？", options: ["閃", "問", "們", "閉"], ans: 2 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "兩個月牽牽手，會變成什麼字？", highlight: "月 ＋ 月 ＝ ？", options: ["朋", "明", "用", "多"], ans: 0 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "走字旁加上自己的己，會變成什麼字？", highlight: "走 ＋ 己 ＝ ？", options: ["趕", "起", "越", "超"], ans: 1 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "至加上立刀旁，會變成什麼字？", highlight: "至 ＋ 刂 ＝ ？", options: ["到", "倒", "利", "刻"], ans: 0 },
+      { type: "部件合成", prompt: "這兩個部件合起來是什麼字？", voice: "左耳旁加上咅，會變成什麼字？", highlight: "阝 ＋ 咅 ＝ ？", options: ["陪", "部", "倍", "隊"], ans: 0 },
+
+      // 課文填空大考驗
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "秋千，秋千，空格我玩。", highlight: "秋千，秋千，□我玩。", options: ["和", "合", "荷", "禾"], ans: 0 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "空格我上高山。", highlight: "□我上高山。", options: ["培", "陪", "部", "配"], ans: 1 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "陪我上高空格。", highlight: "陪我上高□。", options: ["山", "出", "石", "林"], ans: 0 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "陪我空格大海。", highlight: "陪我□大海。", options: ["倒", "到", "道", "達"], ans: 1 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "陪我到大空格。", highlight: "陪我到大□。", options: ["梅", "洋", "海", "湖"], ans: 2 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "我的好朋空格。", highlight: "我的好朋□，", options: ["有", "友", "右", "又"], ans: 1 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "我空格一起玩。", highlight: "我□一起玩。", options: ["們", "門", "問", "滿"], ans: 0 },
+      { type: "課文填空", prompt: "課文填空：空格裡要填哪一個字？", voice: "我們一空格玩。", highlight: "我們一□玩。", options: ["走", "企", "起", "汽"], ans: 2 },
+
+      // 讀音與聲調挑戰
+      { type: "正確讀音", prompt: "讀音考驗：「和」在課文裡怎麼讀？", voice: "秋千，秋千，和我玩的和，怎麼讀？", highlight: "「和」我玩", options: ["ㄏㄢˋ", "ㄏㄜˊ", "ㄏㄨㄛˋ", "ㄏㄜ"], ans: 0 },
+      { type: "正確讀音", prompt: "聲調考驗：「們」在課文裡是什麼聲調？", voice: "我們的們，是什麼聲調？", highlight: "我「們」", options: ["輕聲 ˙ㄇㄣ", "二聲 ㄇㄣˊ", "四聲 ㄇㄣˋ", "一聲 ㄇㄣ"], ans: 0 },
+      { type: "正確讀音", prompt: "讀音考驗：「秋」的正確注音是？", voice: "秋天的秋，注音是哪一個？", highlight: "「秋」天", options: ["ㄑㄧㄡ", "ㄑㄧㄡˇ", "ㄑㄧㄡˋ", "ㄑㄧㄡˊ"], ans: 0 },
+
+      // 反義詞與字義
+      { type: "相反詞", prompt: "動動腦：「上」的相反字是什麼？", voice: "上的相反字是什麼？", highlight: "「上」↔ ？", options: ["下", "左", "右", "出"], ans: 0 },
+      { type: "相反詞", prompt: "動動腦：「大」的相反字是什麼？", voice: "大的相反字是什麼？", highlight: "「大」↔ ？", options: ["小", "少", "多", "短"], ans: 0 }
+    ];
+
+    // Combined Lessons 1-3
+    const QUESTIONS_L13 = [
+      ...QUESTIONS_L3,
+      { type: "課文搶答", prompt: "第一課回顧：「拍拍手，____走。」", voice: "拍拍手，空格走，空格填什麼？", highlight: "拍拍手，□□走。", options: ["向前", "向後", "向上", "向左"], ans: 0 },
+      { type: "部件合成", prompt: "手字旁加上白，會變成什麼字？", voice: "手字旁加白，會變成什麼字？", highlight: "扌 ＋ 白 ＝ ？", options: ["拍", "伯", "帕", "泊"], ans: 0 },
+      { type: "字形辨析", prompt: "哪一個字是「這是誰的」的「這」？", voice: "請問哪一個是這本書的這？", highlight: "「ㄓㄜˋ」是誰的？", options: ["這", "連", "道", "過"], ans: 0 },
+      { type: "正確讀音", prompt: "「誰」在課本裡的標準注音是？", voice: "誰在課本裡的注音是哪一個？", highlight: "「誰」的", options: ["ㄕㄟˊ", "ㄕㄨㄟˊ", "ㄙㄟˊ", "ㄕㄨㄟ"], ans: 0 }
+    ];
+
+    /* ========================================================
+       2. GAME STATE
+       ======================================================== */
+    let teamMode = 2; // 2 or 4
+    let targetScore = 5;
+    let scores = [0, 0, 0, 0];
+    let currentQList = [...QUESTIONS_L3];
+    let currentQ = null;
+    let qIndex = -1;
+
+    let gameState = "IDLE"; // IDLE, BUZZING, ANSWERING, RESOLVED
+    let buzzedTeam = -1;
+    let timerInterval = null;
+    let timeLeft = 5;
+    let isZyVisible = true;
+    let isSfxOn = true;
+
+    const TEAMS = [
+      { name: "海豚隊", color: "#ff6b81", avatar: "🐬", key: "A" },
+      { name: "松鼠隊", color: "#70a1ff", avatar: "🐿️", key: "L" },
+      { name: "烏龜隊", color: "#2ed573", avatar: "🐢", key: "C" },
+      { name: "獅子隊", color: "#ffa502", avatar: "🦁", key: "M" }
+    ];
+
+    /* ========================================================
+       3. SYNTHESIZED AUDIO (Web Audio API)
+       ======================================================== */
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        const C = window.AudioContext || window.webkitAudioContext;
+        if (C) audioCtx = new C();
+      }
+      if (audioCtx && audioCtx.state === "suspended") audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playTone(freq, start, duration, type = "sine", vol = 0.2) {
+      if (!isSfxOn) return;
+      const ctx = getAudioCtx();
+      if (!ctx) return;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t0 = ctx.currentTime + start;
+      osc.type = type;
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.exponentialRampToValueAtTime(vol, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + duration + 0.05);
+    }
+
+    const SFX = {
+      buzzer() {
+        // High alert buzzer
+        playTone(880, 0, 0.12, "triangle", 0.3);
+        playTone(1320, 0.08, 0.25, "square", 0.25);
+      },
+      correct() {
+        // Joyful ding-dong fanfare
+        playTone(523, 0, 0.15, "triangle", 0.3);
+        playTone(659, 0.12, 0.15, "triangle", 0.3);
+        playTone(784, 0.24, 0.18, "triangle", 0.35);
+        playTone(1046, 0.36, 0.45, "triangle", 0.4);
+      },
+      wrong() {
+        // Uh-oh low buzzer
+        playTone(280, 0, 0.22, "sawtooth", 0.25);
+        playTone(210, 0.15, 0.35, "sawtooth", 0.25);
+      },
+      tick() {
+        playTone(800, 0, 0.04, "sine", 0.1);
+      },
+      victory() {
+        [523, 659, 784, 1046, 1318, 1568].forEach((f, i) => {
+          playTone(f, i * 0.11, 0.4, "triangle", 0.25);
+        });
+      }
+    };
+
+    /* ========================================================
+       4. TEXT-TO-SPEECH (TTS)
+       ======================================================== */
+    let twVoice = null;
+    function initTTS() {
+      if (!("speechSynthesis" in window)) return;
+      const load = () => {
+        const vs = window.speechSynthesis.getVoices();
+        twVoice = vs.find(v => /zh[-_]TW/i.test(v.lang)) ||
+                  vs.find(v => /Mei-?Jia|Yating|HsiaoChen|Hanhan/i.test(v.name)) ||
+                  vs.find(v => /^zh/i.test(v.lang)) || null;
+      };
+      load();
+      window.speechSynthesis.onvoiceschanged = load;
+    }
+    initTTS();
+
+    function speakText(txt) {
+      if (!("speechSynthesis" in window) || !isSfxOn) return;
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(txt.replace(/和/g, "汗"));
+      u.lang = "zh-TW";
+      u.rate = 0.88;
+      if (twVoice) u.voice = twVoice;
+      window.speechSynthesis.speak(u);
+    }
+
+    /* ========================================================
+       5. HELPER FORMATTERS
+       ======================================================== */
+    function zyHTML(zy) {
+      if (!zy) return "";
+      let light = false, tone = "";
+      if (zy.startsWith("˙")) { light = true; zy = zy.slice(1); }
+      const last = zy.slice(-1);
+      if ("ˊˇˋ".includes(last)) { tone = last; zy = zy.slice(0, -1); }
+      const syms = [...zy];
+      return `<span class="z"><span class="zc">${light ? '<span class="lt">˙</span>' : ""}${syms.map(s => `<span>${s}</span>`).join("")}</span>${tone ? `<span class="tn${syms.length === 1 ? " mid" : ""}">${tone}</span>` : ""}</span>`;
+    }
+
+    function czHTML(ch) {
+      const zy = ZY_DICT[ch];
+      if (!zy) return `<span class="c">${ch}</span>`;
+      return `<span class="cz"><span class="c">${ch}</span>${zyHTML(zy)}</span>`;
+    }
+
+    function formatTextWithZy(str) {
+      return [...str].map(ch => {
+        if (" ，。、！？+-=？□ ↔「」".includes(ch)) return ch;
+        return czHTML(ch);
+      }).join("");
+    }
+
+    /* ========================================================
+       6. CORE GAME LOGIC
+       ======================================================== */
+    function shuffleArray(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function nextQuestion() {
+      getAudioCtx();
+      if (gameState === "ANSWERING") {
+        clearInterval(timerInterval);
+      }
+
+      qIndex = (qIndex + 1) % currentQList.length;
+      if (qIndex === 0) {
+        currentQList = shuffleArray(currentQList);
+      }
+      currentQ = currentQList[qIndex];
+
+      // Update Arena
+      document.getElementById("qTypeBadge").textContent = `🎯 ${currentQ.type}（第 ${qIndex + 1} 題）`;
+      document.getElementById("qPrompt").innerHTML = `<span>${currentQ.prompt}</span><button class="q-voice-btn" id="qVoiceBtn" title="朗讀題目">🔊</button>`;
+      document.getElementById("qHighlight").innerHTML = formatTextWithZy(currentQ.highlight);
+      document.getElementById("qVoiceBtn").onclick = () => speakText(currentQ.voice);
+
+      // Render Options
+      const letters = ["A", "B", "C", "D"];
+      const grid = document.getElementById("optionsGrid");
+      grid.innerHTML = currentQ.options.map((opt, i) => `
+        <button class="opt-card" data-idx="${i}" onclick="selectAnswer(${i})">
+          <span class="opt-letter">${letters[i]}</span>
+          <span>${formatTextWithZy(opt)}</span>
+        </button>
+      `).join("");
+      grid.style.display = "grid";
+
+      // Reset Buzzer State
+      buzzedTeam = -1;
+      gameState = "BUZZING";
+      document.querySelectorAll(".team-card").forEach(c => c.classList.remove("buzzed"));
+      document.querySelectorAll(".buzzer-btn").forEach(b => b.classList.remove("disabled"));
+      document.getElementById("buzzerAlert").style.display = "none";
+      document.getElementById("passBuzzerBtn").style.display = "none";
+
+      // Announce question
+      speakText(currentQ.voice);
+    }
+
+    function triggerBuzzer(teamIdx) {
+      if (gameState !== "BUZZING") return;
+      if (teamIdx >= teamMode) return;
+
+      gameState = "ANSWERING";
+      buzzedTeam = teamIdx;
+      const t = TEAMS[teamIdx];
+
+      SFX.buzzer();
+
+      // Highlight team card
+      document.querySelectorAll(".team-card").forEach((c, idx) => {
+        c.classList.toggle("buzzed", idx === teamIdx);
+      });
+
+      // Disable other buzzers
+      document.querySelectorAll(".buzzer-btn").forEach((b, idx) => {
+        if (idx !== teamIdx) b.classList.add("disabled");
+      });
+
+      // Show Alert Banner & start countdown
+      const alertEl = document.getElementById("buzzerAlert");
+      alertEl.style.display = "flex";
+      document.getElementById("buzzerAlertIcon").textContent = t.avatar;
+      document.getElementById("buzzerAlertText").textContent = `【${t.name}】搶到答題權！請作答：`;
+
+      startCountdown();
+    }
+
+    function startCountdown() {
+      timeLeft = 5;
+      const timerEl = document.getElementById("timerCount");
+      timerEl.textContent = timeLeft;
+
+      clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+        if (timeLeft > 0) {
+          SFX.tick();
+        } else {
+          clearInterval(timerInterval);
+          handleTimeout();
+        }
+      }, 1000);
+    }
+
+    function handleTimeout() {
+      SFX.wrong();
+      speakText("時間到！搶答失敗！");
+      document.getElementById("buzzerAlertText").textContent = `時間到！作答逾時！`;
+      finishAttempt(false);
+    }
+
+    function selectAnswer(optIdx) {
+      if (gameState !== "ANSWERING") {
+        if (gameState === "BUZZING") {
+          speakText("請先按搶答鈴搶答喔！");
+        }
+        return;
+      }
+
+      clearInterval(timerInterval);
+      const isCorrect = (optIdx === currentQ.ans);
+      const optCards = document.querySelectorAll(".opt-card");
+
+      if (isCorrect) {
+        optCards[optIdx].classList.add("correct");
+        SFX.correct();
+        triggerConfetti(18);
+
+        // Add score
+        scores[buzzedTeam] += 1;
+        updateScoreDisplays();
+
+        const t = TEAMS[buzzedTeam];
+        document.getElementById("buzzerAlertText").textContent = `🎉 太厲害了！【${t.name}】答對 ＋1 分！`;
+        speakText(`答對了！${t.name}加一分！`);
+
+        gameState = "RESOLVED";
+
+        // Check Victory
+        if (scores[buzzedTeam] >= targetScore) {
+          setTimeout(() => showVictory(buzzedTeam), 900);
+        }
+      } else {
+        optCards[optIdx].classList.add("wrong");
+        SFX.wrong();
+        document.getElementById("buzzerAlertText").textContent = `❌ 答錯了！回答機會開放其他隊！`;
+        speakText("答錯了！換其他隊搶答！");
+        finishAttempt(false);
+      }
+    }
+
+    function finishAttempt(wasCorrect) {
+      if (!wasCorrect) {
+        // Allow pass / steal buzzer
+        document.getElementById("passBuzzerBtn").style.display = "inline-flex";
+        gameState = "RESOLVED";
+      }
+    }
+
+    function openStealBuzzer() {
+      gameState = "BUZZING";
+      document.getElementById("passBuzzerBtn").style.display = "none";
+      document.getElementById("buzzerAlert").style.display = "none";
+
+      // Disable previously buzzed team
+      document.querySelectorAll(".team-card").forEach(c => c.classList.remove("buzzed"));
+      document.querySelectorAll(".buzzer-btn").forEach((b, idx) => {
+        b.classList.toggle("disabled", idx === buzzedTeam);
+      });
+
+      speakText("偷分搶答開始！請搶答！");
+      SFX.buzzer();
+    }
+
+    /* ========================================================
+       7. SCORES & TEAM SETTINGS
+       ======================================================== */
+    function updateScoreDisplays() {
+      for (let i = 0; i < 4; i++) {
+        document.getElementById(`score${i + 1}`).textContent = scores[i];
+      }
+    }
+
+    function adjScore(teamIdx, delta) {
+      scores[teamIdx] = Math.max(0, scores[teamIdx] + delta);
+      updateScoreDisplays();
+      if (scores[teamIdx] >= targetScore) {
+        showVictory(teamIdx);
+      }
+    }
+
+    function resetGameScores() {
+      if (!confirm("確定要將全班搶答分數歸零嗎？")) return;
+      scores = [0, 0, 0, 0];
+      updateScoreDisplays();
+    }
+
+    function changeTeamMode() {
+      teamMode = parseInt(document.getElementById("teamModeSelect").value, 10);
+      const is4 = (teamMode === 4);
+
+      const sb = document.getElementById("scoreboard");
+      sb.className = is4 ? "scoreboard teams-4" : "scoreboard teams-2";
+
+      const ba = document.getElementById("buzzersArea");
+      ba.className = is4 ? "buzzers-area teams-4" : "buzzers-area teams-2";
+
+      document.getElementById("teamCard3").style.display = is4 ? "flex" : "none";
+      document.getElementById("teamCard4").style.display = is4 ? "flex" : "none";
+      document.getElementById("buzzBtn3").style.display = is4 ? "flex" : "none";
+      document.getElementById("buzzBtn4").style.display = is4 ? "flex" : "none";
+    }
+
+    function changeTargetScore() {
+      targetScore = parseInt(document.getElementById("targetScoreSelect").value, 10);
+      document.getElementById("targetScoreDisplay").textContent = `🏆 目標：先得 ${targetScore} 分獲勝`;
+    }
+
+    function changeQuestionBank() {
+      const scope = document.getElementById("lessonScopeSelect").value;
+      if (scope === "3") currentQList = [...QUESTIONS_L3];
+      else currentQList = [...QUESTIONS_L13];
+      qIndex = -1;
+      nextQuestion();
+    }
+
+    /* ========================================================
+       8. VICTORY MODAL & CONFETTI
+       ======================================================== */
+    function showVictory(teamIdx) {
+      SFX.victory();
+      triggerConfetti(50);
+      const t = TEAMS[teamIdx];
+      document.getElementById("winnerTeamName").textContent = `🏆 ${t.avatar} 【${t.name}】獲勝！`;
+      document.getElementById("winnerDesc").textContent = `率先達成 ${targetScore} 分！恭喜 ${t.name} 奪得搶答擂台總冠軍！`;
+      document.getElementById("victoryModal").classList.remove("hidden");
+      speakText(`恭喜${t.name}奪得總冠軍！太厲害了！`);
+    }
+
+    function restartMatch() {
+      document.getElementById("victoryModal").classList.add("hidden");
+      scores = [0, 0, 0, 0];
+      updateScoreDisplays();
+      nextQuestion();
+    }
+
+    function triggerConfetti(count = 25) {
+      const colors = ["#ff4757", "#2ed573", "#1e90ff", "#ffa502", "#9b59b6", "#ffd32a"];
+      for (let i = 0; i < count; i++) {
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.style.left = (Math.random() * 100) + "vw";
+        c.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        c.style.width = (8 + Math.random() * 10) + "px";
+        c.style.height = (12 + Math.random() * 14) + "px";
+        c.style.animationDuration = (2 + Math.random() * 2) + "s";
+        c.style.animationDelay = (Math.random() * 0.4) + "s";
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 4500);
+      }
+    }
+
+    /* ========================================================
+       9. KEYBOARD SHORTCUTS
+       ======================================================== */
+    window.addEventListener("keydown", (e) => {
+      // Space: Next question
+      if (e.code === "Space") {
+        e.preventDefault();
+        nextQuestion();
+        return;
+      }
+
+      const key = e.key.toUpperCase();
+
+      // Buzzer shortcuts
+      if (key === "A") triggerBuzzer(0);
+      else if (key === "L") triggerBuzzer(1);
+      else if (key === "C" && teamMode === 4) triggerBuzzer(2);
+      else if (key === "M" && teamMode === 4) triggerBuzzer(3);
+
+      // Option selection shortcuts (1/2/3/4 or Z/X/C/V)
+      if (gameState === "ANSWERING") {
+        if (key === "1") selectAnswer(0);
+        else if (key === "2") selectAnswer(1);
+        else if (key === "3") selectAnswer(2);
+        else if (key === "4") selectAnswer(3);
+      }
+    });
+
+    /* ========================================================
+       10. HEADER TOOLS WIRING
+       ======================================================== */
+    document.getElementById("zyToggleBtn").onclick = () => {
+      isZyVisible = !isZyVisible;
+      document.body.classList.toggle("no-zy", !isZyVisible);
+      document.getElementById("zyToggleBtn").textContent = `ㄅ 注音：${isZyVisible ? "開" : "關"}`;
+      document.getElementById("zyToggleBtn").classList.toggle("active", isZyVisible);
+    };
+
+    document.getElementById("sfxToggleBtn").onclick = () => {
+      isSfxOn = !isSfxOn;
+      document.getElementById("sfxToggleBtn").textContent = `🔊 音效：${isSfxOn ? "開" : "關"}`;
+      document.getElementById("sfxToggleBtn").classList.toggle("active", isSfxOn);
+    };
+
+    document.getElementById("fsBtn").onclick = () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    };
+
+    // Auto initialize first question
+    setTimeout(() => {
+      nextQuestion();
+    }, 400);
+
+  </script>
+</body>
+</html>
