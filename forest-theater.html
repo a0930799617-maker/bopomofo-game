@@ -3,17 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D 森林小鳥拼字劇院 - 康軒小一上第一、二課部件動畫</title>
+  <title>3D 童話拼字大劇院 - 康軒小一上全 6 課 74 字主題動畫</title>
   <style>
     :root {
       --bg-gradient: linear-gradient(135deg, #e6f7ed 0%, #fffbeb 50%, #eaf6ff 100%);
-      --forest: #2d6a4f;
-      --leaf: #52b788;
-      --orange: #e85d04;
-      --navy: #1d3557;
-      --blue: #2563eb;
-      --purple: #7209b7;
-      --gold: #ffbe0b;
+      --accent: #2d6a4f;
+      --accent-dark: #1b4332;
+      --accent-soft: #f4faf6;
+      --accent-border: #b7e4c7;
       --text-dark: #1f2937;
       --card-shadow: 0 12px 28px rgba(15, 45, 30, 0.10), 0 4px 10px rgba(0, 0, 0, 0.05);
       --font-kai: "DFKai-SB", "BiauKai", "標楷體", "Kaiti TC", "PingFang TC", "Microsoft JhengHei", serif;
@@ -34,6 +31,7 @@
       flex-direction: column;
       align-items: center;
       overflow-x: hidden;
+      transition: background 0.45s ease;
     }
 
     /* Top Portal Switch Bar */
@@ -72,7 +70,7 @@
 
     header {
       width: 100%;
-      max-width: 1180px;
+      max-width: 1200px;
       padding: 14px 20px 6px;
       display: flex;
       justify-content: space-between;
@@ -94,8 +92,8 @@
 
     .brand h1 {
       margin: 0;
-      font-size: 1.45rem;
-      background: linear-gradient(90deg, #2d6a4f, #e85d04, #2563eb);
+      font-size: 1.42rem;
+      background: linear-gradient(90deg, #2d6a4f, #d97706, #7c3aed, #e11d48);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 900;
@@ -114,7 +112,7 @@
       border-radius: 50px;
       box-shadow: var(--card-shadow);
       font-weight: 800;
-      color: #2d6a4f;
+      color: var(--accent);
       font-size: 1rem;
     }
 
@@ -125,7 +123,7 @@
       padding: 9px 18px;
       border-radius: 50px;
       font-weight: 800;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #049a73;
       transition: transform 0.12s;
@@ -133,72 +131,105 @@
 
     .share-btn:active { transform: translateY(2px); }
 
-    /* Lesson Switcher Tabs */
+    /* 6-Lesson Theme Tabs */
     .lesson-tabs {
       display: flex;
-      gap: 14px;
+      gap: 10px;
       justify-content: center;
       flex-wrap: wrap;
       margin: 8px 16px 14px;
+      max-width: 1200px;
     }
 
     .lesson-tab-btn {
       border: none;
       background: #fff;
       color: var(--text-dark);
-      padding: 12px 24px;
-      border-radius: 22px;
-      font-size: 1.1rem;
+      padding: 10px 16px;
+      border-radius: 20px;
+      font-size: 0.98rem;
       font-weight: 900;
       cursor: pointer;
-      box-shadow: 0 5px 0 #d9d9d9, 0 8px 15px rgba(0,0,0,0.08);
+      box-shadow: 0 5px 0 #d9d9d9, 0 6px 14px rgba(0,0,0,0.08);
       transition: all 0.15s;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 2px;
+      min-width: 158px;
+    }
+
+    .lesson-tab-btn .tab-sub {
+      font-size: 0.74rem;
+      font-weight: 700;
+      opacity: 0.85;
     }
 
     .lesson-tab-btn:hover { transform: translateY(-2px); }
 
-    .lesson-tab-btn.active[data-lesson="1"] {
-      background: linear-gradient(135deg, #2d6a4f, #40916c);
-      color: #fff;
-      box-shadow: 0 5px 0 #1b4332, 0 8px 18px rgba(45,106,79,0.3);
-    }
-
-    .lesson-tab-btn.active[data-lesson="2"] {
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
-      color: #fff;
-      box-shadow: 0 5px 0 #1e3a8a, 0 8px 18px rgba(37,99,235,0.3);
-    }
+    .lesson-tab-btn.active[data-lesson="1"] { background: linear-gradient(135deg, #2d6a4f, #40916c); color: #fff; box-shadow: 0 5px 0 #1b4332; }
+    .lesson-tab-btn.active[data-lesson="2"] { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: #fff; box-shadow: 0 5px 0 #1e3a8a; }
+    .lesson-tab-btn.active[data-lesson="3"] { background: linear-gradient(135deg, #d97706, #f59e0b); color: #fff; box-shadow: 0 5px 0 #92400e; }
+    .lesson-tab-btn.active[data-lesson="4"] { background: linear-gradient(135deg, #059669, #10b981); color: #fff; box-shadow: 0 5px 0 #065f46; }
+    .lesson-tab-btn.active[data-lesson="5"] { background: linear-gradient(135deg, #7c3aed, #6d28d9); color: #fff; box-shadow: 0 5px 0 #4c1d95; }
+    .lesson-tab-btn.active[data-lesson="6"] { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #fff; box-shadow: 0 5px 0 #9f1239; }
 
     main {
       width: 96%;
-      max-width: 1180px;
+      max-width: 1200px;
       background: rgba(255, 255, 255, 0.95);
       border-radius: 30px;
-      padding: 20px 24px 26px;
+      padding: 18px 24px 26px;
       box-shadow: var(--card-shadow);
       border: 4px solid #fff;
       margin-bottom: 24px;
     }
 
+    .world-banner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      background: var(--accent-soft);
+      border: 2px solid var(--accent-border);
+      border-radius: 18px;
+      padding: 10px 18px;
+      margin-bottom: 14px;
+    }
+
+    .world-title {
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .world-helpers {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #4b5563;
+      background: #fff;
+      padding: 4px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--accent-border);
+    }
+
     /* Character Selection Strip */
     .char-grid-bar {
       display: flex;
-      gap: 10px;
+      gap: 9px;
       flex-wrap: wrap;
       justify-content: center;
-      background: #f4faf6;
-      border: 2px solid #d8f3dc;
+      background: var(--accent-soft);
+      border: 2px solid var(--accent-border);
       border-radius: 22px;
       padding: 12px;
       margin-bottom: 18px;
     }
 
     .char-btn {
-      width: 74px;
-      height: 84px;
+      width: 72px;
+      height: 82px;
       border-radius: 16px;
       border: 3px solid #d8e2dc;
       background: #fff;
@@ -215,7 +246,7 @@
 
     .char-btn:hover {
       transform: translateY(-2px);
-      border-color: #52b788;
+      border-color: var(--accent);
     }
 
     .char-btn.active {
@@ -249,7 +280,7 @@
       left: -4px;
       background: #7209b7;
       color: #fff;
-      font-size: 0.65rem;
+      font-size: 0.64rem;
       font-weight: 900;
       padding: 1px 6px;
       border-radius: 10px;
@@ -257,23 +288,23 @@
 
     .char-btn-kai {
       font-family: var(--font-kai);
-      font-size: 2.1rem;
+      font-size: 2.05rem;
       font-weight: 700;
       color: #1d3557;
       line-height: 1.05;
     }
 
     .char-btn-zy {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       font-weight: 800;
       color: #e63946;
       margin-top: 2px;
     }
 
-    /* Theater Layout: Video Left/Top + Teaching Side Panel */
+    /* Theater Layout */
     .theater-grid {
       display: grid;
-      grid-template-columns: 1.65fr 1fr;
+      grid-template-columns: 1.68fr 1fr;
       gap: 22px;
       align-items: start;
     }
@@ -289,7 +320,7 @@
       border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 14px 30px rgba(0,0,0,0.18);
-      border: 4px solid #52b788;
+      border: 4px solid var(--accent);
       position: relative;
     }
 
@@ -317,9 +348,9 @@
 
     .p-btn {
       border: none;
-      padding: 10px 16px;
+      padding: 10px 15px;
       border-radius: 16px;
-      font-size: 0.98rem;
+      font-size: 0.96rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
@@ -332,14 +363,14 @@
     .p-btn:active { transform: translateY(2px); }
     .p-btn.nav { background: #1d3557; box-shadow: 0 4px 0 #0f172a; }
     .p-btn.replay { background: #e85d04; box-shadow: 0 4px 0 #9d3c00; }
-    .p-btn.full { background: #2d6a4f; box-shadow: 0 4px 0 #1b4332; }
+    .p-btn.full { background: var(--accent); box-shadow: 0 4px 0 var(--accent-dark); }
     .p-btn.auto { background: #6c757d; box-shadow: 0 4px 0 #495057; }
     .p-btn.auto.on { background: #7209b7; box-shadow: 0 4px 0 #4c1d95; }
 
-    /* Side Teaching Info Panel */
+    /* Side Info Panel */
     .info-card {
-      background: linear-gradient(160deg, #fffdf8, #f4fbf7);
-      border: 3px solid #d8f3dc;
+      background: linear-gradient(160deg, #fffdf8, var(--accent-soft));
+      border: 3px solid var(--accent-border);
       border-radius: 24px;
       padding: 18px 20px;
       display: flex;
@@ -374,7 +405,7 @@
       background: #fff0f3;
       color: #e63946;
       border: 2px solid #ffccd5;
-      font-size: 1.35rem;
+      font-size: 1.32rem;
       font-weight: 900;
       padding: 3px 14px;
       border-radius: 50px;
@@ -382,7 +413,7 @@
     }
 
     .rad-line {
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       font-weight: 800;
       color: #d9480f;
     }
@@ -392,7 +423,7 @@
       border: 2px dashed #fab005;
       border-radius: 16px;
       padding: 12px 14px;
-      font-size: 1.04rem;
+      font-size: 1.02rem;
       font-weight: 900;
       color: #7c3a00;
       line-height: 1.45;
@@ -408,10 +439,10 @@
       background: #fff;
       border: 2px solid #90caf9;
       color: #1e3a8a;
-      padding: 6px 14px;
+      padding: 6px 13px;
       border-radius: 50px;
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       cursor: pointer;
       transition: transform 0.12s;
     }
@@ -426,7 +457,7 @@
       border: 2px solid #818cf8;
       border-radius: 16px;
       padding: 10px 14px;
-      font-size: 0.96rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #3730a3;
       line-height: 1.5;
@@ -445,7 +476,7 @@
       padding: 10px 12px;
       border-radius: 14px;
       font-weight: 800;
-      font-size: 0.94rem;
+      font-size: 0.92rem;
       color: #fff;
       background: #2563eb;
       box-shadow: 0 4px 0 #1e40af;
@@ -457,13 +488,13 @@
     }
 
     .teacher-bar {
-      max-width: 1180px;
+      max-width: 1200px;
       width: 96%;
       background: rgba(255,255,255,0.9);
       border-radius: 20px;
       padding: 14px 22px;
       margin-bottom: 28px;
-      font-size: 0.95rem;
+      font-size: 0.94rem;
       line-height: 1.6;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
@@ -477,16 +508,16 @@
     <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
     <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
     <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
-    <a class="portal-link current" href="forest-theater.html">🎬 目前所在：《3D 森林小鳥拼字劇院》</a>
+    <a class="portal-link current" href="forest-theater.html">🎬 目前所在：《3D 童話拼字大劇院》</a>
   </div>
 
   <header>
     <div class="brand">
-      <span style="font-size: 2rem;">🐦</span>
-      <h1>3D 森林小鳥拼字劇院（康軒一上第一、二課）</h1>
+      <span style="font-size: 2rem;" id="brandEmoji">🌲</span>
+      <h1>3D 童話拼字大劇院（康軒一上全 6 課・74 字）</h1>
     </div>
     <div class="header-actions">
-      <div class="stat-pill">🎬 已觀看：<span id="watchedCount">0</span> / 20 字</div>
+      <div class="stat-pill">🎬 已觀看：<span id="watchedCount">0</span> / 74 字</div>
       <button class="share-btn" onclick="openShareModal()">📲 教室投影 / 平板 QR Code</button>
     </div>
   </header>
@@ -495,26 +526,49 @@
   <div id="shareModal" onclick="if(event.target===this)closeShareModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.58);z-index:999;align-items:center;justify-content:center;padding:16px;">
     <div style="background:#fff;border-radius:28px;max-width:450px;width:100%;padding:26px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.28);position:relative;">
       <button onclick="closeShareModal()" style="position:absolute;top:14px;right:18px;border:none;background:#f0f0f0;border-radius:50%;width:36px;height:36px;font-size:1.2rem;cursor:pointer;font-weight:bold;">✕</button>
-      <h3 style="margin:0 0 6px;font-size:1.35rem;color:#2b2d42;" id="modalTitle">📲 掃描觀看 3D 森林小鳥拼字影片</h3>
-      <p style="margin:0 0 14px;color:#555;font-size:0.92rem;">教室大屏打開網址即可投影播放，學生平板掃描也能同步觀看：</p>
+      <h3 style="margin:0 0 6px;font-size:1.35rem;color:#2b2d42;" id="modalTitle">📲 掃描觀看 3D 童話拼字影片</h3>
+      <p style="margin:0 0 14px;color:#555;font-size:0.92rem;">教室大屏打開網址即可投影，學生用平板掃描即直達本課劇院：</p>
       <img id="qrImage" src="" alt="QR Code" style="width:210px;height:210px;border:4px solid #2d6a4f;border-radius:18px;padding:8px;background:#fff;" />
       <div style="margin:12px 0;background:#f4faf6;padding:10px 12px;border-radius:12px;font-size:0.85rem;word-break:break-all;font-weight:700;color:#2d6a4f;" id="shareUrlText"></div>
       <button onclick="copyShareUrl()" id="copyUrlBtn" style="border:none;background:#2d6a4f;color:#fff;padding:12px 20px;border-radius:50px;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 0 #1b4332;width:100%;">📋 複製本課劇院網址</button>
     </div>
   </div>
 
-  <!-- Lesson Tabs -->
+  <!-- 6 Distinct Lesson Theme Tabs -->
   <div class="lesson-tabs">
     <button class="lesson-tab-btn active" data-lesson="1" onclick="selectLesson(1)">
-      🌿 第一課《拍拍手》（9 個生字）
+      <span>🌲 一、拍拍手</span>
+      <span class="tab-sub">魔法森林・雙小鳥（9字）</span>
     </button>
     <button class="lesson-tab-btn" data-lesson="2" onclick="selectLesson(2)">
-      🌸 第二課《這是誰的？》（10 習寫字 ＋ 1 認讀字）
+      <span>🐦 二、這是誰的？</span>
+      <span class="tab-sub">魔法森林・雙小鳥（11字）</span>
+    </button>
+    <button class="lesson-tab-btn" data-lesson="3" onclick="selectLesson(3)">
+      <span>🍂 三、秋千</span>
+      <span class="tab-sub">金秋山海・蝴蝶海鷗（14字）</span>
+    </button>
+    <button class="lesson-tab-btn" data-lesson="4" onclick="selectLesson(4)">
+      <span>🪷 四、大個子，小個子</span>
+      <span class="tab-sub">荷花池塘・青蛙蜻蜓（13字）</span>
+    </button>
+    <button class="lesson-tab-btn" data-lesson="5" onclick="selectLesson(5)">
+      <span>🏰 五、比一比</span>
+      <span class="tab-sub">日夜城堡・晨星雙鳥（14字）</span>
+    </button>
+    <button class="lesson-tab-btn" data-lesson="6" onclick="selectLesson(6)">
+      <span>🌸 六、小路</span>
+      <span class="tab-sub">紅白花路・花蝶白鳥（13字）</span>
     </button>
   </div>
 
   <main>
-    <!-- Character Bar -->
+    <div class="world-banner">
+      <div class="world-title" id="worldTitle">🌲 第一課《拍拍手》— 3D 陽光魔法森林</div>
+      <div class="world-helpers" id="worldHelpers">小幫手：橘紅知更鳥 ＋ 天藍小鳥</div>
+    </div>
+
+    <!-- Character Selection Strip -->
     <div class="char-grid-bar" id="charGridBar"></div>
 
     <!-- Video Theater + Info Card -->
@@ -565,52 +619,141 @@
   </main>
 
   <section class="teacher-bar">
-    <strong>👩‍🏫 學校大屏投影＆平板播放小技巧：</strong>
+    <strong>👩‍🏫 各課專屬 3D 情境教學設計：</strong>
     <span>
-      本劇院 100% 依照<strong>康軒版小一上課本原頁生字表</strong>製作（包含課本橘色部首標示、正確讀音如「誰 ㄕㄟˊ」、「的 ˙ㄉㄜ」、「了 ˙ㄌㄜ」以及認讀字「個」）。
-      上課時可開啟<strong>「🔁 自動連播整課」＋「🖥️ 教室全螢幕」</strong>一氣呵成帶全班看小鳥拼字，或點選單一生字反覆強調部件組合，看完還能一鍵跳轉至《筆順練習館》動手描寫！
+      全 6 課共 <strong>74 個生字</strong>皆 100% 依康軒一上課本原頁製作，並依每課課文打造專屬 3D 繪本場景與小動物幫手：
+      <strong>一～二課《魔法森林雙小鳥》</strong>、<strong>三課《金秋山海蝴蝶與海鷗》</strong>、<strong>四課《荷花池塘大青蛙與小蜻蜓》</strong>、<strong>五課《日夜童話城堡晨星雙鳥》</strong>、<strong>六課《紅白花童話小路花蝶白鳥》</strong>！
+      課堂投影建議開啟「🔁 自動連播整課」搭配「🖥️ 教室全螢幕」，吸引一年級寶貝目不轉睛學國字！
     </span>
   </section>
 
   <script>
-    const THEATER_DATA = {
+    const LESSON_META = {
       1: {
-        title: "第一課《拍拍手》",
-        items: [
-          { idx: 1, char: "拍", zy: "ㄆㄞ", rad: "手部（扌）", strokes: 8, ro: false, video: "videos/lesson12/L1_01_拍.mp4", formula: "🟠 手部（扌） ＋ 🔵 白 ＝「拍」", words: ["拍拍手", "拍球", "拍手", "拍打"], mnemonic: "💡 記憶口訣：用手（扌）＋ 白 ＝ 拍拍手！" },
-          { idx: 2, char: "手", zy: "ㄕㄡˇ", rad: "手部（獨體字）", strokes: 4, ro: false, video: "videos/lesson12/L1_02_手.mp4", formula: "🟠 獨體象形字：「手」部", words: ["小手", "拍手", "左手", "手拉手"], mnemonic: "💡 記憶口訣：像五根手指頭張開的小手！" },
-          { idx: 3, char: "左", zy: "ㄗㄨㄛˇ", rad: "工部（工）", strokes: 5, ro: false, video: "videos/lesson12/L1_03_左.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 工部（工） ＝「左」", words: ["左手", "左邊", "左右", "向左轉"], mnemonic: "💡 記憶口訣：左手拿工具，下面是「工」！" },
-          { idx: 4, char: "右", zy: "ㄧㄡˋ", rad: "口部（口）", strokes: 5, ro: false, video: "videos/lesson12/L1_04_右.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 口部（口） ＝「右」", words: ["右手", "右邊", "左右", "向右看"], mnemonic: "💡 記憶口訣：右手拿湯匙吃一口，下面是「口」！" },
-          { idx: 5, char: "你", zy: "ㄋㄧˇ", rad: "人部（亻）", strokes: 7, ro: false, video: "videos/lesson12/L1_05_你.mp4", formula: "🟠 人部（亻） ＋ 🔵 尔 ＝「你」", words: ["你好", "你們", "謝謝你", "你和我"], mnemonic: "💡 記憶口訣：單人旁「亻」代表人，說聲你好！" },
-          { idx: 6, char: "他", zy: "ㄊㄚ", rad: "人部（亻）", strokes: 5, ro: false, video: "videos/lesson12/L1_06_他.mp4", formula: "🟠 人部（亻） ＋ 🔵 也 ＝「他」", words: ["他們", "他的", "他人", "他和她"], mnemonic: "💡 記憶口訣：人部（亻）＋ 也 ＝ 他們的「他」！" },
-          { idx: 7, char: "也", zy: "ㄧㄝˇ", rad: "乙部（乚）", strokes: 3, ro: false, video: "videos/lesson12/L1_07_也.mp4", formula: "🔵 上方折豎 ＋ 🟠 乙部（乚） ＝「也」", words: ["也是", "也有", "也好", "我也要"], mnemonic: "💡 記憶口訣：彎彎豎彎鉤，我「也」要拍拍手！" },
-          { idx: 8, char: "上", zy: "ㄕㄤˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_08_上.mp4", formula: "🔵 站在上面 ＋ 🟠 一部（地面長橫） ＝「上」", words: ["上學", "上課", "山上", "上下"], mnemonic: "💡 記憶口訣：短橫站在長橫的上面，就是「上」！" },
-          { idx: 9, char: "下", zy: "ㄒㄧㄚˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_09_下.mp4", formula: "🟠 一部（上方長橫） ＋ 🔵 躲在下面 ＝「下」", words: ["下課", "下雨", "下午", "樹下"], mnemonic: "💡 記憶口訣：點躲在長橫的下面，就是「下」！" }
-        ]
+        emoji: "🌲", title: "第一課《拍拍手》", world: "3D 陽光魔法森林", helpers: "小幫手：🐦 橘紅知更鳥 ＋ 🐦 天藍小鳥",
+        bg: "linear-gradient(135deg, #e6f7ed 0%, #fffbeb 50%, #eaf6ff 100%)",
+        accent: "#2d6a4f", accentDark: "#1b4332", soft: "#f4faf6", border: "#b7e4c7"
       },
       2: {
-        title: "第二課《這是誰的？》",
-        items: [
-          { idx: 1, char: "這", zy: "ㄓㄜˋ", rad: "辵部（辶）", strokes: 11, ro: false, video: "videos/lesson12/L2_01_這.mp4", formula: "🟠 辵部（辶） ＋ 🔵 言 ＝「這」", words: ["這是", "這裡", "這個", "這邊"], mnemonic: "💡 記憶口訣：小船「辶」載著「言」，就是「這」！" },
-          { idx: 2, char: "是", zy: "ㄕˋ", rad: "日部（日）", strokes: 9, ro: false, video: "videos/lesson12/L2_02_是.mp4", formula: "🟠 日部（日） ＋ 🔵 下方部件 ＝「是」", words: ["這是", "也是", "是不是", "就是"], mnemonic: "💡 記憶口訣：頭頂一個太陽「日」，合起來變成「是」！" },
-          { idx: 3, char: "誰", zy: "ㄕㄟˊ", rad: "言部（言）", strokes: 15, ro: false, video: "videos/lesson12/L2_03_誰.mp4", formula: "🟠 言部（言） ＋ 🔵 隹（小鳥） ＝「誰」", words: ["是誰", "誰的", "誰家", "問是誰"], mnemonic: "💡 記憶口訣：開口說話（言）問小鳥（隹）是「誰」！" },
-          { idx: 4, char: "的", zy: "˙ㄉㄜ", rad: "白部（白）", strokes: 8, ro: false, video: "videos/lesson12/L2_04_的.mp4", formula: "🟠 白部（白） ＋ 🔵 勺 ＝「的」", words: ["我的", "你的", "誰的", "好的"], mnemonic: "💡 記憶口訣：白白的「白」＋「勺」＝ 我的「的」！" },
-          { idx: 5, char: "我", zy: "ㄨㄛˇ", rad: "戈部（戈）", strokes: 7, ro: false, video: "videos/lesson12/L2_05_我.mp4", formula: "🔵 左邊部件 ＋ 🟠 戈部（戈） ＝「我」", words: ["我們", "我的", "你我", "自我"], mnemonic: "💡 記憶口訣：左邊像小手，右邊是「戈」，變成「我」！" },
-          { idx: 6, char: "分", zy: "ㄈㄣ", rad: "刀部（刀）", strokes: 4, ro: false, video: "videos/lesson12/L2_06_分.mp4", formula: "🔵 八 ＋ 🟠 刀部（刀） ＝「分」", words: ["分享", "分開", "分數", "十分"], mnemonic: "💡 記憶口訣：上面「八」下面「刀」，用刀分成兩半！" },
-          { idx: 7, char: "好", zy: "ㄏㄠˇ", rad: "女部（女）", strokes: 6, ro: false, video: "videos/lesson12/L2_07_好.mp4", formula: "🟠 女部（女） ＋ 🔵 子 ＝「好」", words: ["你好", "好人", "好玩", "好朋友"], mnemonic: "💡 記憶口訣：媽媽（女）抱著寶寶（子），真是「好」！" },
-          { idx: 8, char: "了", zy: "˙ㄌㄜ", rad: "亅部（亅）", strokes: 2, ro: false, video: "videos/lesson12/L2_08_了.mp4", formula: "🔵 上方橫撇（乛） ＋ 🟠 亅部（亅） ＝「了」", words: ["好了", "來了", "笑了", "懂了"], mnemonic: "💡 記憶口訣：只要兩畫寫成「了」，作業寫好了！" },
-          { idx: 9, char: "啊", zy: "ㄚ", rad: "口部（口）", strokes: 11, ro: false, video: "videos/lesson12/L2_09_啊.mp4", formula: "🟠 口部（口） ＋ 🔵 阿 ＝「啊」", words: ["好啊", "對啊", "來啊", "是啊"], mnemonic: "💡 記憶口訣：張開小嘴巴（口）＋ 阿 ＝ 好「啊」！" },
-          { idx: 10, char: "多", zy: "ㄉㄨㄛ", rad: "夕部（夕）", strokes: 6, ro: false, video: "videos/lesson12/L2_10_多.mp4", formula: "🔵 上面「夕」 ＋ 🟠 夕部（下面「夕」） ＝「多」", words: ["好多", "多少", "很多", "多多"], mnemonic: "💡 記憶口訣：兩個「夕」疊在一起，變成好「多」！" },
-          { idx: 11, char: "個", zy: "（ㄍㄜˋ）", rad: "人部（亻）", strokes: 10, ro: true, video: "videos/lesson12/L2_11_個.mp4", formula: "🟠 人部（亻） ＋ 🔵 固 ＝「個」（認讀字）", words: ["一個", "這個", "個子", "每個人"], mnemonic: "💡 記憶口訣：單人旁（亻）＋ 固 ＝ 一個的「個」！" }
-        ]
+        emoji: "🐦", title: "第二課《這是誰的？》", world: "3D 陽光魔法森林", helpers: "小幫手：🐦 橘紅知更鳥 ＋ 🐦 天藍小鳥",
+        bg: "linear-gradient(135deg, #e7f0ff 0%, #fff9e6 50%, #e6f7ed 100%)",
+        accent: "#2563eb", accentDark: "#1e3a8a", soft: "#f0f7ff", border: "#bfdbfe"
+      },
+      3: {
+        emoji: "🍂", title: "第三課《秋千》", world: "3D 金秋山海秋千", helpers: "小幫手：🦋 金橘小蝴蝶 ＋ 🕊️ 大海小白海鷗",
+        bg: "linear-gradient(135deg, #fef3c7 0%, #ffedd5 45%, #e0f2fe 100%)",
+        accent: "#d97706", accentDark: "#92400e", soft: "#fffbeb", border: "#fde68a"
+      },
+      4: {
+        emoji: "🪷", title: "第四課《大個子，小個子》", world: "3D 荷花池塘樂園", helpers: "小幫手：🐸 大個子綠青蛙 ＋ 🧚 小個子藍蜻蜓",
+        bg: "linear-gradient(135deg, #d1fae5 0%, #ecfdf5 50%, #e0f2fe 100%)",
+        accent: "#059669", accentDark: "#065f46", soft: "#ecfdf5", border: "#a7f3d0"
+      },
+      5: {
+        emoji: "🏰", title: "第五課《比一比》", world: "3D 日夜童話城堡", helpers: "小幫手：👑 晨曦小國王鳥 ＋ 🌙 星夜紫月亮鳥",
+        bg: "linear-gradient(135deg, #fef3c7 0%, #ede9fe 52%, #dbeafe 100%)",
+        accent: "#7c3aed", accentDark: "#4c1d95", soft: "#f5f3ff", border: "#ddd6fe"
+      },
+      6: {
+        emoji: "🌸", title: "第六課《小路》", world: "3D 紅白花童話小路", helpers: "小幫手：🌺 紅花仙子蝴蝶 ＋ 🌼 白花精靈小鳥",
+        bg: "linear-gradient(135deg, #ffe4e6 0%, #fff1f2 48%, #fef9c3 100%)",
+        accent: "#e11d48", accentDark: "#9f1239", soft: "#fff1f2", border: "#fecdd3"
       }
+    };
+
+    const THEATER_DATA = {
+      1: [
+        { char: "拍", zy: "ㄆㄞ", rad: "手部（扌）", strokes: 8, ro: false, video: "videos/lesson12/L1_01_拍.mp4", formula: "🟠 手部（扌） ＋ 🔵 白 ＝「拍」", words: ["拍拍手", "拍球", "拍手", "拍打"], mnemonic: "💡 口訣：用手（扌）＋ 白 ＝ 拍拍手！" },
+        { char: "手", zy: "ㄕㄡˇ", rad: "手部（獨體）", strokes: 4, ro: false, video: "videos/lesson12/L1_02_手.mp4", formula: "🟠 獨體象形字：「手」部", words: ["小手", "拍手", "左手", "手拉手"], mnemonic: "💡 口訣：像五根手指頭張開的小手！" },
+        { char: "左", zy: "ㄗㄨㄛˇ", rad: "工部（工）", strokes: 5, ro: false, video: "videos/lesson12/L1_03_左.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 工部（工） ＝「左」", words: ["左手", "左邊", "左右", "向左轉"], mnemonic: "💡 口訣：左手拿工具，下面是「工」！" },
+        { char: "右", zy: "ㄧㄡˋ", rad: "口部（口）", strokes: 5, ro: false, video: "videos/lesson12/L1_04_右.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 口部（口） ＝「右」", words: ["右手", "右邊", "左右", "向右看"], mnemonic: "💡 口訣：右手拿湯匙吃一口，下面是「口」！" },
+        { char: "你", zy: "ㄋㄧˇ", rad: "人部（亻）", strokes: 7, ro: false, video: "videos/lesson12/L1_05_你.mp4", formula: "🟠 人部（亻） ＋ 🔵 尔 ＝「你」", words: ["你好", "你們", "謝謝你", "你和我"], mnemonic: "💡 口訣：單人旁「亻」代表人，說聲你好！" },
+        { char: "他", zy: "ㄊㄚ", rad: "人部（亻）", strokes: 5, ro: false, video: "videos/lesson12/L1_06_他.mp4", formula: "🟠 人部（亻） ＋ 🔵 也 ＝「他」", words: ["他們", "他的", "他人", "他和她"], mnemonic: "💡 口訣：人部（亻）＋ 也 ＝ 他們的「他」！" },
+        { char: "也", zy: "ㄧㄝˇ", rad: "乙部（乚）", strokes: 3, ro: false, video: "videos/lesson12/L1_07_也.mp4", formula: "🔵 上方折豎 ＋ 🟠 乙部（乚） ＝「也」", words: ["也是", "也有", "也好", "我也要"], mnemonic: "💡 口訣：彎彎豎彎鉤，我「也」要拍拍手！" },
+        { char: "上", zy: "ㄕㄤˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_08_上.mp4", formula: "🔵 站在上面 ＋ 🟠 一部（地面長橫） ＝「上」", words: ["上學", "上課", "山上", "上下"], mnemonic: "💡 口訣：短橫站在長橫的上面，就是「上」！" },
+        { char: "下", zy: "ㄒㄧㄚˋ", rad: "一部（一）", strokes: 3, ro: false, video: "videos/lesson12/L1_09_下.mp4", formula: "🟠 一部（上方長橫） ＋ 🔵 躲在下面 ＝「下」", words: ["下課", "下雨", "下午", "樹下"], mnemonic: "💡 口訣：點躲在長橫的下面，就是「下」！" }
+      ],
+      2: [
+        { char: "這", zy: "ㄓㄜˋ", rad: "辵部（辶）", strokes: 11, ro: false, video: "videos/lesson12/L2_01_這.mp4", formula: "🟠 辵部（辶） ＋ 🔵 言 ＝「這」", words: ["這是", "這裡", "這個", "這邊"], mnemonic: "💡 口訣：小船「辶」載著「言」，就是「這」！" },
+        { char: "是", zy: "ㄕˋ", rad: "日部（日）", strokes: 9, ro: false, video: "videos/lesson12/L2_02_是.mp4", formula: "🟠 日部（日） ＋ 🔵 下方部件 ＝「是」", words: ["這是", "也是", "是不是", "就是"], mnemonic: "💡 口訣：頭頂一個太陽「日」，合起來變成「是」！" },
+        { char: "誰", zy: "ㄕㄟˊ", rad: "言部（言）", strokes: 15, ro: false, video: "videos/lesson12/L2_03_誰.mp4", formula: "🟠 言部（言） ＋ 🔵 隹（小鳥） ＝「誰」", words: ["是誰", "誰的", "誰家", "問是誰"], mnemonic: "💡 口訣：開口說話（言）問小鳥（隹）是「誰」！" },
+        { char: "的", zy: "˙ㄉㄜ", rad: "白部（白）", strokes: 8, ro: false, video: "videos/lesson12/L2_04_的.mp4", formula: "🟠 白部（白） ＋ 🔵 勺 ＝「的」", words: ["我的", "你的", "誰的", "好的"], mnemonic: "💡 口訣：白白的「白」＋「勺」＝ 我的「的」！" },
+        { char: "我", zy: "ㄨㄛˇ", rad: "戈部（戈）", strokes: 7, ro: false, video: "videos/lesson12/L2_05_我.mp4", formula: "🔵 左邊部件 ＋ 🟠 戈部（戈） ＝「我」", words: ["我們", "我的", "你我", "自我"], mnemonic: "💡 口訣：左邊像小手，右邊是「戈」，變成「我」！" },
+        { char: "分", zy: "ㄈㄣ", rad: "刀部（刀）", strokes: 4, ro: false, video: "videos/lesson12/L2_06_分.mp4", formula: "🔵 八 ＋ 🟠 刀部（刀） ＝「分」", words: ["分享", "分開", "分數", "十分"], mnemonic: "💡 口訣：上面「八」下面「刀」，用刀分成兩半！" },
+        { char: "好", zy: "ㄏㄠˇ", rad: "女部（女）", strokes: 6, ro: false, video: "videos/lesson12/L2_07_好.mp4", formula: "🟠 女部（女） ＋ 🔵 子 ＝「好」", words: ["你好", "好人", "好玩", "好朋友"], mnemonic: "💡 口訣：媽媽（女）抱著寶寶（子），真是「好」！" },
+        { char: "了", zy: "˙ㄌㄜ", rad: "亅部（亅）", strokes: 2, ro: false, video: "videos/lesson12/L2_08_了.mp4", formula: "🔵 上方橫撇（乛） ＋ 🟠 亅部（亅） ＝「了」", words: ["好了", "來了", "笑了", "懂了"], mnemonic: "💡 口訣：只要兩畫寫成「了」，作業寫好了！" },
+        { char: "啊", zy: "ㄚ", rad: "口部（口）", strokes: 11, ro: false, video: "videos/lesson12/L2_09_啊.mp4", formula: "🟠 口部（口） ＋ 🔵 阿 ＝「啊」", words: ["好啊", "對啊", "來啊", "是啊"], mnemonic: "💡 口訣：張開小嘴巴（口）＋ 阿 ＝ 好「啊」！" },
+        { char: "多", zy: "ㄉㄨㄛ", rad: "夕部（夕）", strokes: 6, ro: false, video: "videos/lesson12/L2_10_多.mp4", formula: "🔵 上面「夕」 ＋ 🟠 夕部（下面「夕」） ＝「多」", words: ["好多", "多少", "很多", "多多"], mnemonic: "💡 口訣：兩個「夕」疊在一起，變成好「多」！" },
+        { char: "個", zy: "（ㄍㄜˋ）", rad: "人部（亻）", strokes: 10, ro: true, video: "videos/lesson12/L2_11_個.mp4", formula: "🟠 人部（亻） ＋ 🔵 固 ＝「個」（認讀字）", words: ["一個", "這個", "個子", "每個人"], mnemonic: "💡 口訣：單人旁（亻）＋ 固 ＝ 一個的「個」！" }
+      ],
+      3: [
+        { char: "秋", zy: "ㄑㄧㄡ", rad: "禾部", strokes: 9, ro: false, video: "videos/lesson36/L3_01_秋.mp4", formula: "🟠 禾部（禾） ＋ 🔵 火 ＝「秋」", words: ["秋千", "秋天", "中秋", "秋風"], mnemonic: "💡 口訣：稻禾（禾）配紅火（火），秋天來了！" },
+        { char: "千", zy: "ㄑㄧㄢ", rad: "十部", strokes: 3, ro: false, video: "videos/lesson36/L3_02_千.mp4", formula: "🔵 一撇 ＋ 🟠 十部（十） ＝「千」", words: ["秋千", "一千", "千萬", "千百"], mnemonic: "💡 口訣：「十」頭上戴一撇，變成「千」！" },
+        { char: "和", zy: "ㄏㄢˋ", rad: "口部", strokes: 8, ro: false, video: "videos/lesson36/L3_03_和.mp4", formula: "🔵 禾 ＋ 🟠 口部（口） ＝「和」", words: ["我和你", "和好", "溫和", "和平"], mnemonic: "💡 口訣：稻禾（禾）配嘴巴（口），我和你和好！" },
+        { char: "玩", zy: "ㄨㄢˊ", rad: "玉部（王）", strokes: 8, ro: false, video: "videos/lesson36/L3_04_玩.mp4", formula: "🟠 玉部（王） ＋ 🔵 元 ＝「玩」", words: ["好玩", "玩具", "一起玩", "玩耍"], mnemonic: "💡 口訣：「王」加「元」，大家一起出來玩！" },
+        { char: "陪", zy: "ㄆㄟˊ", rad: "阜部（阝）", strokes: 11, ro: false, video: "videos/lesson36/L3_05_陪.mp4", formula: "🟠 阜部（阝） ＋ 🔵 咅 ＝「陪」", words: ["陪伴", "陪我", "陪你玩", "陪同"], mnemonic: "💡 口訣：左耳旁「阝」陪在你身邊！" },
+        { char: "高", zy: "ㄍㄠ", rad: "高部（獨體）", strokes: 10, ro: false, video: "videos/lesson36/L3_06_高.mp4", formula: "🟠 獨體部首字：「高」部", words: ["高山", "高興", "盪高高", "長高"], mnemonic: "💡 口訣：像一座尖屋頂的高樓，高高的！" },
+        { char: "山", zy: "ㄕㄢ", rad: "山部（獨體）", strokes: 3, ro: false, video: "videos/lesson36/L3_07_山.mp4", formula: "🟠 獨體象形字：「山」部", words: ["高山", "山上", "爬山", "山海"], mnemonic: "💡 口訣：三座山峰中間高，變成一座「山」！" },
+        { char: "到", zy: "ㄉㄠˋ", rad: "刀部（刂）", strokes: 8, ro: false, video: "videos/lesson36/L3_08_到.mp4", formula: "🔵 至 ＋ 🟠 刀部（刂） ＝「到」", words: ["看到", "到達", "來到", "遲到"], mnemonic: "💡 口訣：「至」加上立刀旁「刂」，我們到了！" },
+        { char: "大", zy: "ㄉㄚˋ", rad: "大部（獨體）", strokes: 3, ro: false, video: "videos/lesson36/L3_09_大.mp4", formula: "🟠 獨體象形字：「大」部", words: ["大海", "大人", "大小", "大聲"], mnemonic: "💡 口訣：一個人張開雙手雙腳，好「大」呀！" },
+        { char: "海", zy: "ㄏㄞˇ", rad: "水部（氵）", strokes: 10, ro: false, video: "videos/lesson36/L3_10_海.mp4", formula: "🟠 水部（氵） ＋ 🔵 每 ＝「海」", words: ["大海", "海邊", "海水", "海鷗"], mnemonic: "💡 口訣：三點水「氵」加「每」，藍藍的大海！" },
+        { char: "朋", zy: "ㄆㄥˊ", rad: "月部", strokes: 8, ro: false, video: "videos/lesson36/L3_11_朋.mp4", formula: "🟠 月部（月） ＋ 🔵 月 ＝「朋」", words: ["朋友", "好朋友", "小朋友", "友朋"], mnemonic: "💡 口訣：兩個「月」並排手牽手，是好朋友！" },
+        { char: "友", zy: "ㄧㄡˇ", rad: "又部", strokes: 4, ro: false, video: "videos/lesson36/L3_12_友.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 又部（又） ＝「友」", words: ["朋友", "好朋友", "友善", "友愛"], mnemonic: "💡 口訣：兩隻小手握一起，變成好「友」！" },
+        { char: "們", zy: "˙ㄇㄣ", rad: "人部（亻）", strokes: 10, ro: false, video: "videos/lesson36/L3_13_們.mp4", formula: "🟠 人部（亻） ＋ 🔵 門 ＝「們」", words: ["我們", "你們", "他們", "朋友們"], mnemonic: "💡 口訣：單人旁「亻」加「門」，代表好多人！" },
+        { char: "起", zy: "ㄑㄧˇ", rad: "走部", strokes: 10, ro: false, video: "videos/lesson36/L3_14_起.mp4", formula: "🟠 走部（走） ＋ 🔵 己 ＝「起」", words: ["一起", "起來", "起飛", "起床"], mnemonic: "💡 口訣：自己（己）走（走）動，大家一起來！" }
+      ],
+      4: [
+        { char: "子", zy: "˙ㄗ", rad: "子部（獨體）", strokes: 3, ro: false, video: "videos/lesson36/L4_01_子.mp4", formula: "🟠 獨體部首字：「子」部（輕聲˙ㄗ）", words: ["大個子", "小個子", "帽子", "桌子"], mnemonic: "💡 口訣：「了」加一橫張開手，變大個子小個子！" },
+        { char: "小", zy: "ㄒㄧㄠˇ", rad: "小部（獨體）", strokes: 3, ro: false, video: "videos/lesson36/L4_02_小.mp4", formula: "🟠 獨體部首字：「小」部", words: ["小個子", "大小", "小蛙", "小心"], mnemonic: "💡 口訣：豎鉤居中兩小點，就是可愛的「小」！" },
+        { char: "課", zy: "ㄎㄜˋ", rad: "言部", strokes: 15, ro: false, video: "videos/lesson36/L4_03_課.mp4", formula: "🟠 言部（言） ＋ 🔵 果 ＝「課」", words: ["上課", "下課", "課本", "功課"], mnemonic: "💡 口訣：說話（言）結好果（果），快樂來上課！" },
+        { char: "兩", zy: "ㄌㄧㄤˇ", rad: "入部", strokes: 8, ro: false, video: "videos/lesson36/L4_04_兩.mp4", formula: "🔵 小屋外框 ＋ 🟠 入部（雙入） ＝「兩」", words: ["兩人", "兩個", "兩隻", "兩邊"], mnemonic: "💡 口訣：房子裡住著兩個「入」，就是「兩」！" },
+        { char: "人", zy: "ㄖㄣˊ", rad: "人部（獨體）", strokes: 2, ro: false, video: "videos/lesson36/L4_05_人.mp4", formula: "🟠 獨體象形字：「人」部", words: ["大人", "兩人", "好人", "人們"], mnemonic: "💡 口訣：一撇一捺靠一起，像人向前走！" },
+        { char: "拉", zy: "ㄌㄚ", rad: "手部（扌）", strokes: 8, ro: false, video: "videos/lesson36/L4_06_拉.mp4", formula: "🟠 手部（扌） ＋ 🔵 立 ＝「拉」", words: ["手拉手", "拉開", "拉車", "拉一拉"], mnemonic: "💡 口訣：伸出手（扌）站立（立）手拉手！" },
+        { char: "看", zy: "ㄎㄢˋ", rad: "目部", strokes: 9, ro: false, video: "videos/lesson36/L4_07_看.mp4", formula: "🔵 手遮額頭 ＋ 🟠 目部（目） ＝「看」", words: ["看見", "看書", "左看看", "好看"], mnemonic: "💡 口訣：把手放在眼睛（目）上面往遠處看！" },
+        { char: "找", zy: "ㄓㄠˇ", rad: "手部（扌）", strokes: 7, ro: false, video: "videos/lesson36/L4_08_找.mp4", formula: "🟠 手部（扌） ＋ 🔵 戈 ＝「找」", words: ["找到", "找一找", "找青蛙", "尋找"], mnemonic: "💡 口訣：用手（扌）配「戈」，東找找西找找！" },
+        { char: "隻", zy: "ㄓ", rad: "隹部", strokes: 10, ro: false, video: "videos/lesson36/L4_09_隻.mp4", formula: "🟠 隹部（小鳥） ＋ 🔵 又（小手） ＝「隻」", words: ["一隻", "兩隻", "隻身", "幾隻蛙"], mnemonic: "💡 口訣：手（又）捧著一隻小鳥（隹），就是「隻」！" },
+        { char: "青", zy: "ㄑㄧㄥ", rad: "青部（獨體）", strokes: 8, ro: false, video: "videos/lesson36/L4_10_青.mp4", formula: "🟠 獨體部首字：「青」部", words: ["青蛙", "青草", "青山", "青菜"], mnemonic: "💡 口訣：青青草地住著綠色的「青」蛙！" },
+        { char: "蛙", zy: "ㄨㄚ", rad: "虫部", strokes: 12, ro: false, video: "videos/lesson36/L4_11_蛙.mp4", formula: "🟠 虫部（虫） ＋ 🔵 圭 ＝「蛙」", words: ["青蛙", "樹蛙", "牛蛙", "小蛙"], mnemonic: "💡 口訣：小虫旁配兩塊泥土（圭），呱呱叫的青蛙！" },
+        { char: "開", zy: "ㄎㄞ", rad: "門部", strokes: 12, ro: false, video: "videos/lesson36/L4_12_開.mp4", formula: "🟠 門部（門） ＋ 🔵 开 ＝「開」", words: ["開心", "開門", "打開", "開花"], mnemonic: "💡 口訣：把大「門」裡面的門閂打開，真開心！" },
+        { char: "心", zy: "ㄒㄧㄣ", rad: "心部（獨體）", strokes: 4, ro: false, video: "videos/lesson36/L4_13_心.mp4", formula: "🟠 獨體象形字：「心」部", words: ["開心", "愛心", "小心", "點心"], mnemonic: "💡 口訣：一個大碗裝三顆小愛心，天天都開心！" }
+      ],
+      5: [
+        { char: "比", zy: "ㄅㄧˇ", rad: "比部（獨體）", strokes: 4, ro: false, video: "videos/lesson36/L5_01_比.mp4", formula: "🟠 獨體部首字：「比」部", words: ["比一比", "比賽", "比較", "無比"], mnemonic: "💡 口訣：兩個人肩並肩站在一起「比」一比！" },
+        { char: "門", zy: "ㄇㄣˊ", rad: "門部（獨體）", strokes: 8, ro: false, video: "videos/lesson36/L5_02_門.mp4", formula: "🟠 獨體象形字：「門」部", words: ["大門", "門裡", "門外", "門口"], mnemonic: "💡 口訣：左右兩扇對開的門板，變成「門」！" },
+        { char: "裡", zy: "ㄌㄧˇ", rad: "衣部（衤）", strokes: 13, ro: false, video: "videos/lesson36/L5_03_裡.mp4", formula: "🟠 衣部（衤） ＋ 🔵 里 ＝「裡」", words: ["門裡", "裡面", "家裡", "這裡"], mnemonic: "💡 口訣：衣字旁「衤」加「里」，代表在裡面！" },
+        { char: "外", zy: "ㄨㄞˋ", rad: "夕部", strokes: 5, ro: false, video: "videos/lesson36/L5_04_外.mp4", formula: "🟠 夕部（夕） ＋ 🔵 卜 ＝「外」", words: ["門外", "外面", "外頭", "戶外"], mnemonic: "💡 口訣：左邊「夕」加右邊「卜」，走到門外去！" },
+        { char: "有", zy: "ㄧㄡˇ", rad: "月部", strokes: 6, ro: false, video: "videos/lesson36/L5_05_有.mp4", formula: "🔵 左上（𠂇） ＋ 🟠 月部（月） ＝「有」", words: ["有沒有", "有人", "有趣", "擁有"], mnemonic: "💡 口訣：一橫一撇下面躲著「月」，變成「有」！" },
+        { char: "什", zy: "ㄕㄣˊ", rad: "人部（亻）", strokes: 4, ro: false, video: "videos/lesson36/L5_06_什.mp4", formula: "🟠 人部（亻） ＋ 🔵 十 ＝「什」", words: ["什麼", "為什麼", "有什麼", "做什麼"], mnemonic: "💡 口訣：單人旁「亻」加「十」，問問這是什麼！" },
+        { char: "麼", zy: "˙ㄇㄜ", rad: "麻部", strokes: 14, ro: false, video: "videos/lesson36/L5_07_麼.mp4", formula: "🟠 麻部（麻） ＋ 🔵 幺 ＝「麼」", words: ["什麼", "這麼", "多麼", "那麼"], mnemonic: "💡 口訣：「麻」下面躲著「幺」，輕聲念什麼！" },
+        { char: "不", zy: "ㄅㄨˋ", rad: "一部", strokes: 4, ro: false, video: "videos/lesson36/L5_08_不.mp4", formula: "🟠 一部（上橫） ＋ 🔵 下方筆畫 ＝「不」", words: ["不同", "不要", "不好", "是不是"], mnemonic: "💡 口訣：最上面一橫擋住，搖搖頭說「不」！" },
+        { char: "同", zy: "ㄊㄨㄥˊ", rad: "口部", strokes: 6, ro: false, video: "videos/lesson36/L5_09_同.mp4", formula: "🔵 屋子外框 ＋ 🟠 口部（口） ＝「同」", words: ["不同", "同學", "相同", "一同"], mnemonic: "💡 口訣：大家在同一間屋子裡說話（口），是同學！" },
+        { char: "早", zy: "ㄗㄠˇ", rad: "日部", strokes: 6, ro: false, video: "videos/lesson36/L5_10_早.mp4", formula: "🟠 日部（日） ＋ 🔵 十 ＝「早」", words: ["早上", "早安", "早晚", "一早"], mnemonic: "💡 口訣：太陽（日）爬到「十」字草地上，早安！" },
+        { char: "晚", zy: "ㄨㄢˇ", rad: "日部", strokes: 11, ro: false, video: "videos/lesson36/L5_11_晚.mp4", formula: "🟠 日部（日） ＋ 🔵 免 ＝「晚」", words: ["晚上", "晚安", "早晚", "傍晚"], mnemonic: "💡 口訣：太陽（日）和「免」在一起，晚上說晚安！" },
+        { char: "王", zy: "ㄨㄤˊ", rad: "玉部（獨體）", strokes: 4, ro: false, video: "videos/lesson36/L5_12_王.mp4", formula: "🟠 獨體字：「王」（三橫一豎）", words: ["國王", "王子", "大王", "女王"], mnemonic: "💡 口訣：三橫加上中間一豎，威風的小國「王」！" },
+        { char: "主", zy: "ㄓㄨˇ", rad: "丶部", strokes: 5, ro: false, video: "videos/lesson36/L5_13_主.mp4", formula: "🟠 丶部（頭頂一點） ＋ 🔵 王 ＝「主」", words: ["主人", "公主", "主角", "主要"], mnemonic: "💡 口訣：「王」頭頂點亮一點蠟燭，變成「主」人！" },
+        { char: "又", zy: "ㄧㄡˋ", rad: "又部（獨體）", strokes: 2, ro: false, video: "videos/lesson36/L5_14_又.mp4", formula: "🟠 獨體部首字：「又」部", words: ["又大又圓", "又高又大", "再又", "又來了"], mnemonic: "💡 口訣：兩筆交錯寫成「又」，又大又好玩！" }
+      ],
+      6: [
+        { char: "路", zy: "ㄌㄨˋ", rad: "足部", strokes: 13, ro: false, video: "videos/lesson36/L6_01_路.mp4", formula: "🟠 足部（足） ＋ 🔵 各 ＝「路」", words: ["小路", "走路", "馬路", "道路"], mnemonic: "💡 口訣：用雙腳（足）走遍「各」條美麗小路！" },
+        { char: "長", zy: "ㄔㄤˊ", rad: "長部（獨體）", strokes: 8, ro: false, video: "videos/lesson36/L6_02_長.mp4", formula: "🟠 獨體部首字：「長」部", words: ["長長", "很長", "長短", "長路"], mnemonic: "💡 口訣：長長的小路開滿花，走得好開心！" },
+        { char: "白", zy: "ㄅㄞˊ", rad: "白部（獨體）", strokes: 5, ro: false, video: "videos/lesson36/L6_03_白.mp4", formula: "🟠 獨體部首字：「白」部", words: ["小白花", "白色", "白雲", "白天"], mnemonic: "💡 口訣：「日」頭上多一小撇，變成潔白的「白」！" },
+        { char: "花", zy: "ㄏㄨㄚ", rad: "艸部（艹）", strokes: 8, ro: false, video: "videos/lesson36/L6_04_花.mp4", formula: "🟠 艸部（艹） ＋ 🔵 化 ＝「花」", words: ["小花", "紅花", "白花", "開花"], mnemonic: "💡 口訣：草字頭「艹」加「化」，小路開滿花！" },
+        { char: "紅", zy: "ㄏㄨㄥˊ", rad: "糸部", strokes: 9, ro: false, video: "videos/lesson36/L6_05_紅.mp4", formula: "🟠 糸部（糸） ＋ 🔵 工 ＝「紅」", words: ["小紅花", "紅色", "紅花", "粉紅"], mnemonic: "💡 口訣：彩色絲線（糸）配「工」，織出漂亮紅花！" },
+        { char: "走", zy: "ㄗㄡˇ", rad: "走部（獨體）", strokes: 7, ro: false, video: "videos/lesson36/L6_06_走.mp4", formula: "🟠 獨體部首字：「走」部", words: ["走路", "走過", "走向", "走來走去"], mnemonic: "💡 口訣：上面一個「土」，下面邁開腳步向前「走」！" },
+        { char: "在", zy: "ㄗㄞˋ", rad: "土部", strokes: 6, ro: false, video: "videos/lesson36/L6_07_在.mp4", formula: "🔵 左上筆畫 ＋ 🟠 土部（土） ＝「在」", words: ["走在", "在家", "現在", "這裡在"], mnemonic: "💡 口訣：穩穩站在泥「土」上面，就在這裡！" },
+        { char: "向", zy: "ㄒㄧㄤˋ", rad: "口部", strokes: 6, ro: false, video: "videos/lesson36/L6_08_向.mp4", formula: "🔵 小屋外框 ＋ 🟠 口部（口） ＝「向」", words: ["方向", "向前", "向小花", "向左"], mnemonic: "💡 口訣：屋子開個小窗口（口），朝著陽光方向！" },
+        { char: "說", zy: "ㄕㄨㄛ", rad: "言部", strokes: 14, ro: false, video: "videos/lesson36/L6_09_說.mp4", formula: "🟠 言部（言） ＋ 🔵 兌 ＝「說」", words: ["說話", "說你好", "說早安", "說明"], mnemonic: "💡 口訣：用言部「言」和「兌」，向小花說早安！" },
+        { char: "朵", zy: "ㄉㄨㄛˇ", rad: "木部", strokes: 6, ro: false, video: "videos/lesson36/L6_10_朵.mp4", formula: "🔵 几（花苞） ＋ 🟠 木部（木） ＝「朵」", words: ["一朵花", "花朵", "雲朵", "耳朵"], mnemonic: "💡 口訣：樹枝（木）上面開出花苞（几），一「朵」花！" },
+        { char: "從", zy: "ㄘㄨㄥˊ", rad: "彳部", strokes: 11, ro: false, video: "videos/lesson36/L6_11_從.mp4", formula: "🟠 彳部（彳） ＋ 🔵 右邊部件 ＝「從」", words: ["從前", "從這裡", "從頭", "跟從"], mnemonic: "💡 口訣：雙人旁「彳」跟著往前走，從這一頭出發！" },
+        { char: "頭", zy: "ㄊㄡˊ", rad: "頁部", strokes: 16, ro: false, video: "videos/lesson36/L6_12_頭.mp4", formula: "🔵 豆 ＋ 🟠 頁部（頁） ＝「頭」", words: ["點頭", "那一頭", "這一頭", "頭上"], mnemonic: "💡 口訣：「豆」加上「頁」部，小花笑著點點頭！" },
+        { char: "那", zy: "ㄋㄚˋ", rad: "邑部（阝）", strokes: 7, ro: false, video: "videos/lesson36/L6_13_那.mp4", formula: "🔵 冄 ＋ 🟠 邑部（阝） ＝「那」", words: ["那一頭", "那裡", "那個", "那邊"], mnemonic: "💡 口訣：左邊「冄」加右耳旁「阝」，指著那一頭！" }
+      ]
     };
 
     let currentLesson = 1;
     let currentItemIdx = 0;
     let autoPlayLesson = false;
     const watchedSet = new Set();
-
     const videoEl = document.getElementById("theaterVideo");
 
     function speakText(text) {
@@ -625,9 +768,23 @@
       window.speechSynthesis.speak(utter);
     }
 
+    function applyLessonTheme(lessonNum) {
+      const m = LESSON_META[lessonNum];
+      const root = document.documentElement;
+      root.style.setProperty("--bg-gradient", m.bg);
+      root.style.setProperty("--accent", m.accent);
+      root.style.setProperty("--accent-dark", m.accentDark);
+      root.style.setProperty("--accent-soft", m.soft);
+      root.style.setProperty("--accent-border", m.border);
+
+      document.getElementById("brandEmoji").textContent = m.emoji;
+      document.getElementById("worldTitle").textContent = `${m.emoji} ${m.title} — ${m.world}`;
+      document.getElementById("worldHelpers").textContent = m.helpers;
+    }
+
     function updateUrlParams() {
       try {
-        const item = THEATER_DATA[currentLesson].items[currentItemIdx];
+        const item = THEATER_DATA[currentLesson][currentItemIdx];
         const newUrl = `${window.location.pathname}?lesson=${currentLesson}&char=${encodeURIComponent(item.char)}`;
         window.history.replaceState({}, "", newUrl);
       } catch (e) {}
@@ -636,6 +793,7 @@
     function selectLesson(lessonNum, itemIndex = 0, shouldPlay = true) {
       currentLesson = lessonNum;
       currentItemIdx = itemIndex;
+      applyLessonTheme(lessonNum);
       document.querySelectorAll(".lesson-tab-btn").forEach(btn => {
         btn.classList.toggle("active", Number(btn.dataset.lesson) === lessonNum);
       });
@@ -650,17 +808,17 @@
     }
 
     function stepChar(delta) {
-      const items = THEATER_DATA[currentLesson].items;
+      const items = THEATER_DATA[currentLesson];
       currentItemIdx = (currentItemIdx + delta + items.length) % items.length;
       renderCharGrid();
       loadCurrentVideo(true);
     }
 
     function renderCharGrid() {
-      const items = THEATER_DATA[currentLesson].items;
+      const items = THEATER_DATA[currentLesson];
       const bar = document.getElementById("charGridBar");
       bar.innerHTML = items.map((it, i) => `
-        <button class="char-btn ${i === currentItemIdx ? "active" : ""} ${watchedSet.has(it.char) ? "watched" : ""}" onclick="selectChar(${i})">
+        <button class="char-btn ${i === currentItemIdx ? "active" : ""} ${watchedSet.has(currentLesson + '_' + it.char) ? "watched" : ""}" onclick="selectChar(${i})">
           ${it.ro ? '<span class="ro-pill">認讀</span>' : ""}
           <span class="char-btn-kai">${it.char}</span>
           <span class="char-btn-zy">${it.zy}</span>
@@ -669,7 +827,7 @@
     }
 
     function loadCurrentVideo(shouldPlay) {
-      const item = THEATER_DATA[currentLesson].items[currentItemIdx];
+      const item = THEATER_DATA[currentLesson][currentItemIdx];
       updateUrlParams();
 
       document.getElementById("infoChar").textContent = item.char;
@@ -711,15 +869,15 @@
     }
 
     videoEl.addEventListener("ended", () => {
-      const item = THEATER_DATA[currentLesson].items[currentItemIdx];
-      watchedSet.add(item.char);
+      const item = THEATER_DATA[currentLesson][currentItemIdx];
+      watchedSet.add(currentLesson + "_" + item.char);
       document.getElementById("watchedCount").textContent = watchedSet.size;
       renderCharGrid();
 
       if (autoPlayLesson) {
-        const items = THEATER_DATA[currentLesson].items;
+        const items = THEATER_DATA[currentLesson];
         if (currentItemIdx < items.length - 1) {
-          setTimeout(() => selectChar(currentItemIdx + 1), 900);
+          setTimeout(() => selectChar(currentItemIdx + 1), 850);
         }
       }
     });
@@ -731,7 +889,8 @@
 
     function openShareModal() {
       const url = getPublicUrl();
-      document.getElementById("modalTitle").textContent = `📲 康軒一上 ${THEATER_DATA[currentLesson].title} 3D 拼字劇院`;
+      const m = LESSON_META[currentLesson];
+      document.getElementById("modalTitle").textContent = `📲 ${m.emoji} ${m.title}（${m.world}）`;
       document.getElementById("shareUrlText").textContent = url;
       document.getElementById("qrImage").src = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=" + encodeURIComponent(url);
       document.getElementById("shareModal").style.display = "flex";
@@ -744,7 +903,7 @@
     function copyShareUrl() {
       navigator.clipboard.writeText(getPublicUrl()).then(() => {
         const btn = document.getElementById("copyUrlBtn");
-        btn.textContent = "✅ 已複製網址！可直接貼到教室電腦或 LINE";
+        btn.textContent = "✅ 已複製本課網址！可直接貼到教室電腦或 LINE";
         btn.style.background = "#06d6a0";
         setTimeout(() => {
           btn.textContent = "📋 複製本課劇院網址";
@@ -757,10 +916,10 @@
       const params = new URLSearchParams(window.location.search);
       const lNum = parseInt(params.get("lesson"), 10);
       const cParam = params.get("char");
-      let startLesson = (lNum === 1 || lNum === 2) ? lNum : 1;
+      let startLesson = (lNum >= 1 && lNum <= 6) ? lNum : 1;
       let startIdx = 0;
       if (cParam) {
-        const found = THEATER_DATA[startLesson].items.findIndex(x => x.char === cParam);
+        const found = THEATER_DATA[startLesson].findIndex(x => x.char === cParam);
         if (found !== -1) startIdx = found;
       }
       selectLesson(startLesson, startIdx, false);
