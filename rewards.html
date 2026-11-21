@@ -506,6 +506,56 @@
       100% { transform: scale(1) translateY(0); }
     }
 
+    /* Real Wildlife Animal Photo Frame */
+    .real-animal-photo-frame {
+      position: relative;
+      width: 204px;
+      height: 152px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 3.5px solid #ffffff;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(0, 0, 0, 0.12);
+      background: #1b2a1e;
+    }
+
+    .real-animal-photo-frame.stage-3 {
+      border-color: #ffd54f;
+      box-shadow: 0 0 22px rgba(255, 213, 79, 0.85), 0 8px 22px rgba(0, 0, 0, 0.5);
+    }
+
+    .real-animal-photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .landmark-animal-box:hover .real-animal-photo-frame img {
+      transform: scale(1.06);
+    }
+
+    .real-animal-stage-pill {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: rgba(0, 0, 0, 0.72);
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 999px;
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      letter-spacing: 0.3px;
+      backdrop-filter: blur(4px);
+    }
+
+    .real-animal-photo-frame.stage-3 .real-animal-stage-pill {
+      background: linear-gradient(135deg, #ffb300, #ff6f00);
+      color: #fff;
+      border-color: #fff9c4;
+    }
+
     /* Blue Mystery Question Block (from reference image) */
     .mystery-question-badge {
       position: absolute;
@@ -2371,154 +2421,19 @@
           (MATCHING THE EXACT STYLE OF USER'S UPLOADED IMAGE)
        ========================================================= */
     function getCompanionAnimalSVG(cfg, stage) {
-      const isEgg = (stage === 0);
-      const isBaby = (stage === 1);
-      const isAdult = (stage === 2);
-      const isSacred = (stage === 3);
-
-      // 1. PROTECTIVE ANIMAL MOTHER + EGG (Stage 0: 0-49 pts)
-      if (isEgg) {
-        return getGuardingMotherAndEggSVG(cfg);
-      }
-
-      // 2. CUTE REAL COMPANION ANIMALS (EXACT STYLE OF USER'S REFERENCE IMAGE)
-      let furMain = '#78909c';
-      let furSec = '#ffffff';
-      let eyeIris = '#39b54a'; // Emerald green like image!
-      let earInner = '#ffcdd2';
-      let hasStripedTail = false;
-      let hasLionMane = false;
-
-      if (cfg.animalType === 'lemur') {
-        furMain = '#78909c'; furSec = '#ffffff'; eyeIris = '#43a047'; hasStripedTail = true;
-      } else if (cfg.animalType === 'lion') {
-        furMain = '#ffa726'; furSec = '#fff3e0'; eyeIris = '#f57c00'; hasLionMane = true;
-      } else if (cfg.animalType === 'shiba') {
-        furMain = '#e67e22'; furSec = '#fff8e1'; eyeIris = '#4caf50';
-      } else if (cfg.animalType === 'deer') {
-        furMain = '#a1887f'; furSec = '#ffffff'; eyeIris = '#2e7d32';
-      } else if (cfg.animalType === 'penguin') {
-        furMain = '#37474f'; furSec = '#ffffff'; eyeIris = '#0288d1';
-      } else if (cfg.animalType === 'bear') {
-        furMain = '#8d6e63'; furSec = '#d7ccc8'; eyeIris = '#6d4c41';
-      } else if (cfg.animalType === 'fox') {
-        furMain = '#ff7043'; furSec = '#ffffff'; eyeIris = '#388e3c';
-      } else if (cfg.animalType === 'panda') {
-        furMain = '#ffffff'; furSec = '#263238'; eyeIris = '#2e7d32';
-      } else if (cfg.animalType === 'bunny') {
-        furMain = '#ffffff'; furSec = '#f8bbd0'; eyeIris = '#e91e63';
-      } else if (cfg.animalType === 'cat') {
-        furMain = '#ffb74d'; furSec = '#ffffff'; eyeIris = '#00acc1';
-      }
-
-      // Sacred Aura for Stage 3
-      const sacredAura = isSacred ? `
-        <!-- Divine Golden Wings -->
-        <g opacity="0.95">
-          <path d="M 32,80 C 5,50 -5,15 25,12 C 42,10 48,45 42,75 Z" fill="#ffd700" stroke="#fff59d" stroke-width="2"/>
-          <path d="M 128,80 C 155,50 165,15 135,12 C 118,10 112,45 118,75 Z" fill="#ffd700" stroke="#fff59d" stroke-width="2"/>
-        </g>
-        <!-- Golden Halo -->
-        <ellipse cx="80" cy="18" rx="35" ry="9" fill="none" stroke="#ffee58" stroke-width="4.5" opacity="0.9"/>
-        <ellipse cx="80" cy="18" rx="30" ry="7" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
-      ` : '';
-
+      const stageLabels = [
+        cfg.animalType === 'penguin' ? '🥚 溫暖孵育期' : '🐾 幼崽撫育期',
+        '🌱 活潑幼年期',
+        '🦁 健美成年期',
+        '👑 野生王者'
+      ];
+      const imgSrc = `games/animals/${cfg.animalType}_${stage}.jpg`;
+      const badge = stageLabels[stage] || stageLabels[0];
       return `
-        <svg viewBox="0 0 160 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          ${sacredAura}
-
-          <!-- Shadow on landmark floor -->
-          <ellipse cx="80" cy="136" rx="42" ry="12" fill="#000000" opacity="0.25"/>
-
-          <!-- Striped Tail (Lemur like user reference image) -->
-          ${hasStripedTail || cfg.animalType === 'lemur' ? `
-            <g transform="translate(100, 75) rotate(-15)">
-              <path d="M 0,35 Q 15,10 10,-25 Q 5,-40 -8,-32 Q -18,-20 -8,10 Q -5,30 -5,40 Z" fill="#ffffff" stroke="#263238" stroke-width="2"/>
-              <path d="M 0,25 Q 8,15 5,5 L -6,10 Q -5,22 -3,28 Z" fill="#263238"/>
-              <path d="M 7,0 Q 12,-10 9,-18 L -4,-12 Q -5,-2 -7,5 Z" fill="#263238"/>
-              <path d="M 9,-22 Q 8,-35 -3,-30 L -8,-24 Q 0,-30 4,-20 Z" fill="#263238"/>
-            </g>
-          ` : ''}
-
-          <!-- Lion Fluffy Mane -->
-          ${hasLionMane ? `
-            <circle cx="80" cy="80" r="54" fill="#e65100"/>
-            <circle cx="80" cy="80" r="48" fill="#ff9800"/>
-          ` : ''}
-
-          <!-- Cute Fluffy Ears -->
-          <g>
-            <ellipse cx="38" cy="62" rx="16" ry="18" fill="${furMain}" transform="rotate(-20 38 62)"/>
-            <ellipse cx="38" cy="62" rx="10" ry="12" fill="${earInner}" transform="rotate(-20 38 62)"/>
-            <!-- White fur tufts on ear -->
-            <path d="M 24,65 Q 16,55 28,50 Q 20,44 32,46 Q 30,58 24,65 Z" fill="#ffffff"/>
-
-            <ellipse cx="122" cy="62" rx="16" ry="18" fill="${furMain}" transform="rotate(20 122 62)"/>
-            <ellipse cx="122" cy="62" rx="10" ry="12" fill="${earInner}" transform="rotate(20 122 62)"/>
-            <path d="M 136,65 Q 144,55 132,50 Q 140,44 128,46 Q 130,58 136,65 Z" fill="#ffffff"/>
-          </g>
-
-          <!-- Body / Chest -->
-          <ellipse cx="80" cy="126" rx="36" ry="26" fill="${furMain}"/>
-          <ellipse cx="80" cy="124" rx="24" ry="18" fill="${furSec}"/>
-
-          <!-- Cute Fluffy Head -->
-          <ellipse cx="80" cy="84" rx="44" ry="38" fill="${furMain}"/>
-          <!-- White Fluffy Cheeks & Muzzle (exactly like reference image) -->
-          <path d="M 40,88 C 30,95 38,112 55,110 C 68,118 92,118 105,110 C 122,112 130,95 120,88 C 128,78 115,70 102,76 C 92,72 68,72 58,76 C 45,70 32,78 40,88 Z" fill="${furSec}"/>
-
-          <!-- BIG GLOSSY EYES (Exact match to reference image!) -->
-          <!-- Left Eye -->
-          <g>
-            <ellipse cx="60" cy="80" rx="16" ry="18" fill="#1b2a1a"/>
-            <ellipse cx="60" cy="80" rx="14" ry="16" fill="${eyeIris}"/>
-            <ellipse cx="60" cy="80" rx="9" ry="11" fill="#0d1b0e"/>
-            <ellipse cx="56" cy="74" rx="5" ry="6" fill="#ffffff"/>
-            <ellipse cx="65" cy="86" rx="2.5" ry="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Right Eye -->
-          <g>
-            <ellipse cx="100" cy="80" rx="16" ry="18" fill="#1b2a1a"/>
-            <ellipse cx="100" cy="80" rx="14" ry="16" fill="${eyeIris}"/>
-            <ellipse cx="100" cy="80" rx="9" ry="11" fill="#0d1b0e"/>
-            <ellipse cx="96" cy="74" rx="5" ry="6" fill="#ffffff"/>
-            <ellipse cx="105" cy="86" rx="2.5" ry="3" fill="#ffffff"/>
-          </g>
-
-          <!-- Cute Black Nose -->
-          <ellipse cx="80" cy="94" rx="5" ry="3.5" fill="#212121"/>
-          <ellipse cx="79" cy="93" rx="1.5" ry="1" fill="#ffffff" opacity="0.8"/>
-
-          <!-- Open Happy Smiling Mouth with Tongue -->
-          <path d="M 73,100 Q 80,110 87,100 Z" fill="#b71c1c"/>
-          <path d="M 75,103 Q 80,109 85,103 Z" fill="#ff8a80"/>
-
-          <!-- ADORABLE PAWS HOLDING CHEEKS (Exact pose from reference image!) -->
-          <g transform="translate(42, 102) rotate(18)">
-            <ellipse cx="0" cy="0" rx="8" ry="14" fill="#37474f"/>
-            <line x1="-3" y1="-8" x2="-3" y2="2" stroke="#263238" stroke-width="1.8"/>
-            <line x1="2" y1="-9" x2="2" y2="3" stroke="#263238" stroke-width="1.8"/>
-          </g>
-          <g transform="translate(118, 102) rotate(-18)">
-            <ellipse cx="0" cy="0" rx="8" ry="14" fill="#37474f"/>
-            <line x1="-2" y1="-9" x2="-2" y2="3" stroke="#263238" stroke-width="1.8"/>
-            <line x1="3" y1="-8" x2="3" y2="2" stroke="#263238" stroke-width="1.8"/>
-          </g>
-
-          <!-- Stage 2 Adult Crown or Stage 3 Sacred Sparkles -->
-          ${isAdult ? `
-            <path d="M 66,45 L 72,32 L 80,42 L 88,32 L 94,45 Z" fill="#ffd700" stroke="#ffb300" stroke-width="2"/>
-            <circle cx="80" cy="40" r="3" fill="#e91e63"/>
-          ` : ''}
-
-          ${isSacred ? `
-            <path d="M 64,42 L 68,26 L 80,36 L 92,26 L 96,42 Z" fill="#ffd700" stroke="#fff9c4" stroke-width="2.5"/>
-            <circle cx="80" cy="33" r="4" fill="#d500f9"/>
-            <circle cx="70" cy="36" r="3" fill="#00e5ff"/>
-            <circle cx="90" cy="36" r="3" fill="#ff1744"/>
-          ` : ''}
-        </svg>
+        <div class="real-animal-photo-frame stage-${stage}">
+          <img src="${imgSrc}" alt="${cfg.realAnimal}" loading="lazy" />
+          <span class="real-animal-stage-pill">${badge}</span>
+        </div>
       `;
     }
 
@@ -2542,11 +2457,11 @@
         if (stage === 0) {
           tagClass = 'tag-egg';
           progressPct = Math.min(100, Math.round((points / 50) * 100));
-          milestoneText = `目標 50 點破殼誕生 (尚差 ${Math.max(0, 50 - points)} 點)`;
+          milestoneText = `目標 50 點幼年成長 (尚差 ${Math.max(0, 50 - points)} 點)`;
         } else if (stage === 1) {
           tagClass = 'tag-baby';
           progressPct = Math.min(100, Math.round(((points - 50) / 50) * 100));
-          milestoneText = `目標 100 點成長為成獸 (尚差 ${Math.max(0, 100 - points)} 點)`;
+          milestoneText = `目標 100 點成年動物 (尚差 ${Math.max(0, 100 - points)} 點)`;
         } else if (stage === 2) {
           tagClass = 'tag-adult';
           progressPct = Math.min(100, Math.round(((points - 100) / 100) * 100));
