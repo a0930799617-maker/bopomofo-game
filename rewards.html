@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🌍 世界名勝環球冒險 × 萌獸陪伴集點系統 | 一年級專屬</title>
+  <title>🌍 世界名勝環球冒險 × 真實動物守護集點系統 | 一年級專屬</title>
   
   <!-- Google Fonts: Fredoka & Noto Sans TC for vibrant game UI -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1083,7 +1083,7 @@
     <a class="portal-link" href="forest-theater.html">🎬 《3D 童話拼字大劇院》</a>
     <a class="portal-link" href="lesson3-game.html">🍂 《秋千》互動遊戲樂園</a>
     <a class="portal-link" href="quiz-battle.html">⚡ 《全班搶答大對決》</a>
-    <a class="portal-link current" href="rewards.html">🐾 目前所在：《萌獸陪伴集點系統》</a>
+    <a class="portal-link current" href="rewards.html">🐾 目前所在：《真實動物集點系統》</a>
     <a class="portal-link" href="adventure.html">🌴 《3D 雨林識字大冒險》</a>
   </div>
 
@@ -1093,13 +1093,13 @@
   <!-- Top Navigation Header -->
   <header>
     <div class="brand-section">
-      <div class="brand-avatar">🌍🐵</div>
+      <div class="brand-avatar">🌍🦁</div>
       <div class="brand-title">
         <h1>
-          世界名勝環球冒險 × 萌獸陪伴集點系統
+          世界名勝環球冒險 × 真實動物守護集點系統
           <span class="badge-class">一年級專屬</span>
         </h1>
-        <p>🏛️ 各國世界名勝背景 + 專屬大眼托腮陪伴萌獸 | 滿 50 點破殼 ➔ 滿 100 點成獸 ➔ 滿 200 點【稀有聖獸】！</p>
+        <p>🏛️ 各國世界名勝背景 + 專屬真實野生動物守護 | 滿 50 點幼年成長 ➔ 滿 100 點健美成年 ➔ 滿 200 點【野生動物王者】！</p>
       </div>
     </div>
 
@@ -1108,7 +1108,7 @@
         <span>📢 全班批次加分</span>
       </button>
       <button class="btn-header" onclick="openLeaderboardModal()">
-        <span>🏆 世界萌獸榜</span>
+        <span>🏆 真實動物榜</span>
       </button>
       <button class="btn-header" onclick="openHistoryModal()">
         <span>📜 加分記錄</span>
@@ -1131,13 +1131,13 @@
       <div class="stats-info">
         <span class="stat-pill">🎒 學生：<strong>10 位</strong></span>
         <span class="stat-pill">⭐ 全班總點數：<strong id="total-class-points">0</strong> 點</span>
-        <span class="stat-pill stage-1">🐾 50點破殼萌獸：<strong id="total-baby-count">0</strong> / 10 隻</span>
-        <span class="stat-pill stage-2">🦁 100點成獸：<strong id="total-adult-count">0</strong> / 10 隻</span>
-        <span class="stat-pill stage-3">👑 200點稀有聖獸：<strong id="total-sacred-count">0</strong> / 10 隻</span>
+        <span class="stat-pill stage-1">🐾 50點活潑幼崽：<strong id="total-baby-count">0</strong> / 10 隻</span>
+        <span class="stat-pill stage-2">🦁 100點成年動物：<strong id="total-adult-count">0</strong> / 10 隻</span>
+        <span class="stat-pill stage-3">👑 200點野生王者：<strong id="total-sacred-count">0</strong> / 10 隻</span>
       </div>
 
       <div style="font-size:0.88rem; font-weight:800; color:#2e7d32; display:flex; align-items:center; gap:6px;">
-        <span>🏛️ 世界景點背景 + 陪伴動物 👏</span>
+        <span>🏛️ 世界景點背景 + 真實守護動物 👏</span>
       </div>
     </div>
 
@@ -1268,12 +1268,12 @@
   <div class="modal-overlay" id="leaderboard-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2>🏆 世界名勝萌獸榮譽榜</h2>
+        <h2>🏆 世界名勝真實動物榮譽榜</h2>
         <button class="modal-close" onclick="closeLeaderboardModal()">&times;</button>
       </div>
       <div class="modal-body">
         <p style="font-size:0.85rem; color:#78909c; margin-bottom:14px; text-align:center; font-weight:700;">
-          🥚 0~49點 生命蛋 ➔ 🐾 50點 破殼托腮陪伴萌獸 ➔ 🦁 100點 成獸 ➔ 👑 200點 稀有聖獸！
+          🐾 0~49點 幼崽撫育 ➔ 🐾 50點 活潑幼年期 ➔ 🦁 100點 健美成年期 ➔ 👑 200點 野生王者領袖！
         </p>
         <ul class="leaderboard-list" id="leaderboard-container"></ul>
       </div>
@@ -1342,7 +1342,7 @@
   <!-- ================= JAVASCRIPT LOGIC & WORLD SCENERY + CARTOON ANIMAL SYSTEM ================= -->
   <script>
     /* =========================================================
-       1. STUDENTS: WORLD LANDMARK BACKGROUND + COMPANION ANIMAL
+       1. STUDENTS: WORLD LANDMARK BACKGROUND + REAL ANIMAL
        ========================================================= */
     const STUDENTS_CONFIG = [
       {
@@ -1356,10 +1356,10 @@
         motherName: '金獅媽媽',
         animalType: 'lion',
         stages: {
-          0: { title: '🥚 金獅媽媽守護蛋', desc: '【0~49點】金獅媽媽在艾菲爾鐵塔下寸步不離、溫柔守護著小金獅蛋，滿50點破殼而出！' },
-          1: { title: '🐾 托腮小金獅', desc: '【滿50點破殼】托著毛茸腮幫、大眼睛笑開懷的可愛小獅寶！' },
-          2: { title: '🦁 雄武金獅・成獸', desc: '【滿100點成獸】鬃毛茂密如金色烈焰，威風凜凜的巴黎守護獅' },
-          3: { title: '👑 太陽神威・聖光天馬獅', desc: '【滿200點稀有聖獸】天界雙翼展翅，散發金色聖輝的稀有聖獸！' }
+          0: { title: '🐾 金獅媽媽撫育小獅', desc: '【0~49點】金獅媽媽在艾菲爾鐵塔下溫柔撫育小金獅寶寶，寸步不離細心守護，滿50點健康長大！' },
+          1: { title: '🐾 活潑幼年小金獅', desc: '【滿50點成長】托著毛茸腮幫、大眼睛充滿朝氣與勇氣的活潑小金獅！' },
+          2: { title: '🦁 雄武成年非洲金獅', desc: '【滿100點成年動物】金色鬃毛茂密威風、體格健碩強壯的成年非洲雄獅。' },
+          3: { title: '👑 塞倫蓋提草原獅王', desc: '【滿200點野生王者】草原頂級萬獸之王！昂首闊步、守護獅群的雄武王者！' }
         },
         quote: '「功課交齊、踏實勇敢，我就能成長為守護全班的王者金獅！」'
       },
@@ -1374,10 +1374,10 @@
         motherName: '柴犬媽媽',
         animalType: 'shiba',
         stages: {
-          0: { title: '🥚 柴犬媽媽守護蛋', desc: '【0~49點】富士山櫻花樹下，柴犬媽媽趴臥在旁寸步不離地溫柔守護，滿50點破殼而出！' },
-          1: { title: '🐾 托腮萌小柴', desc: '【滿50點破殼】水汪汪大眼睛、雙爪托著肉嘟嘟小臉的柴犬寶寶！' },
-          2: { title: '🐕 靈敏赤柴・成獸', desc: '【滿100點成獸】肌肉健美、眼神專注聰穎的成獸赤柴犬' },
-          3: { title: '👑 天照之靈・八咫神柴', desc: '【滿200點稀有聖獸】身負九天神環與御神靈火的稀有聖獸！' }
+          0: { title: '🐾 柴犬媽媽撫育小柴', desc: '【0~49點】富士山櫻花樹下，柴犬媽媽趴臥在旁溫柔守護赤柴寶寶，滿50點健康長大！' },
+          1: { title: '🐾 靈動幼年小赤柴', desc: '【滿50點成長】水汪汪大眼睛、雙爪托著肉嘟嘟小臉、活潑愛笑的柴犬幼犬！' },
+          2: { title: '🐕 靈敏成年日本赤柴', desc: '【滿100點成年動物】身形勻稱敏捷、眼神專注忠誠、聰穎靈動的成年柴犬。' },
+          3: { title: '👑 日本天然紀念物・冠軍赤柴犬', desc: '【滿200點頂級名犬】姿態端莊挺拔、忠誠勇敢、享譽世界的日本國寶級冠軍柴犬！' }
         },
         quote: '「汪汪！今天也要充滿朝氣，做最棒的自己！」'
       },
@@ -1389,13 +1389,13 @@
         landmarkId: 'pyramids',
         photoUrl: 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80',
         realAnimal: '金斑梅花鹿 🦌',
-        motherName: '仙鹿媽媽',
+        motherName: '母鹿媽媽',
         animalType: 'deer',
         stages: {
-          0: { title: '🥚 仙鹿媽媽守護蛋', desc: '【0~49點】金字塔晨曦中，梅花鹿媽媽低頭輕撫著金色鹿蛋，滿50點破殼而出！' },
-          1: { title: '🐾 托腮精靈小鹿', desc: '【滿50點破殼】純真靈動大眼、背上有斑紋、托腮甜笑的精靈鹿！' },
-          2: { title: '🦌 傲角神鹿・成獸', desc: '【滿100點成獸】頭頂枝狀華美巨角、姿態優雅高貴的成獸靈鹿' },
-          3: { title: '👑 法老聖息・九色神鹿', desc: '【滿200點稀有聖獸】踏雲踏風、七彩九色仙光環繞的稀有聖鹿！' }
+          0: { title: '🐾 母鹿媽媽撫育小鹿', desc: '【0~49點】金字塔晨曦中，梅花鹿媽媽低頭輕撫小鹿寶寶，悉心溫暖呵護，滿50點健康長大！' },
+          1: { title: '🐾 純真幼年小梅花鹿', desc: '【滿50點成長】純真靈動大眼、背上有白色斑點、托腮甜笑的優雅小鹿！' },
+          2: { title: '🦌 傲角成年梅花鹿', desc: '【滿100點成年動物】頭頂枝狀華美巨角、身形修長矯健、步態高貴的成年靈鹿。' },
+          3: { title: '👑 森林鹿群領袖・金斑梅花鹿王', desc: '【滿200點野生王者】鹿角如王冠、體態雄偉、帶領鹿群奔馳在自然林間的鹿王！' }
         },
         quote: '「細心寫字與安靜思考，心靈就會如水晶般清澈。」'
       },
@@ -1410,10 +1410,10 @@
         motherName: '企鵝媽媽',
         animalType: 'penguin',
         stages: {
-          0: { title: '🥚 企鵝媽媽守護蛋', desc: '【0~49點】倫敦大笨鐘下，帝王企鵝媽媽展翅溫暖呵護著企鵝蛋，滿50點破殼而出！' },
-          1: { title: '🐾 托腮波波企鵝', desc: '【滿50點破殼】黑白燕尾、圓滾肚皮、用小短翅托腮的呆萌小企鵝！' },
-          2: { title: '🐧 帝王企鵝・成獸', desc: '【滿100點成獸】黑白羽毛油亮、胸前金黃高貴的成熟帝王企鵝' },
-          3: { title: '👑 極地永凍・冰晶聖王企鵝', desc: '【滿200點稀有聖獸】頭戴永恆冰冠、極光光羽流動的稀有聖王！' }
+          0: { title: '🥚 企鵝媽媽溫暖孵蛋', desc: '【0~49點】倫敦大笨鐘下，帝王企鵝媽媽展翅溫暖呵護孵育企鵝蛋，滿50點破殼而出！' },
+          1: { title: '🐾 圓滾幼年小企鵝', desc: '【滿50點破殼】黑白絨毛、圓滾肚皮、小短翅托腮的呆萌小企鵝寶寶！' },
+          2: { title: '🐧 健壯成年帝王企鵝', desc: '【滿100點成年動物】黑白羽毛油亮防水、胸前頸部金黃高貴的成熟帝企鵝。' },
+          3: { title: '👑 南極冰原霸主・健壯帝企鵝王', desc: '【滿200點野生王者】頂風冒雪、潛泳捕魚技術高超、守護全群小企鵝的極地之王！' }
         },
         quote: '「像大笨鐘一樣準時認真，每一天都是大進步！」'
       },
@@ -1425,13 +1425,13 @@
         landmarkId: 'liberty',
         photoUrl: 'https://images.unsplash.com/photo-1605130284535-11dd9eedc58a?auto=format&fit=crop&w=800&q=80',
         realAnimal: '北美棕熊 🐻',
-        motherName: '棕熊媽媽',
+        motherName: '母熊媽媽',
         animalType: 'bear',
         stages: {
-          0: { title: '🥚 棕熊媽媽守護蛋', desc: '【0~49點】自由女神像基座旁，厚實溫暖的棕熊媽媽臂彎環抱著小熊蛋，滿50點破殼而出！' },
-          1: { title: '🐾 托腮蜜糖小萌熊', desc: '【滿50點破殼】圓圓毛耳朵、托著大肉臉開懷笑著的小棕熊！' },
-          2: { title: '🐻 魁梧灰熊・成獸', desc: '【滿100點成獸】體型威猛厚實、臂膀孔武有力的成年大棕熊' },
-          3: { title: '👑 萬神守護・大地聖靈巨熊', desc: '【滿200點稀有聖獸】大地符文星鎧、神聖力量無可撼動的稀有聖熊！' }
+          0: { title: '🐾 母熊媽媽撫育小熊', desc: '【0~49點】自由女神像基座旁，厚實溫暖的母熊媽媽臂彎環抱著小棕熊寶寶，滿50點健康長大！' },
+          1: { title: '🐾 憨厚幼年小棕熊', desc: '【滿50點成長】圓圓毛耳朵、托著大肉臉開懷笑著、喜愛蜂蜜的可愛小熊！' },
+          2: { title: '🐻 雄壯成年北美棕熊', desc: '【滿100點成年動物】體型威猛厚實、臂膀孔武有力、善於捕魚攀爬的成獸大棕熊。' },
+          3: { title: '👑 阿拉斯加森林霸主・巨型灰棕熊', desc: '【滿200點野生王者】體格磅礴、徒手捕抓迴游鮭魚、威震北美的森林霸主！' }
         },
         quote: '「幫助同學是我的超能力，我是全班最暖心的依靠！」'
       },
@@ -1443,13 +1443,13 @@
         landmarkId: 'sydney',
         photoUrl: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
         realAnimal: '野生赤狐 🦊',
-        motherName: '赤狐媽媽',
+        motherName: '母狐媽媽',
         animalType: 'fox',
         stages: {
-          0: { title: '🥚 赤狐媽媽守護蛋', desc: '【0~49點】雪梨歌劇院海風中，赤狐媽媽用蓬鬆毛茸的大尾巴像毯子般裹護著小狐蛋，滿50點破殼！' },
-          1: { title: '🐾 托腮小赤狐', desc: '【滿50點破殼】大尖耳朵、蓬鬆大尾巴、大眼睛忽閃忽閃的小狐狸！' },
-          2: { title: '🦊 敏捷赤狐・成獸', desc: '【滿100點成獸】毛色亮麗如火、身手矯健靈巧的成獸赤狐' },
-          3: { title: '👑 九天玄火・九尾仙皇狐', desc: '【滿200點稀有聖獸】九尾流金天火、仙氣飄逸祥和的稀有聖獸！' }
+          0: { title: '🐾 母狐媽媽撫育小狐', desc: '【0~49點】雪梨歌劇院海風中，母狐媽媽用蓬鬆毛茸的大尾巴裹護小狐寶寶，滿50點健康長大！' },
+          1: { title: '🐾 靈巧幼年小赤狐', desc: '【滿50點成長】大尖耳朵、蓬鬆大尾巴、大眼睛好奇機靈的小狐狸！' },
+          2: { title: '🦊 敏捷成年野生赤狐', desc: '【滿100點成年動物】毛色亮麗如火、四肢修長敏捷、聽覺極其敏銳的成獸赤狐。' },
+          3: { title: '👑 荒野生存大師・雪原紅赤狐王', desc: '【滿200點野生王者】機警聰敏、在荒野嚴寒風雪中自如奔馳的野外生存大師！' }
         },
         quote: '「動動腦筋思考，所有的問題都能迎刃而解！」'
       },
@@ -1464,10 +1464,10 @@
         motherName: '熊貓媽媽',
         animalType: 'panda',
         stages: {
-          0: { title: '🥚 熊貓媽媽守護蛋', desc: '【0~49點】萬里長城翠竹間，熊貓媽媽拿著嫩竹枝、慈愛看護著熊貓靈蛋，滿50點破殼！' },
-          1: { title: '🐾 托腮小熊貓', desc: '【滿50點破殼】黑眼圈大萌眼、肉嘟嘟爪爪托腮笑瞇瞇的熊貓幼崽！' },
-          2: { title: '🐼 功夫巨擘熊貓・成獸', desc: '【滿100點成獸】身軀敦實有力、沉穩大氣的成熟大熊貓' },
-          3: { title: '👑 陰陽無極・降龍聖熊貓', desc: '【滿200點稀有聖獸】太極神環環繞、通曉乾坤奧義的稀有聖獸！' }
+          0: { title: '🐾 熊貓媽媽撫育小熊貓', desc: '【0~49點】萬里長城翠竹間，熊貓媽媽拿著嫩竹枝、慈愛懷抱著熊貓寶寶，滿50點健康長大！' },
+          1: { title: '🐾 呆萌幼年大熊貓', desc: '【滿50點成長】黑眼圈大萌眼、肉嘟嘟爪爪托腮笑瞇瞇的可愛熊貓幼崽！' },
+          2: { title: '🐼 敦實成年國寶大熊貓', desc: '【滿100點成年動物】身軀圓滾敦實有力、喜愛竹林攀爬與散步的成熟大熊貓。' },
+          3: { title: '👑 臥龍自然保護區・大元老國寶熊貓', desc: '【滿200點國寶王者】安詳沉穩、深受全世界小朋友喜愛崇敬的國寶大熊貓！' }
         },
         quote: '「功夫不負有心人，天天認真練習就是我的絕招！」'
       },
@@ -1479,13 +1479,13 @@
         landmarkId: 'colosseum',
         photoUrl: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80',
         realAnimal: '歐洲雪兔 🐰',
-        motherName: '雪兔媽媽',
+        motherName: '母兔媽媽',
         animalType: 'bunny',
         stages: {
-          0: { title: '🥚 雪兔媽媽守護蛋', desc: '【0~49點】羅馬競技場古柱下，純白長耳的雪兔媽媽雙爪暖心護著雪兔蛋，滿50點破殼！' },
-          1: { title: '🐾 托腮垂耳雪兔', desc: '【滿50點破殼】長長大耳朵、紅寶石透亮大眼、托腮甜笑的兔寶寶！' },
-          2: { title: '🐰 疾馳雪兔・成獸', desc: '【滿100點成獸】四肢矯健迅捷、雪白皮毛如絲緞的成獸白兔' },
-          3: { title: '👑 月宮帝皇・瑤池月影仙聖兔', desc: '【滿200點稀有聖獸】仙宮羽翼展翅、月光光暈伴隨的稀有聖兔！' }
+          0: { title: '🐾 母兔媽媽撫育小兔', desc: '【0~49點】羅馬競技場古柱下，純白長耳的母兔媽媽在暖草窩中呵護兔寶寶，滿50點健康長大！' },
+          1: { title: '🐾 靈巧幼年歐洲雪兔', desc: '【滿50點成長】長長大耳朵、透亮靈動雙眼、托腮甜笑的活潑雪兔寶寶！' },
+          2: { title: '🐰 疾馳成年歐洲雪兔', desc: '【滿100點成年動物】四肢矯健迅捷、雪白冬毛如絲緞、飛馳奔跑的成獸白兔。' },
+          3: { title: '👑 阿爾卑斯雪原領袖・高山雪兔王', desc: '【滿200點野生王者】聽風辨位、在冰雪峭壁間飛躍自如的高山雪原兔王！' }
         },
         quote: '「蹦蹦跳跳向前進，每天都有進步的好心情！」'
       },
@@ -1497,13 +1497,13 @@
         landmarkId: 'santorini',
         photoUrl: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
         realAnimal: '地中海花豹貓 🐱',
-        motherName: '豹貓媽媽',
+        motherName: '母貓媽媽',
         animalType: 'cat',
         stages: {
-          0: { title: '🥚 豹貓媽媽守護蛋', desc: '【0~49點】聖托里尼藍頂教堂前，優雅的花豹貓媽媽尾巴圈護著幸運萌蛋，滿50點破殼！' },
-          1: { title: '🐾 托腮小豹貓', desc: '【滿50點破殼】碧綠大眼睛、長長尾巴、雙爪捧臉喵喵叫的小萌貓！' },
-          2: { title: '🐱 靈敏獵豹・成獸', desc: '【滿100點成獸】肌肉線條流暢優雅、步履輕盈無聲的成熟靈貓' },
-          3: { title: '👑 愛琴海女神・天界招福聖貓', desc: '【滿200點稀有聖獸】展開天使金羽、散發奇蹟光塵的稀有聖獸！' }
+          0: { title: '🐾 母貓媽媽撫育小貓', desc: '【0~49點】聖托里尼藍頂教堂前，優雅的花豹貓媽媽溫柔圈護著小豹貓寶寶，滿50點健康長大！' },
+          1: { title: '🐾 靈敏幼年小豹貓', desc: '【滿50點成長】碧綠大眼睛、長長尾巴、雙爪捧臉喵喵叫的活潑小花貓！' },
+          2: { title: '🐱 矯健成年地中海豹貓', desc: '【滿100點成年動物】肌肉線條流暢優雅、步履輕盈無聲、身手敏捷的成熟獵貓。' },
+          3: { title: '👑 愛琴海靈動巡獵・地中海花豹貓王', desc: '【滿200點野生王者】矯健敏捷、巡守愛琴海島自然天地的頂級巡獵手！' }
         },
         quote: '「用心做好每一件小事，世界就會變得閃閃發光！」'
       },
@@ -1514,14 +1514,14 @@
         landmarkShort: '泰姬瑪哈陵',
         landmarkId: 'tajmahal',
         photoUrl: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
-        realAnimal: '環尾萌狐猴 🐵', // Exactly the character from the user's reference image!
+        realAnimal: '環尾萌狐猴 🐵',
         motherName: '狐猴媽媽',
         animalType: 'lemur',
         stages: {
-          0: { title: '🥚 狐猴媽媽守護蛋', desc: '【0~49點】泰姬瑪哈陵倒影旁，環尾狐猴媽媽用黑白環紋大尾巴溫柔護著小精靈蛋，滿50點破殼！' },
-          1: { title: '🐾 托腮萌狐猴', desc: '【滿50點破殼】完全如圖！水汪汪大綠眼、雙爪托腮甜笑的環尾狐猴！' },
-          2: { title: '🐵 敏捷狐猴・成獸', desc: '【滿100點成獸】黑白環紋大長尾、身姿輕盈敏捷的成獸狐猴' },
-          3: { title: '👑 梵天至高・九天星輝聖狐猴', desc: '【滿200點稀有聖獸】天界彩虹神翼、踏星踏霞的稀有天馬神聖獸！' }
+          0: { title: '🐾 狐猴媽媽撫育小狐猴', desc: '【0~49點】泰姬瑪哈陵倒影旁，環尾狐猴媽媽用黑白條紋大尾巴溫柔環抱小狐猴寶寶，滿50點健康長大！' },
+          1: { title: '🐾 靈秀幼年環尾狐猴', desc: '【滿50點成長】水汪汪大綠眼、雙爪托腮甜笑、充滿好奇心的環尾狐猴寶寶！' },
+          2: { title: '🐵 敏捷成年環尾狐猴', desc: '【滿100點成年動物】黑白環紋大長尾高揚、樹冠跳躍身姿輕盈敏捷的成熟狐猴。' },
+          3: { title: '👑 馬達加斯加雨林長老・狐猴族長', desc: '【滿200點野生王者】高揚黑白環尾引領族群、在熱帶雨林自如飛越的長老領袖！' }
         },
         quote: '「雙手托腮甜甜笑，今天也要做最棒最快樂的好孩子！」'
       }
@@ -1535,13 +1535,13 @@
     let audioEnabled = true;
 
     /* =========================================================
-       2. STAGE CALCULATIONS (Egg -> Baby -> Adult -> Sacred)
+       2. STAGE CALCULATIONS (Infant -> Baby -> Adult -> King)
        ========================================================= */
     function getStage(points) {
-      if (points >= 200) return 3; // 滿200點為稀有聖獸
-      if (points >= 100) return 2; // 滿100點為成獸
-      if (points >= 50)  return 1; // 滿50點破殼幼獸
-      return 0;                    // 0~49點 生命蛋
+      if (points >= 200) return 3; // 滿200點為野生動物王者
+      if (points >= 100) return 2; // 滿100點為健美成年動物
+      if (points >= 50)  return 1; // 滿50點為活潑幼崽
+      return 0;                    // 0~49點 幼崽撫育期
     }
 
     function initData() {
@@ -1806,10 +1806,10 @@
         isEvo: true,
         isSacred: isSacred,
         reason: isSacred 
-          ? `👑 突破 200 點！覺醒為稀有聖獸【${cfg.stages[3].title}】` 
+          ? `👑 突破 200 點！晉升為野生動物王者【${cfg.stages[3].title}】` 
           : (newStage === 2 
-              ? `🦁 突破 100 點！成長為威武成獸【${cfg.stages[2].title}】` 
-              : `🐣 突破 50 點！生命之蛋破殼誕生為【${cfg.stages[1].title}】`),
+              ? `🦁 突破 100 點！成長為健美成年動物【${cfg.stages[2].title}】` 
+              : `🐾 突破 50 點！健康長大為活潑幼崽【${cfg.stages[1].title}】`),
         time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }),
         totalNow: student.points
       });
@@ -2550,11 +2550,11 @@
         } else if (stage === 2) {
           tagClass = 'tag-adult';
           progressPct = Math.min(100, Math.round(((points - 100) / 100) * 100));
-          milestoneText = `目標 200 點蛻變稀有聖獸！(尚差 ${Math.max(0, 200 - points)} 點)`;
+          milestoneText = `目標 200 點成為野生動物王者！(尚差 ${Math.max(0, 200 - points)} 點)`;
         } else {
           tagClass = 'tag-sacred';
           progressPct = 100;
-          milestoneText = `👑 已達成最高等級【稀有傳說聖獸】！`;
+          milestoneText = `👑 已達成最高等級【野生動物王者】！`;
         }
 
         const card = document.createElement('div');
@@ -2565,7 +2565,7 @@
           <!-- Landmark Banner on Top of Card -->
           <div class="card-top-landmark">
             <span class="landmark-badge">🏛️ ${cfg.landmark}</span>
-            <span>伴生萌獸：${cfg.realAnimal}</span>
+            <span>真實動物：${cfg.realAnimal}</span>
           </div>
 
           <!-- Card Header: Student Name + Evolution Tag beside Name -->
@@ -2582,7 +2582,7 @@
           </div>
 
           <!-- Landmark Background + Companion Animal Display Box -->
-          <div class="landmark-animal-box" onclick="openInspectModal('${cfg.id}')" title="點擊放大查看名勝與大眼萌獸特寫">
+          <div class="landmark-animal-box" onclick="openInspectModal('${cfg.id}')" title="點擊放大查看名勝與真實動物特寫">
             <!-- World Landmark Background: Real Internet Landscape Photo + Fallback -->
             ${getLandmarkBackgroundHTML(cfg)}
 
@@ -2594,7 +2594,7 @@
               ${getCompanionAnimalSVG(cfg, stage)}
             </div>
 
-            <span class="click-inspect-hint">🔍 點擊查看名勝與萌獸</span>
+            <span class="click-inspect-hint">🔍 點擊查看名勝與真實動物</span>
           </div>
 
           <!-- Score Progress -->
@@ -2676,13 +2676,13 @@
 
       if (isSacred) {
         box.className = 'modal-content evolution-modal-box sacred';
-        document.getElementById('evo-main-title').textContent = '👑 突破 200 點！覺醒為【稀有傳說聖獸】！ 👑';
+        document.getElementById('evo-main-title').textContent = '👑 突破 200 點！晉升為【野生動物王者】！ 👑';
       } else if (stage === 2) {
         box.className = 'modal-content evolution-modal-box';
-        document.getElementById('evo-main-title').textContent = '🦁 突破 100 點！成長為【威武成獸】！ 🦁';
+        document.getElementById('evo-main-title').textContent = '🦁 突破 100 點！成長為【健美成年動物】！ 🦁';
       } else {
         box.className = 'modal-content evolution-modal-box';
-        document.getElementById('evo-main-title').textContent = '🐣 突破 50 點！生命之蛋破殼誕生！ 🐣';
+        document.getElementById('evo-main-title').textContent = '🐾 突破 50 點！健康長大為活潑幼崽！ 🐾';
       }
 
       document.getElementById('evo-kid-name').textContent = cfg.name;
@@ -2717,7 +2717,7 @@
       document.getElementById('inspect-kid-name').textContent = cfg.name;
       document.getElementById('inspect-kid-score').textContent = `${student.points} 點`;
       document.getElementById('inspect-kid-landmark').textContent = cfg.landmark;
-      document.getElementById('inspect-kid-tier-desc').textContent = `${cfg.realAnimal}・${stageInfo.title} (${stage === 0 ? '生命之蛋' : (stage === 1 ? '破殼萌獸' : (stage === 2 ? '成獸' : '稀有聖獸'))})`;
+      document.getElementById('inspect-kid-tier-desc').textContent = `${cfg.realAnimal}・${stageInfo.title} (${stage === 0 ? '媽媽撫育' : (stage === 1 ? '活潑幼崽' : (stage === 2 ? '健美成年' : '野生王者'))})`;
       document.getElementById('inspect-kid-quote').textContent = cfg.quote;
 
       // History
@@ -2832,7 +2832,7 @@
             </span>
             <span style="font-size:0.85rem; font-weight:700; color:#78909c;">點</span>
             <div style="font-size:0.75rem; color:${stage === 3 ? '#e040fb' : (stage === 2 ? '#ff9800' : (stage === 1 ? '#4caf50' : '#2196f3'))}; font-weight:800;">
-              ${stage === 3 ? '👑 稀有聖獸' : (stage === 2 ? '🦁 成獸' : (stage === 1 ? '🐾 幼獸' : '🥚 蛋'))}
+              ${stage === 3 ? '👑 野生王者' : (stage === 2 ? '🦁 成年動物' : (stage === 1 ? '🐾 活潑幼崽' : '🐾 幼崽撫育'))}
             </div>
           </div>
         `;
@@ -2865,7 +2865,7 @@
               <span style="font-size:0.75rem; color:#9e9e9e; margin-left:6px;">${h.time}</span>
             </div>
             <span style="font-weight:900; color:${h.isSacred ? '#7b1fa2' : (h.isEvo ? '#e65100' : '#2e7d32')};">
-              ${h.isEvo ? (h.isSacred ? '👑 稀有聖獸' : '🌟 進化蛻變') : `+${h.pts} 點 👏`}
+              ${h.isEvo ? (h.isSacred ? '👑 野生王者' : '🌟 成長晉級') : `+${h.pts} 點 👏`}
             </span>
           `;
           ul.appendChild(li);
@@ -2908,7 +2908,7 @@
       const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2));
       const downloadAnchor = document.createElement('a');
       downloadAnchor.setAttribute('href', dataStr);
-      downloadAnchor.setAttribute('download', `世界名勝陪伴萌獸加分系統備份_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '-')}.json`);
+      downloadAnchor.setAttribute('download', `世界名勝真實動物集點系統備份_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '-')}.json`);
       document.body.appendChild(downloadAnchor);
       downloadAnchor.click();
       downloadAnchor.remove();
