@@ -1,0 +1,3003 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌍 世界名勝環球冒險 × 萌獸陪伴集點系統 | 一年級專屬</title>
+  
+  <!-- Google Fonts: Fredoka & Noto Sans TC for vibrant game UI -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Sniglet:wght@800&display=swap" rel="stylesheet">
+  
+  <!-- Canvas Confetti -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #2e7d32;
+      --primary-dark: #1b5e20;
+      --accent-gold: #ffd54f;
+      --accent-orange: #ff9800;
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --card-shadow: 0 14px 30px rgba(15, 35, 20, 0.3);
+      --border-radius: 24px;
+      --text-dark: #223322;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      font-family: 'Noto Sans TC', 'Fredoka', system-ui, sans-serif;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #2e7d32;
+      background-image: 
+        radial-gradient(circle at 10% 15%, rgba(255, 255, 255, 0.25) 0%, transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(255, 235, 59, 0.22) 0%, transparent 30%),
+        linear-gradient(to bottom, #70d6ff 0%, #a4e99a 28%, #4ba238 65%, #1b4d21 100%);
+      background-attachment: fixed;
+    }
+
+    /* Ambient Canopy Top */
+    .top-canopy-deco {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 110px;
+      pointer-events: none;
+      z-index: 1;
+      background: 
+        radial-gradient(ellipse at 12% -30%, #25661f 0%, #174213 60%, transparent 75%),
+        radial-gradient(ellipse at 88% -30%, #2f7a26 0%, #1a4916 60%, transparent 75%);
+      opacity: 0.85;
+    }
+
+    /* Top Navigation Header */
+    header {
+      position: relative;
+      z-index: 10;
+      background: linear-gradient(135deg, #2b6c25 0%, #1a4916 100%);
+      color: white;
+      padding: 12px 26px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 6px 22px rgba(0,0,0,0.35);
+      border-bottom: 5px solid #66bb6a;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brand-avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #ffe082 0%, #ffb300 100%);
+      border: 3px solid #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      animation: pulseAvatar 3s infinite ease-in-out;
+    }
+
+    @keyframes pulseAvatar {
+      0%, 100% { transform: scale(1) rotate(-3deg); }
+      50% { transform: scale(1.08) rotate(3deg); }
+    }
+
+    .brand-title h1 {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: 0.5px;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-class {
+      background: linear-gradient(135deg, #ffd54f, #ffb300);
+      color: #3e2723;
+      font-size: 0.8rem;
+      font-weight: 900;
+      padding: 3px 14px;
+      border-radius: 16px;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.25);
+      border: 2px solid #fff9c4;
+    }
+
+    .brand-title p {
+      font-size: 0.88rem;
+      color: #dcedc8;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-header {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      border: 2px solid #a5d6a7;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: all 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .btn-header:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.28);
+      border-color: #ffffff;
+    }
+
+    .btn-batch {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      border: 2px solid #ffe082;
+      box-shadow: 0 4px 12px rgba(230, 81, 0, 0.4);
+    }
+
+    .btn-batch:hover {
+      background: linear-gradient(135deg, #ffa726, #fb8c00);
+    }
+
+    /* Main Container */
+    main {
+      position: relative;
+      z-index: 5;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px 26px 36px;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Top Stats Bar */
+    .top-stats-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 22px;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      padding: 14px 24px;
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(18, 51, 23, 0.22);
+      border: 3px solid #81c784;
+    }
+
+    .stats-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .stat-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #e8f5e9;
+      padding: 6px 14px;
+      border-radius: 14px;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+    }
+
+    .stat-pill.stage-1 { background: #fff8e1; color: #f57f17; border-color: #ffe082; }
+    .stat-pill.stage-2 { background: #ede7f6; color: #6a1b9a; border-color: #d1c4e9; }
+    .stat-pill.stage-3 { background: #fce4ec; color: #c2185b; border-color: #f8bbd0; }
+
+    /* Students Cards Grid */
+    .students-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(295px, 1fr));
+      gap: 24px;
+    }
+
+    /* Single Student World Landmark Card */
+    .student-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(14px);
+      border-radius: var(--border-radius);
+      box-shadow: var(--card-shadow);
+      border: 4px solid #81c784;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease, border-color 0.3s ease;
+      overflow: hidden;
+    }
+
+    .student-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(18, 51, 23, 0.32);
+      border-color: #4caf50;
+    }
+
+    /* Evolution Stage Styles */
+    .student-card.stage-0 {
+      border-color: #81d4fa;
+      background: linear-gradient(175deg, #ffffff 0%, #f0f9ff 100%);
+    }
+
+    .student-card.stage-1 {
+      border-color: #ffd54f;
+      background: linear-gradient(175deg, #ffffff 0%, #fffde7 100%);
+    }
+
+    .student-card.stage-2 {
+      border-color: #ba68c8;
+      background: linear-gradient(175deg, #ffffff 0%, #f3e5f5 100%);
+    }
+
+    .student-card.stage-3 {
+      border-color: #ffd700;
+      background: linear-gradient(175deg, #fffde7 0%, #fff9c4 60%, #ffe082 100%);
+      box-shadow: 0 16px 36px rgba(255, 215, 0, 0.45);
+    }
+
+    .student-card.stage-3::before {
+      content: '';
+      position: absolute;
+      top: -60%;
+      left: -60%;
+      width: 220%;
+      height: 220%;
+      background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, rgba(224,64,251,0.15) 45%, transparent 70%);
+      pointer-events: none;
+      animation: rotateSacredGlow 14s linear infinite;
+    }
+
+    @keyframes rotateSacredGlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Card Top Landmark Banner */
+    .card-top-landmark {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #1b5e20;
+      background: #e8f5e9;
+      padding: 4px 10px;
+      border-radius: 12px;
+      border: 1px solid #c8e6c9;
+    }
+
+    .landmark-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Card Header: Student Name + Evolution Badge */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .name-evolution-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      width: 100%;
+    }
+
+    .name-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .student-name {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #1b5e20;
+      letter-spacing: 0.5px;
+    }
+
+    /* Evolution Tag beside name */
+    .evolution-tag-beside {
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .tag-egg {
+      background: #e1f5fe;
+      color: #0277bd;
+      border: 1px solid #b3e5fc;
+    }
+
+    .tag-baby {
+      background: linear-gradient(135deg, #fff9c4, #ffd54f);
+      color: #5d4037;
+      border: 1px solid #ffe082;
+      animation: bounceTag 2s infinite ease-in-out;
+    }
+
+    @keyframes bounceTag {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    .tag-adult {
+      background: linear-gradient(135deg, #e1bee7, #ab47bc);
+      color: white;
+      border: 1px solid #ba68c8;
+    }
+
+    .tag-sacred {
+      background: linear-gradient(135deg, #ffd700, #ff6f00, #d500f9);
+      color: white;
+      font-weight: 900;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      border: 1px solid #fff59d;
+      animation: sacredBadgeGlow 2s infinite alternate;
+    }
+
+    @keyframes sacredBadgeGlow {
+      0% { transform: scale(1); filter: drop-shadow(0 0 3px rgba(255,215,0,0.6)); }
+      100% { transform: scale(1.06); filter: drop-shadow(0 0 8px rgba(224,64,251,0.8)); }
+    }
+
+    .stage-subdesc {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #558b2f;
+    }
+
+    /* Landmark Background + Companion Animal Display Box */
+    .landmark-animal-box {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin: 4px 0 10px;
+      border-radius: 20px;
+      overflow: hidden;
+      cursor: pointer;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.25), 0 4px 12px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      border: 3px solid #81c784;
+    }
+
+    .landmark-animal-box:hover {
+      box-shadow: inset 0 2px 14px rgba(0,0,0,0.35), 0 6px 18px rgba(46, 125, 50, 0.4);
+      border-color: #4caf50;
+    }
+
+    .landmark-photo-wrap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 17px;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .landmark-photo-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: brightness(0.92) contrast(1.08) saturate(1.15);
+      transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.3s ease;
+      z-index: 1;
+    }
+
+    .student-card:hover .landmark-photo-img {
+      transform: scale(1.08);
+    }
+
+    .landmark-photo-fallback {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .landmark-photo-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.02) 40%, rgba(0,0,0,0.38) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .landmark-bg-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .companion-animal-container {
+      position: relative;
+      z-index: 3;
+      width: 230px;
+      height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .companion-animal-container:hover {
+      transform: scale(1.05) translateY(-3px);
+    }
+
+    .companion-animal-container.jump-anim {
+      animation: happyJump 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes happyJump {
+      0% { transform: scale(1) translateY(0); }
+      35% { transform: scale(1.15, 0.88) translateY(-28px) rotate(4deg); }
+      70% { transform: scale(0.95, 1.08) translateY(-8px) rotate(-3deg); }
+      100% { transform: scale(1) translateY(0); }
+    }
+
+    /* Blue Mystery Question Block (from reference image) */
+    .mystery-question-badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #448aff, #1565c0);
+      box-shadow: 0 4px 10px rgba(21, 101, 192, 0.5);
+      border: 2px solid #e3f2fd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-family: 'Sniglet', 'Fredoka', cursive;
+      font-size: 1.3rem;
+      font-weight: 900;
+      z-index: 5;
+      animation: pulseQuestion 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseQuestion {
+      0%, 100% { transform: scale(1) rotate(-4deg); }
+      50% { transform: scale(1.12) rotate(4deg); }
+    }
+
+    .click-inspect-hint {
+      position: absolute;
+      bottom: 8px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 3px 10px;
+      border-radius: 12px;
+      color: #2e7d32;
+      pointer-events: none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      z-index: 5;
+    }
+
+    /* Score Progress Section */
+    .score-progress-wrap {
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .score-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+
+    .score-number {
+      font-size: 1.95rem;
+      font-weight: 900;
+      color: #2e7d32;
+      font-family: 'Fredoka', 'Noto Sans TC', sans-serif;
+      display: flex;
+      align-items: baseline;
+      gap: 3px;
+    }
+
+    .student-card.stage-3 .score-number {
+      color: #d84315;
+    }
+
+    .score-unit {
+      font-size: 0.92rem;
+      font-weight: 800;
+      color: #78909c;
+    }
+
+    .next-milestone-text {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #558b2f;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 14px;
+      background: #cfd8dc;
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid #b0bec5;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #66bb6a, #43a047);
+      border-radius: 10px;
+      transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+
+    .progress-bar-fill.baby {
+      background: linear-gradient(90deg, #ffd54f, #ffb300);
+    }
+
+    .progress-bar-fill.adult {
+      background: linear-gradient(90deg, #ab47bc, #7b1fa2);
+    }
+
+    .progress-bar-fill.sacred {
+      background: linear-gradient(90deg, #ffd700, #ff6f00, #d500f9);
+    }
+
+    .progress-bar-fill::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+      animation: progressShine 2s infinite;
+    }
+
+    @keyframes progressShine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    /* Point Action Buttons */
+    .action-buttons-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 6px;
+      margin-top: auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn-add-pts {
+      border: none;
+      outline: none;
+      padding: 10px 4px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      color: white;
+    }
+
+    .btn-add-pts:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.22);
+    }
+
+    .btn-add-pts:active {
+      transform: translateY(1px) scale(0.97);
+    }
+
+    .btn-homework {
+      background: linear-gradient(135deg, #42a5f5, #1976d2);
+      border-bottom: 3.5px solid #0d47a1;
+    }
+
+    .btn-behavior {
+      background: linear-gradient(135deg, #66bb6a, #388e3c);
+      border-bottom: 3.5px solid #1b5e20;
+    }
+
+    .btn-other {
+      background: linear-gradient(135deg, #ffa726, #f57c00);
+      border-bottom: 3.5px solid #e65100;
+    }
+
+    .pts-badge {
+      font-size: 1.1rem;
+      font-weight: 900;
+      font-family: 'Fredoka', sans-serif;
+      line-height: 1;
+    }
+
+    .btn-label {
+      font-size: 0.74rem;
+      white-space: nowrap;
+    }
+
+    /* Card Micro Actions */
+    .card-footer-mini {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px dashed #cfd8dc;
+      font-size: 0.74rem;
+      color: #78909c;
+    }
+
+    .btn-mini-adjust {
+      background: none;
+      border: 1px solid #cfd8dc;
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 0.72rem;
+      color: #78909c;
+      cursor: pointer;
+    }
+
+    .btn-mini-adjust:hover {
+      background: #eceff1;
+      color: #455a64;
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(10, 30, 15, 0.78);
+      backdrop-filter: blur(8px);
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 30px;
+      max-width: 640px;
+      width: 100%;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+      border: 5px solid #81c784;
+      overflow: hidden;
+      transform: scale(0.85);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      background: linear-gradient(135deg, #2e7d32, #1b5e20);
+      color: white;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-header h2 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .modal-close {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      font-size: 1.4rem;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .modal-close:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .modal-body {
+      padding: 22px 26px;
+      max-height: 75vh;
+      overflow-y: auto;
+    }
+
+    /* Evolution Celebration Modal */
+    .evolution-modal-box {
+      text-align: center;
+      padding: 30px 24px;
+      background: radial-gradient(circle, #fffde7 0%, #fff9c4 70%, #ffe082 100%);
+      border: 6px solid #ffd54f;
+    }
+
+    .evolution-modal-box.sacred {
+      background: radial-gradient(circle, #fffde7 0%, #ffd54f 40%, #e1bee7 80%, #7b1fa2 100%);
+      border: 6px solid #ffd700;
+      color: #311b92;
+    }
+
+    .evo-title {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: #e65100;
+      margin-bottom: 10px;
+      animation: pulseEvoTitle 1s ease-in-out infinite alternate;
+    }
+
+    .evolution-modal-box.sacred .evo-title {
+      color: #ffd700;
+      text-shadow: 0 0 15px rgba(224, 64, 251, 0.8), 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    @keyframes pulseEvoTitle {
+      0% { transform: scale(0.98); }
+      100% { transform: scale(1.05); }
+    }
+
+    .evo-stage-art {
+      width: 100%;
+      height: 270px;
+      margin: 15px 0;
+      border-radius: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      border: 4px solid #fff59d;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .evo-badge-name {
+      display: inline-block;
+      background: linear-gradient(135deg, #ff6f00, #ffa000);
+      color: white;
+      padding: 6px 24px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 1.35rem;
+      box-shadow: 0 4px 14px rgba(255, 111, 0, 0.4);
+    }
+
+    .btn-celebrate-done {
+      background: linear-gradient(135deg, #43a047, #2e7d32);
+      border: none;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 900;
+      padding: 12px 38px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(46, 125, 50, 0.4);
+      transition: transform 0.2s;
+    }
+
+    .btn-celebrate-done:hover {
+      transform: scale(1.06);
+    }
+
+    /* Inspect Modal */
+    .inspect-art-wrap {
+      width: 100%;
+      height: 320px;
+      border-radius: 22px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      position: relative;
+      border: 4px solid #a5d6a7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    }
+
+    .inspect-details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .detail-card {
+      background: #e8f5e9;
+      padding: 12px;
+      border-radius: 14px;
+      border: 1px solid #c8e6c9;
+    }
+
+    .detail-title {
+      font-size: 0.8rem;
+      color: #2e7d32;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .detail-value {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: #1b5e20;
+    }
+
+    /* History & Leaderboard */
+    .history-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 250px;
+      overflow-y: auto;
+    }
+
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f5f5f5;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+    }
+
+    .history-item.plus { border-left: 4px solid #43a047; }
+    .history-item.evo { border-left: 4px solid #ffb300; background: #fffde7; font-weight: 700; }
+    .history-item.sacred { border-left: 4px solid #e040fb; background: #f3e5f5; font-weight: 800; }
+
+    .leaderboard-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .leaderboard-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      background: #f8fafc;
+      border-radius: 16px;
+      border: 2px solid #e2e8f0;
+    }
+
+    .leaderboard-row.rank-1 {
+      border-color: #ffd54f;
+      background: linear-gradient(90deg, #fff9c4, #fffde7);
+    }
+    .leaderboard-row.rank-2 {
+      border-color: #cfd8dc;
+      background: linear-gradient(90deg, #eceff1, #ffffff);
+    }
+    .leaderboard-row.rank-3 {
+      border-color: #ffccbc;
+      background: linear-gradient(90deg, #fbe9e7, #ffffff);
+    }
+
+    .rank-tag {
+      font-size: 1.15rem;
+      font-weight: 900;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #cfd8dc;
+      color: #37474f;
+    }
+
+    .rank-1 .rank-tag { background: #ffd54f; color: #e65100; }
+    .rank-2 .rank-tag { background: #b0bec5; color: white; }
+    .rank-3 .rank-tag { background: #ffab91; color: white; }
+
+    /* Toast Notification */
+    #toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast-msg {
+      background: rgba(20, 54, 27, 0.95);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 12px 22px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+      border: 2px solid #81c784;
+      animation: toastIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), fadeOut 0.5s ease 2.7s forwards;
+    }
+
+    @keyframes toastIn {
+      from { transform: translateX(50px) scale(0.9); opacity: 0; }
+      to { transform: translateX(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+      }
+      .brand-section { justify-content: center; }
+      .header-actions { justify-content: center; flex-wrap: wrap; }
+      .students-grid { grid-template-columns: 1fr; }
+      .top-stats-bar { flex-direction: column; align-items: stretch; }
+    }
+
+    /* Top Portal Bar */
+    .top-portal-bar {
+      width: 100%;
+      background: #11141c;
+      color: #fff;
+      padding: 7px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.92rem;
+      flex-wrap: wrap;
+      z-index: 9999;
+      position: relative;
+    }
+
+    .portal-link {
+      color: #ffe66d;
+      text-decoration: none;
+      font-weight: 800;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 13px;
+      border-radius: 50px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .portal-link:hover { background: rgba(255, 255, 255, 0.25); transform: translateY(-1px); }
+    .portal-link.current { background: #ffd54f; color: #223322; font-weight: 900; box-shadow: 0 0 10px rgba(255,213,79,0.7); }
+  </style>
+</head>
+<body>
+
+  <!-- Top Portal Bar -->
+  <div class="top-portal-bar">
+    <span>🎒 小一國語文快樂學系列：</span>
+    <a class="portal-link" href="index.html">🚂 《注音符號魔法樂園》</a>
+    <a class="portal-link" href="characters.html">🔍 《國字相似字魔法偵探》</a>
+    <a class="portal-link" href="strokes.html">✍️ 《康軒分課生字筆順練習館》</a>
+    <a class="portal-link" href="forest-theater.html">🎬 《3D 童話拼字大劇院》</a>
+    <a class="portal-link" href="lesson3-game.html">🍂 《秋千》互動遊戲樂園</a>
+    <a class="portal-link" href="quiz-battle.html">⚡ 《全班搶答大對決》</a>
+    <a class="portal-link current" href="rewards.html">🐾 目前所在：《萌獸陪伴集點系統》</a>
+  </div>
+
+  <!-- Ambient Top Canopy -->
+  <div class="top-canopy-deco"></div>
+
+  <!-- Top Navigation Header -->
+  <header>
+    <div class="brand-section">
+      <div class="brand-avatar">🌍🐵</div>
+      <div class="brand-title">
+        <h1>
+          世界名勝環球冒險 × 萌獸陪伴集點系統
+          <span class="badge-class">一年級專屬</span>
+        </h1>
+        <p>🏛️ 各國世界名勝背景 + 專屬大眼托腮陪伴萌獸 | 滿 50 點破殼 ➔ 滿 100 點成獸 ➔ 滿 200 點【稀有聖獸】！</p>
+      </div>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-header btn-batch" onclick="openBatchModal()">
+        <span>📢 全班批次加分</span>
+      </button>
+      <button class="btn-header" onclick="openLeaderboardModal()">
+        <span>🏆 世界萌獸榜</span>
+      </button>
+      <button class="btn-header" onclick="openHistoryModal()">
+        <span>📜 加分記錄</span>
+      </button>
+      <button class="btn-header" id="btn-audio-toggle" onclick="toggleAudio()">
+        <span id="audio-icon">👏 拍手音效：開</span>
+      </button>
+      <button class="btn-header" onclick="toggleFullScreen()">
+        <span>🖥️ 大螢幕</span>
+      </button>
+      <button class="btn-header" onclick="openSettingsModal()">
+        <span>⚙️ 資料</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="top-stats-bar">
+      <div class="stats-info">
+        <span class="stat-pill">🎒 學生：<strong>10 位</strong></span>
+        <span class="stat-pill">⭐ 全班總點數：<strong id="total-class-points">0</strong> 點</span>
+        <span class="stat-pill stage-1">🐾 50點破殼萌獸：<strong id="total-baby-count">0</strong> / 10 隻</span>
+        <span class="stat-pill stage-2">🦁 100點成獸：<strong id="total-adult-count">0</strong> / 10 隻</span>
+        <span class="stat-pill stage-3">👑 200點稀有聖獸：<strong id="total-sacred-count">0</strong> / 10 隻</span>
+      </div>
+
+      <div style="font-size:0.88rem; font-weight:800; color:#2e7d32; display:flex; align-items:center; gap:6px;">
+        <span>🏛️ 世界景點背景 + 陪伴動物 👏</span>
+      </div>
+    </div>
+
+    <!-- 10 Students Cards Grid -->
+    <div class="students-grid" id="students-grid"></div>
+  </main>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 1. Evolution Celebration Modal -->
+  <div class="modal-overlay" id="evo-modal">
+    <div class="modal-content evolution-modal-box" id="evo-modal-box">
+      <div class="evo-title" id="evo-main-title">🎉 破 殼 誕 生 ！ 🎉</div>
+      <div style="font-size:1.15rem; font-weight:800; color:#37474f; margin-bottom:12px; line-height:1.6;">
+        恭喜 <strong id="evo-kid-name" style="color:#2e7d32; font-size:1.55rem;">經祐</strong> 的點數突破新里程碑！<br>
+        在 <span id="evo-landmark-name" style="color:#e65100;">法國巴黎・艾菲爾鐵塔</span> 前成功進化：<br>
+        <div style="margin-top:10px;"><span class="evo-badge-name" id="evo-animal-new-title">🐾 破殼幼獸</span></div>
+      </div>
+
+      <div class="evo-stage-art" id="evo-stage-art-box"></div>
+
+      <p style="font-size:0.95rem; color:#424242; margin-bottom: 20px; font-weight:700;" id="evo-lore-text"></p>
+
+      <button class="btn-celebrate-done" onclick="closeEvoModal()">
+        🌟 領取世界進化榮耀！
+      </button>
+    </div>
+  </div>
+
+  <!-- 2. Inspect Modal -->
+  <div class="modal-overlay" id="inspect-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="inspect-title">🐾 世界名勝特寫舞台</h2>
+        <button class="modal-close" onclick="closeInspectModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="inspect-art-wrap" id="inspect-stage-box"></div>
+
+        <div class="inspect-details-grid">
+          <div class="detail-card">
+            <div class="detail-title">小朋友姓名</div>
+            <div class="detail-value" id="inspect-kid-name">--</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">目前累積點數</div>
+            <div class="detail-value" id="inspect-kid-score">0 點</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">世界名勝背景</div>
+            <div class="detail-value" id="inspect-kid-landmark">--</div>
+          </div>
+          <div class="detail-card">
+            <div class="detail-title">陪伴動物與型態</div>
+            <div class="detail-value" id="inspect-kid-tier-desc">--</div>
+          </div>
+        </div>
+
+        <div style="background:#fff9c4; padding:12px; border-radius:14px; margin-bottom:15px; font-size:0.92rem; color:#5d4037; font-weight:700;" id="inspect-kid-quote"></div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3 style="font-size:1rem; font-weight:800; color:#37474f;">📜 最近加分記錄</h3>
+          <span style="font-size:0.75rem; color:#78909c;">最新 5 筆</span>
+        </div>
+        <ul class="history-list" id="inspect-kid-history"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Batch Add Modal -->
+  <div class="modal-overlay" id="batch-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📢 全班批次加分作業</h2>
+        <button class="modal-close" onclick="closeBatchModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.95rem; color:#546e7a; margin-bottom:14px; font-weight:700;">
+          勾選同學並一鍵加上點數，伴隨全班拍手掌聲：
+        </p>
+
+        <div style="display:flex; gap:10px; margin-bottom:14px;">
+          <button class="btn-header" style="background:#43a047; border:none;" onclick="toggleAllStudentsSelection(true)">
+            ✅ 全選 (10人)
+          </button>
+          <button class="btn-header" style="background:#78909c; border:none;" onclick="toggleAllStudentsSelection(false)">
+            ❌ 全不選
+          </button>
+        </div>
+
+        <div id="batch-students-checkboxes" style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-bottom:20px; max-height:200px; overflow-y:auto; padding:8px; border:1px solid #c8e6c9; border-radius:12px;"></div>
+
+        <h3 style="font-size:1rem; font-weight:800; color:#37474f; margin-bottom:10px;">選擇加分項目：</h3>
+        <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px;">
+          <button class="btn-add-pts btn-homework" style="padding:12px 8px;" onclick="applyBatchAdd(5, '功課交齊')">
+            <span class="pts-badge">+5 點</span>
+            <span class="btn-label">功課交齊 👏</span>
+          </button>
+          <button class="btn-add-pts btn-behavior" style="padding:12px 8px;" onclick="applyBatchAdd(5, '課堂優良表現')">
+            <span class="pts-badge">+5 點</span>
+            <span class="btn-label">優良表現 🌟</span>
+          </button>
+          <button class="btn-add-pts btn-behavior" style="padding:12px 8px;background:linear-gradient(135deg,#ff7675,#d63031);" onclick="applyBatchAdd(5, '搶答大對決優勝')">
+            <span class="pts-badge">+5 點</span>
+            <span class="btn-label">搶答優勝 ⚡</span>
+          </button>
+          <button class="btn-add-pts btn-homework" style="padding:12px 8px;background:linear-gradient(135deg,#00cec9,#0984e3);" onclick="applyBatchAdd(5, '生字筆順闖關滿分')">
+            <span class="pts-badge">+5 點</span>
+            <span class="btn-label">筆順滿分 ✍️</span>
+          </button>
+          <button class="btn-add-pts btn-other" style="padding:12px 8px;background:linear-gradient(135deg,#fdcb6e,#e17055);" onclick="applyBatchAdd(5, '3D拼字練習通關')">
+            <span class="pts-badge">+5 點</span>
+            <span class="btn-label">3D拼字通關 🎬</span>
+          </button>
+          <button class="btn-add-pts btn-other" style="padding:12px 8px;" onclick="applyBatchAdd(1, '日常加分')">
+            <span class="pts-badge">+1 點</span>
+            <span class="btn-label">日常加分 👍</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Leaderboard Modal -->
+  <div class="modal-overlay" id="leaderboard-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>🏆 世界名勝萌獸榮譽榜</h2>
+        <button class="modal-close" onclick="closeLeaderboardModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:0.85rem; color:#78909c; margin-bottom:14px; text-align:center; font-weight:700;">
+          🥚 0~49點 生命蛋 ➔ 🐾 50點 破殼托腮陪伴萌獸 ➔ 🦁 100點 成獸 ➔ 👑 200點 稀有聖獸！
+        </p>
+        <ul class="leaderboard-list" id="leaderboard-container"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. History Log Modal -->
+  <div class="modal-overlay" id="history-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>📜 全班加分歷史日誌</h2>
+        <button class="modal-close" onclick="closeHistoryModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span style="font-size:0.85rem; color:#78909c; font-weight:700;" id="history-count-text">共 0 筆記錄</span>
+          <button class="btn-mini-adjust" onclick="clearAllHistory()">🗑️ 清空日誌</button>
+        </div>
+        <ul class="history-list" id="full-history-list" style="max-height: 400px;"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Settings Modal -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>⚙️ 系統設定與資料備份</h2>
+        <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="background:#e8f5e9; padding:14px; border-radius:14px; border:1px solid #c8e6c9;">
+            <h4 style="color:#1b5e20; margin-bottom:6px;">💾 資料本機自動儲存</h4>
+            <p style="font-size:0.85rem; color:#388e3c;">
+              點數、蛋與真實動物進化形態即時保存在瀏覽器中，關閉或重新整理網頁資料都不會遺失。
+            </p>
+          </div>
+
+          <div style="display:flex; gap:10px;">
+            <button class="btn-header" style="flex:1; background:#0288d1; border:none; justify-content:center;" onclick="exportDataJSON()">
+              📤 匯出備份檔案 (JSON)
+            </button>
+            <button class="btn-header" style="flex:1; background:#00897b; border:none; justify-content:center;" onclick="document.getElementById('import-file-input').click()">
+              📥 匯入資料備份
+            </button>
+            <input type="file" id="import-file-input" style="display:none;" accept=".json" onchange="importDataJSON(event)">
+          </div>
+
+          <hr style="border:none; border-top:1px solid #cfd8dc;">
+
+          <div style="background:#ffebee; padding:14px; border-radius:14px; border:1px solid #ffcdd2;">
+            <h4 style="color:#c62828; margin-bottom:6px;">⚠️ 重新開局 / 重設點數</h4>
+            <p style="font-size:0.85rem; color:#b71c1c; margin-bottom:10px;">
+              新學期或新週次需要將所有人點數重設回生命之蛋時使用。
+            </p>
+            <button class="btn-header" style="background:#d32f2f; border:none;" onclick="confirmResetAllPoints()">
+              🔄 重設全班點數為 0
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC & WORLD SCENERY + CARTOON ANIMAL SYSTEM ================= -->
+  <script>
+    /* =========================================================
+       1. STUDENTS: WORLD LANDMARK BACKGROUND + COMPANION ANIMAL
+       ========================================================= */
+    const STUDENTS_CONFIG = [
+      {
+        id: 's1',
+        name: '經祐',
+        landmark: '🇫🇷 法國巴黎・艾菲爾鐵塔',
+        landmarkShort: '巴黎艾菲爾鐵塔',
+        landmarkId: 'eiffel',
+        photoUrl: 'https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '非洲金獅 🦁',
+        motherName: '金獅媽媽',
+        animalType: 'lion',
+        stages: {
+          0: { title: '🥚 金獅媽媽守護蛋', desc: '【0~49點】金獅媽媽在艾菲爾鐵塔下寸步不離、溫柔守護著小金獅蛋，滿50點破殼而出！' },
+          1: { title: '🐾 托腮小金獅', desc: '【滿50點破殼】托著毛茸腮幫、大眼睛笑開懷的可愛小獅寶！' },
+          2: { title: '🦁 雄武金獅・成獸', desc: '【滿100點成獸】鬃毛茂密如金色烈焰，威風凜凜的巴黎守護獅' },
+          3: { title: '👑 太陽神威・聖光天馬獅', desc: '【滿200點稀有聖獸】天界雙翼展翅，散發金色聖輝的稀有聖獸！' }
+        },
+        quote: '「功課交齊、踏實勇敢，我就能成長為守護全班的王者金獅！」'
+      },
+      {
+        id: 's2',
+        name: '東旭',
+        landmark: '🇯🇵 日本・富士山櫻花',
+        landmarkShort: '富士山櫻花',
+        landmarkId: 'fuji',
+        photoUrl: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '日本赤柴犬 🐕',
+        motherName: '柴犬媽媽',
+        animalType: 'shiba',
+        stages: {
+          0: { title: '🥚 柴犬媽媽守護蛋', desc: '【0~49點】富士山櫻花樹下，柴犬媽媽趴臥在旁寸步不離地溫柔守護，滿50點破殼而出！' },
+          1: { title: '🐾 托腮萌小柴', desc: '【滿50點破殼】水汪汪大眼睛、雙爪托著肉嘟嘟小臉的柴犬寶寶！' },
+          2: { title: '🐕 靈敏赤柴・成獸', desc: '【滿100點成獸】肌肉健美、眼神專注聰穎的成獸赤柴犬' },
+          3: { title: '👑 天照之靈・八咫神柴', desc: '【滿200點稀有聖獸】身負九天神環與御神靈火的稀有聖獸！' }
+        },
+        quote: '「汪汪！今天也要充滿朝氣，做最棒的自己！」'
+      },
+      {
+        id: 's3',
+        name: '羽翔',
+        landmark: '🇪🇬 埃及・吉薩金字塔',
+        landmarkShort: '吉薩金字塔',
+        landmarkId: 'pyramids',
+        photoUrl: 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '金斑梅花鹿 🦌',
+        motherName: '仙鹿媽媽',
+        animalType: 'deer',
+        stages: {
+          0: { title: '🥚 仙鹿媽媽守護蛋', desc: '【0~49點】金字塔晨曦中，梅花鹿媽媽低頭輕撫著金色鹿蛋，滿50點破殼而出！' },
+          1: { title: '🐾 托腮精靈小鹿', desc: '【滿50點破殼】純真靈動大眼、背上有斑紋、托腮甜笑的精靈鹿！' },
+          2: { title: '🦌 傲角神鹿・成獸', desc: '【滿100點成獸】頭頂枝狀華美巨角、姿態優雅高貴的成獸靈鹿' },
+          3: { title: '👑 法老聖息・九色神鹿', desc: '【滿200點稀有聖獸】踏雲踏風、七彩九色仙光環繞的稀有聖鹿！' }
+        },
+        quote: '「細心寫字與安靜思考，心靈就會如水晶般清澈。」'
+      },
+      {
+        id: 's4',
+        name: '奕紘',
+        landmark: '🇬🇧 英國倫敦・大笨鐘',
+        landmarkShort: '倫敦大笨鐘',
+        landmarkId: 'bigben',
+        photoUrl: 'https://images.unsplash.com/photo-1529655683826-aba9b3e77383?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '帝王企鵝 🐧',
+        motherName: '企鵝媽媽',
+        animalType: 'penguin',
+        stages: {
+          0: { title: '🥚 企鵝媽媽守護蛋', desc: '【0~49點】倫敦大笨鐘下，帝王企鵝媽媽展翅溫暖呵護著企鵝蛋，滿50點破殼而出！' },
+          1: { title: '🐾 托腮波波企鵝', desc: '【滿50點破殼】黑白燕尾、圓滾肚皮、用小短翅托腮的呆萌小企鵝！' },
+          2: { title: '🐧 帝王企鵝・成獸', desc: '【滿100點成獸】黑白羽毛油亮、胸前金黃高貴的成熟帝王企鵝' },
+          3: { title: '👑 極地永凍・冰晶聖王企鵝', desc: '【滿200點稀有聖獸】頭戴永恆冰冠、極光光羽流動的稀有聖王！' }
+        },
+        quote: '「像大笨鐘一樣準時認真，每一天都是大進步！」'
+      },
+      {
+        id: 's5',
+        name: '則嶧',
+        landmark: '🇺🇸 美國紐約・自由女神像',
+        landmarkShort: '紐約自由女神',
+        landmarkId: 'liberty',
+        photoUrl: 'https://images.unsplash.com/photo-1605130284535-11dd9eedc58a?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '北美棕熊 🐻',
+        motherName: '棕熊媽媽',
+        animalType: 'bear',
+        stages: {
+          0: { title: '🥚 棕熊媽媽守護蛋', desc: '【0~49點】自由女神像基座旁，厚實溫暖的棕熊媽媽臂彎環抱著小熊蛋，滿50點破殼而出！' },
+          1: { title: '🐾 托腮蜜糖小萌熊', desc: '【滿50點破殼】圓圓毛耳朵、托著大肉臉開懷笑著的小棕熊！' },
+          2: { title: '🐻 魁梧灰熊・成獸', desc: '【滿100點成獸】體型威猛厚實、臂膀孔武有力的成年大棕熊' },
+          3: { title: '👑 萬神守護・大地聖靈巨熊', desc: '【滿200點稀有聖獸】大地符文星鎧、神聖力量無可撼動的稀有聖熊！' }
+        },
+        quote: '「幫助同學是我的超能力，我是全班最暖心的依靠！」'
+      },
+      {
+        id: 's6',
+        name: '又炘',
+        landmark: '🇦🇺 澳洲雪梨・歌劇院',
+        landmarkShort: '雪梨歌劇院',
+        landmarkId: 'sydney',
+        photoUrl: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '野生赤狐 🦊',
+        motherName: '赤狐媽媽',
+        animalType: 'fox',
+        stages: {
+          0: { title: '🥚 赤狐媽媽守護蛋', desc: '【0~49點】雪梨歌劇院海風中，赤狐媽媽用蓬鬆毛茸的大尾巴像毯子般裹護著小狐蛋，滿50點破殼！' },
+          1: { title: '🐾 托腮小赤狐', desc: '【滿50點破殼】大尖耳朵、蓬鬆大尾巴、大眼睛忽閃忽閃的小狐狸！' },
+          2: { title: '🦊 敏捷赤狐・成獸', desc: '【滿100點成獸】毛色亮麗如火、身手矯健靈巧的成獸赤狐' },
+          3: { title: '👑 九天玄火・九尾仙皇狐', desc: '【滿200點稀有聖獸】九尾流金天火、仙氣飄逸祥和的稀有聖獸！' }
+        },
+        quote: '「動動腦筋思考，所有的問題都能迎刃而解！」'
+      },
+      {
+        id: 's7',
+        name: '勝智',
+        landmark: '🇨🇳 中國・萬里長城',
+        landmarkShort: '萬里長城',
+        landmarkId: 'greatwall',
+        photoUrl: 'https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '國寶大熊貓 🐼',
+        motherName: '熊貓媽媽',
+        animalType: 'panda',
+        stages: {
+          0: { title: '🥚 熊貓媽媽守護蛋', desc: '【0~49點】萬里長城翠竹間，熊貓媽媽拿著嫩竹枝、慈愛看護著熊貓靈蛋，滿50點破殼！' },
+          1: { title: '🐾 托腮小熊貓', desc: '【滿50點破殼】黑眼圈大萌眼、肉嘟嘟爪爪托腮笑瞇瞇的熊貓幼崽！' },
+          2: { title: '🐼 功夫巨擘熊貓・成獸', desc: '【滿100點成獸】身軀敦實有力、沉穩大氣的成熟大熊貓' },
+          3: { title: '👑 陰陽無極・降龍聖熊貓', desc: '【滿200點稀有聖獸】太極神環環繞、通曉乾坤奧義的稀有聖獸！' }
+        },
+        quote: '「功夫不負有心人，天天認真練習就是我的絕招！」'
+      },
+      {
+        id: 's8',
+        name: '翌銓',
+        landmark: '🇮🇹 義大利羅馬・競技場',
+        landmarkShort: '羅馬競技場',
+        landmarkId: 'colosseum',
+        photoUrl: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '歐洲雪兔 🐰',
+        motherName: '雪兔媽媽',
+        animalType: 'bunny',
+        stages: {
+          0: { title: '🥚 雪兔媽媽守護蛋', desc: '【0~49點】羅馬競技場古柱下，純白長耳的雪兔媽媽雙爪暖心護著雪兔蛋，滿50點破殼！' },
+          1: { title: '🐾 托腮垂耳雪兔', desc: '【滿50點破殼】長長大耳朵、紅寶石透亮大眼、托腮甜笑的兔寶寶！' },
+          2: { title: '🐰 疾馳雪兔・成獸', desc: '【滿100點成獸】四肢矯健迅捷、雪白皮毛如絲緞的成獸白兔' },
+          3: { title: '👑 月宮帝皇・瑤池月影仙聖兔', desc: '【滿200點稀有聖獸】仙宮羽翼展翅、月光光暈伴隨的稀有聖兔！' }
+        },
+        quote: '「蹦蹦跳跳向前進，每天都有進步的好心情！」'
+      },
+      {
+        id: 's9',
+        name: '銪芳',
+        landmark: '🇬🇷 希臘・聖托里尼藍頂教堂',
+        landmarkShort: '聖托里尼教堂',
+        landmarkId: 'santorini',
+        photoUrl: 'https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '地中海花豹貓 🐱',
+        motherName: '豹貓媽媽',
+        animalType: 'cat',
+        stages: {
+          0: { title: '🥚 豹貓媽媽守護蛋', desc: '【0~49點】聖托里尼藍頂教堂前，優雅的花豹貓媽媽尾巴圈護著幸運萌蛋，滿50點破殼！' },
+          1: { title: '🐾 托腮小豹貓', desc: '【滿50點破殼】碧綠大眼睛、長長尾巴、雙爪捧臉喵喵叫的小萌貓！' },
+          2: { title: '🐱 靈敏獵豹・成獸', desc: '【滿100點成獸】肌肉線條流暢優雅、步履輕盈無聲的成熟靈貓' },
+          3: { title: '👑 愛琴海女神・天界招福聖貓', desc: '【滿200點稀有聖獸】展開天使金羽、散發奇蹟光塵的稀有聖獸！' }
+        },
+        quote: '「用心做好每一件小事，世界就會變得閃閃發光！」'
+      },
+      {
+        id: 's10',
+        name: '芷嫻',
+        landmark: '🇮🇳 印度・泰姬瑪哈陵',
+        landmarkShort: '泰姬瑪哈陵',
+        landmarkId: 'tajmahal',
+        photoUrl: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?auto=format&fit=crop&w=800&q=80',
+        realAnimal: '環尾萌狐猴 🐵', // Exactly the character from the user's reference image!
+        motherName: '狐猴媽媽',
+        animalType: 'lemur',
+        stages: {
+          0: { title: '🥚 狐猴媽媽守護蛋', desc: '【0~49點】泰姬瑪哈陵倒影旁，環尾狐猴媽媽用黑白環紋大尾巴溫柔護著小精靈蛋，滿50點破殼！' },
+          1: { title: '🐾 托腮萌狐猴', desc: '【滿50點破殼】完全如圖！水汪汪大綠眼、雙爪托腮甜笑的環尾狐猴！' },
+          2: { title: '🐵 敏捷狐猴・成獸', desc: '【滿100點成獸】黑白環紋大長尾、身姿輕盈敏捷的成獸狐猴' },
+          3: { title: '👑 梵天至高・九天星輝聖狐猴', desc: '【滿200點稀有聖獸】天界彩虹神翼、踏星踏霞的稀有天馬神聖獸！' }
+        },
+        quote: '「雙手托腮甜甜笑，今天也要做最棒最快樂的好孩子！」'
+      }
+    ];
+
+    const STORAGE_KEY = 'magic_world_companion_students_v7';
+    const HISTORY_KEY = 'magic_world_companion_history_v7';
+
+    let studentsData = {};
+    let historyLogs = [];
+    let audioEnabled = true;
+
+    /* =========================================================
+       2. STAGE CALCULATIONS (Egg -> Baby -> Adult -> Sacred)
+       ========================================================= */
+    function getStage(points) {
+      if (points >= 200) return 3; // 滿200點為稀有聖獸
+      if (points >= 100) return 2; // 滿100點為成獸
+      if (points >= 50)  return 1; // 滿50點破殼幼獸
+      return 0;                    // 0~49點 生命蛋
+    }
+
+    function initData() {
+      let stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) {
+        // Try migrating from v6 or v5
+        const oldData = localStorage.getItem('magic_world_companion_students_v6') || localStorage.getItem('magic_world_companion_students_v5');
+        if (oldData) stored = oldData;
+      }
+
+      if (stored) {
+        try {
+          studentsData = JSON.parse(stored);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      STUDENTS_CONFIG.forEach(cfg => {
+        if (!studentsData[cfg.id]) {
+          studentsData[cfg.id] = {
+            id: cfg.id,
+            points: 0,
+            stage: 0,
+            history: []
+          };
+        } else {
+          studentsData[cfg.id].stage = getStage(studentsData[cfg.id].points);
+        }
+      });
+
+      let storedHist = localStorage.getItem(HISTORY_KEY);
+      if (!storedHist) {
+        const oldHist = localStorage.getItem('magic_world_companion_history_v6') || localStorage.getItem('magic_world_companion_history_v5');
+        if (oldHist) storedHist = oldHist;
+      }
+
+      if (storedHist) {
+        try {
+          historyLogs = JSON.parse(storedHist);
+        } catch (e) {
+          console.error(e);
+        }
+      }
+
+      saveData();
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(studentsData));
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(historyLogs));
+      updateClassStats();
+    }
+
+    /* =========================================================
+       3. REALISTIC CLAPPING APPLAUSE SYNTHESIZER
+       ========================================================= */
+    class AudioSynthesizer {
+      constructor() {
+        this.ctx = null;
+      }
+
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      }
+
+      playApplause(isLong = false) {
+        if (!audioEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+
+        const now = this.ctx.currentTime;
+        const clapDuration = isLong ? 2.3 : 1.25;
+        const totalClaps = isLong ? 48 : 25;
+
+        for (let i = 0; i < totalClaps; i++) {
+          const clapTime = now + (Math.random() * (clapDuration - 0.2));
+          const bufferSize = Math.floor(this.ctx.sampleRate * 0.035);
+          const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+          const data = buffer.getChannelData(0);
+
+          for (let j = 0; j < bufferSize; j++) {
+            data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.26));
+          }
+
+          const noise = this.ctx.createBufferSource();
+          noise.buffer = buffer;
+
+          const filter = this.ctx.createBiquadFilter();
+          filter.type = 'bandpass';
+          filter.frequency.value = 950 + Math.random() * 600;
+          filter.Q.value = 2.8;
+
+          const gain = this.ctx.createGain();
+          const volume = (0.3 + Math.random() * 0.25) * (1 - (clapTime - now) / clapDuration);
+          gain.gain.setValueAtTime(volume, clapTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, clapTime + 0.035);
+
+          noise.connect(filter);
+          filter.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          noise.start(clapTime);
+        }
+
+        const chimes = isLong ? [523.25, 659.25, 783.99, 1046.50] : [783.99, 1046.50];
+        chimes.forEach((freq, idx) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const chimeTime = now + idx * 0.08;
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(freq, chimeTime);
+          gain.gain.setValueAtTime(0.18, chimeTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, chimeTime + 0.25);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(chimeTime);
+          osc.stop(chimeTime + 0.26);
+        });
+      }
+
+      playMinus() {
+        if (!audioEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(160, now + 0.15);
+        gain.gain.setValueAtTime(0.15, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.16);
+      }
+
+      playEpicFanfare(isSacred = false) {
+        if (!audioEnabled) return;
+        this.init();
+        if (!this.ctx) return;
+        this.playApplause(true);
+
+        const now = this.ctx.currentTime;
+        const notes = isSacred ? [
+          { f: 523.25, t: 0.0, d: 0.2 },
+          { f: 659.25, t: 0.2, d: 0.2 },
+          { f: 783.99, t: 0.4, d: 0.3 },
+          { f: 1046.5, t: 0.7, d: 0.5 },
+          { f: 1318.5, t: 1.2, d: 0.8 }
+        ] : [
+          { f: 523.25, t: 0.0, d: 0.16 },
+          { f: 659.25, t: 0.18, d: 0.16 },
+          { f: 783.99, t: 0.36, d: 0.35 },
+          { f: 1046.5, t: 0.72, d: 0.6 }
+        ];
+
+        notes.forEach(n => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          const st = now + n.t;
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(n.f, st);
+          gain.gain.setValueAtTime(0.22, st);
+          gain.gain.exponentialRampToValueAtTime(0.001, st + n.d);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(st);
+          osc.stop(st + n.d + 0.05);
+        });
+      }
+    }
+
+    const sound = new AudioSynthesizer();
+
+    /* =========================================================
+       4. POINT ACTIONS
+       ========================================================= */
+    function addPoints(studentId, pts, reason) {
+      const student = studentsData[studentId];
+      if (!student) return;
+
+      const cfg = STUDENTS_CONFIG.find(c => c.id === studentId);
+      const oldPts = student.points;
+      const oldStage = getStage(oldPts);
+
+      student.points = Math.max(0, student.points + pts);
+      const newStage = getStage(student.points);
+      student.stage = newStage;
+
+      // Clapping sound
+      if (pts >= 5) {
+        sound.playApplause(true);
+      } else {
+        sound.playApplause(false);
+      }
+
+      const timeStr = new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' });
+      const record = {
+        kidId: studentId,
+        kidName: cfg.name,
+        pts: pts,
+        reason: reason,
+        time: timeStr,
+        totalNow: student.points
+      };
+
+      student.history.unshift(record);
+      if (student.history.length > 20) student.history.pop();
+      historyLogs.unshift(record);
+      if (historyLogs.length > 100) historyLogs.pop();
+
+      showToast(`👏 ${cfg.name} ${reason} +${pts} 點！(目前 ${student.points} 點)`);
+
+      // Trigger happy jump animation
+      const charEl = document.getElementById(`char-anim-${studentId}`);
+      if (charEl) {
+        charEl.classList.remove('jump-anim');
+        void charEl.offsetWidth;
+        charEl.classList.add('jump-anim');
+      }
+
+      if (newStage > oldStage) {
+        triggerEvolution(studentId, newStage);
+      }
+
+      saveData();
+      renderCards();
+    }
+
+    function minusPoint(studentId) {
+      const student = studentsData[studentId];
+      if (!student || student.points <= 0) return;
+      student.points -= 1;
+      student.stage = getStage(student.points);
+      sound.playMinus();
+      const cfg = STUDENTS_CONFIG.find(c => c.id === studentId);
+      showToast(`↩️ 已為 ${cfg.name} 微調 -1 點 (目前 ${student.points} 點)`);
+      saveData();
+      renderCards();
+    }
+
+    function triggerEvolution(studentId, newStage) {
+      const student = studentsData[studentId];
+      const cfg = STUDENTS_CONFIG.find(c => c.id === studentId);
+      const isSacred = (newStage === 3);
+
+      historyLogs.unshift({
+        kidId: studentId,
+        kidName: cfg.name,
+        pts: 0,
+        isEvo: true,
+        isSacred: isSacred,
+        reason: isSacred 
+          ? `👑 突破 200 點！覺醒為稀有聖獸【${cfg.stages[3].title}】` 
+          : (newStage === 2 
+              ? `🦁 突破 100 點！成長為威武成獸【${cfg.stages[2].title}】` 
+              : `🐣 突破 50 點！生命之蛋破殼誕生為【${cfg.stages[1].title}】`),
+        time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' }),
+        totalNow: student.points
+      });
+
+      if (window.confetti) {
+        confetti({
+          particleCount: isSacred ? 200 : 120,
+          spread: isSacred ? 100 : 75,
+          origin: { y: 0.6 }
+        });
+      }
+
+      sound.playEpicFanfare(isSacred);
+      openEvoModal(cfg, newStage);
+    }
+
+    /* =========================================================
+       5. WORLD LANDMARK BACKGROUND ILLUSTRATIONS (VIBRANT ART)
+       ========================================================= */
+    function getWorldLandmarkSVG(landmarkId) {
+      switch(landmarkId) {
+        case 'eiffel': // 🇫🇷 法國巴黎艾菲爾鐵塔
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-eiffel" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#e1f5fe"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-eiffel)"/>
+              <path d="M 40,50 Q 60,35 90,40 Q 110,35 125,50 Q 115,70 80,65 Z" fill="#ffffff" opacity="0.7"/>
+              <path d="M 180,60 Q 210,40 240,48 Q 260,65 220,70 Z" fill="#ffffff" opacity="0.6"/>
+              <!-- Green Champ de Mars Park -->
+              <rect y="150" width="300" height="50" fill="#43a047"/>
+              <ellipse cx="150" cy="155" rx="140" ry="25" fill="#66bb6a"/>
+              <!-- Eiffel Tower Silhouette -->
+              <g fill="#5d4037" opacity="0.85">
+                <polygon points="146,15 154,15 156,70 144,70"/>
+                <polygon points="142,70 158,70 168,125 132,125"/>
+                <polygon points="130,125 170,125 185,165 170,165 160,135 140,135 130,165 115,165"/>
+                <path d="M 135,165 Q 150,140 165,165 Z" fill="#66bb6a"/>
+                <line x1="150" y1="15" x2="150" y2="5" stroke="#5d4037" stroke-width="2.5"/>
+              </g>
+              <!-- Trees -->
+              <circle cx="50" cy="155" r="18" fill="#2e7d32"/>
+              <circle cx="250" cy="155" r="18" fill="#2e7d32"/>
+            </svg>
+          `;
+
+        case 'fuji': // 🇯🇵 日本富士山櫻花
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-fuji" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#81d4fa"/><stop offset="100%" stop-color="#fff3e0"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-fuji)"/>
+              <!-- Mt. Fuji Volcano -->
+              <polygon points="150,45 60,165 240,165" fill="#3949ab"/>
+              <!-- Snow cap -->
+              <polygon points="150,45 120,85 132,80 140,92 150,82 160,92 168,80 180,85" fill="#ffffff"/>
+              <!-- Green Hills -->
+              <ellipse cx="60" cy="175" rx="90" ry="35" fill="#388e3c"/>
+              <ellipse cx="230" cy="175" rx="100" ry="35" fill="#2e7d32"/>
+              <!-- Cherry Blossom Trees (Sakura) -->
+              <circle cx="35" cy="125" r="28" fill="#f48fb1"/>
+              <circle cx="65" cy="135" r="22" fill="#f06292"/>
+              <circle cx="265" cy="120" r="30" fill="#f48fb1"/>
+            </svg>
+          `;
+
+        case 'pyramids': // 🇪🇬 埃及吉薩金字塔
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-pyr" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#ffb74d"/><stop offset="100%" stop-color="#ffe082"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-pyr)"/>
+              <circle cx="70" cy="60" r="24" fill="#ffffff" opacity="0.9"/>
+              <!-- Desert Dunes -->
+              <polygon points="120,70 40,165 200,165" fill="#d7a15c"/>
+              <polygon points="120,70 145,165 200,165" fill="#b07d3b"/>
+              <!-- Small Pyramid -->
+              <polygon points="215,95 160,165 270,165" fill="#e0a96d"/>
+              <polygon points="215,95 235,165 270,165" fill="#b07d3b"/>
+              <!-- Golden Sand Ground -->
+              <ellipse cx="150" cy="180" rx="180" ry="35" fill="#f5c276"/>
+            </svg>
+          `;
+
+        case 'bigben': // 🇬🇧 英國倫敦大笨鐘
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-ben" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#64b5f6"/><stop offset="100%" stop-color="#e3f2fd"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-ben)"/>
+              <!-- Thames River & Bank -->
+              <rect y="160" width="300" height="40" fill="#29b6f6"/>
+              <rect y="150" width="300" height="15" fill="#78909c"/>
+              <!-- Big Ben Tower -->
+              <g fill="#b0bec5">
+                <rect x="180" y="55" width="45" height="100"/>
+                <rect x="176" y="50" width="53" height="10" fill="#cfd8dc"/>
+                <!-- Clock Face -->
+                <circle cx="202.5" cy="75" r="14" fill="#fff9c4" stroke="#546e7a" stroke-width="2"/>
+                <!-- Spire -->
+                <polygon points="202.5,15 182,50 223,50" fill="#37474f"/>
+              </g>
+              <!-- Westminster bridge arches -->
+              <ellipse cx="80" cy="165" rx="35" ry="12" fill="#cfd8dc"/>
+              <ellipse cx="140" cy="165" rx="35" ry="12" fill="#cfd8dc"/>
+            </svg>
+          `;
+
+        case 'liberty': // 🇺🇸 美國紐約自由女神像
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-lib" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#e0f7fa"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-lib)"/>
+              <!-- Blue Harbour Water -->
+              <rect y="155" width="300" height="45" fill="#0288d1"/>
+              <!-- Pedestal & Statue -->
+              <g fill="#78909c">
+                <rect x="50" y="125" width="55" height="35"/>
+                <polygon points="77.5,60 65,125 90,125" fill="#4db6ac"/>
+                <circle cx="77.5" cy="52" r="10" fill="#4db6ac"/>
+                <!-- Crown Spikes -->
+                <polygon points="77.5,38 72,48 83,48" fill="#4db6ac"/>
+                <!-- Torch -->
+                <line x1="88" y1="65" x2="100" y2="38" stroke="#4db6ac" stroke-width="3"/>
+                <circle cx="100" cy="36" r="6" fill="#ffd54f"/>
+              </g>
+              <!-- Manhattan Skyline Silhouette in Background -->
+              <rect x="150" y="115" width="18" height="45" fill="#90a4ae" opacity="0.6"/>
+              <rect x="175" y="95" width="22" height="65" fill="#78909c" opacity="0.6"/>
+              <polygon points="186,75 178,95 194,95" fill="#78909c" opacity="0.6"/>
+              <rect x="205" y="110" width="20" height="50" fill="#90a4ae" opacity="0.6"/>
+            </svg>
+          `;
+
+        case 'sydney': // 🇦🇺 澳洲雪梨歌劇院
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-syd" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#29b6f6"/><stop offset="100%" stop-color="#e1f5fe"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-syd)"/>
+              <rect y="150" width="300" height="50" fill="#0277bd"/>
+              <!-- Harbour Podium -->
+              <rect x="70" y="145" width="160" height="15" fill="#37474f"/>
+              <!-- Overlapping White Shells of Opera House -->
+              <path d="M 90,145 C 95,90 140,85 145,145 Z" fill="#ffffff"/>
+              <path d="M 125,145 C 130,105 170,100 175,145 Z" fill="#f5f5f5"/>
+              <path d="M 155,145 C 160,115 195,110 200,145 Z" fill="#ffffff"/>
+              <!-- Sydney Harbour Bridge Arch in background -->
+              <path d="M -10,150 Q 50,70 110,150" stroke="#546e7a" stroke-width="6" fill="none" opacity="0.5"/>
+            </svg>
+          `;
+
+        case 'greatwall': // 🇨🇳 中國萬里長城
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-gw" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#64b5f6"/><stop offset="100%" stop-color="#e8f5e9"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-gw)"/>
+              <!-- Rolling Green Mountain Ridges -->
+              <polygon points="-10,140 70,85 160,135 240,80 310,120 310,200 -10,200" fill="#43a047"/>
+              <polygon points="30,150 120,105 210,145 310,100 310,200 -10,200" fill="#2e7d32"/>
+              <!-- Great Wall Rampart winding across mountains -->
+              <path d="M 20,145 Q 80,110 140,125 T 280,100" stroke="#8d6e63" stroke-width="14" fill="none"/>
+              <path d="M 20,140 Q 80,105 140,120 T 280,95" stroke="#a1887f" stroke-width="3" fill="none"/>
+              <!-- Watchtower -->
+              <rect x="130" y="105" width="28" height="28" fill="#8d6e63"/>
+              <polygon points="126,105 144,95 162,105" fill="#5d4037"/>
+            </svg>
+          `;
+
+        case 'colosseum': // 🇮🇹 義大利羅馬競技場
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-col" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#4fc3f7"/><stop offset="100%" stop-color="#fff8e1"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-col)"/>
+              <circle cx="240" cy="50" r="22" fill="#ffd54f" opacity="0.85"/>
+              <rect y="155" width="300" height="45" fill="#81c784"/>
+              <!-- Colosseum Facade with Roman Arches -->
+              <g fill="#d7ccc8">
+                <rect x="50" y="85" width="200" height="75" rx="10"/>
+                <!-- Outer ruined sloped wall -->
+                <polygon points="50,85 70,60 170,60 180,85" fill="#bcaaa4"/>
+                <!-- Arches row 1 -->
+                <circle cx="75" cy="115" r="7" fill="#5d4037"/>
+                <circle cx="105" cy="115" r="7" fill="#5d4037"/>
+                <circle cx="135" cy="115" r="7" fill="#5d4037"/>
+                <circle cx="165" cy="115" r="7" fill="#5d4037"/>
+                <circle cx="195" cy="115" r="7" fill="#5d4037"/>
+                <circle cx="225" cy="115" r="7" fill="#5d4037"/>
+                <!-- Arches row 2 -->
+                <circle cx="90" cy="140" r="7" fill="#5d4037"/>
+                <circle cx="120" cy="140" r="7" fill="#5d4037"/>
+                <circle cx="150" cy="140" r="7" fill="#5d4037"/>
+                <circle cx="180" cy="140" r="7" fill="#5d4037"/>
+                <circle cx="210" cy="140" r="7" fill="#5d4037"/>
+              </g>
+            </svg>
+          `;
+
+        case 'santorini': // 🇬🇷 希臘聖托里尼藍頂教堂
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-san" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#039be5"/><stop offset="100%" stop-color="#b3e5fc"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-san)"/>
+              <!-- Aegean Deep Blue Sea -->
+              <rect y="125" width="300" height="75" fill="#01579b"/>
+              <!-- Volcanic Cliff -->
+              <polygon points="-10,135 120,130 180,200 -10,200" fill="#5d4037"/>
+              <!-- Whitewashed Cycladic Church with Cobalt Blue Dome -->
+              <rect x="130" y="90" width="105" height="75" fill="#ffffff"/>
+              <ellipse cx="182.5" cy="90" rx="42" ry="32" fill="#0288d1"/>
+              <!-- White Bell Tower -->
+              <rect x="75" y="95" width="38" height="55" fill="#ffffff"/>
+              <polygon points="70,95 94,75 118,95" fill="#ffffff"/>
+              <circle cx="94" cy="115" r="6" fill="#0288d1"/>
+            </svg>
+          `;
+
+        case 'tajmahal': // 🇮🇹 印度泰姬瑪哈陵
+        default:
+          return `
+            <svg class="landmark-bg-svg" viewBox="0 0 300 200" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="sky-taj" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#81d4fa"/><stop offset="100%" stop-color="#fff9c4"/>
+                </linearGradient>
+              </defs>
+              <rect width="300" height="200" fill="url(#sky-taj)"/>
+              <!-- Reflecting Pool Garden -->
+              <rect y="150" width="300" height="50" fill="#43a047"/>
+              <rect x="115" y="150" width="70" height="50" fill="#4fc3f7"/>
+              <!-- White Marble Taj Mahal -->
+              <g fill="#ffffff">
+                <rect x="90" y="85" width="120" height="65" rx="4"/>
+                <!-- Central Arch -->
+                <path d="M 125,150 L 125,115 Q 150,98 175,115 L 175,150 Z" fill="#cfd8dc"/>
+                <!-- Iconic Onion Dome -->
+                <path d="M 120,85 C 120,40 150,30 150,22 C 150,30 180,40 180,85 Z" fill="#ffffff"/>
+                <!-- Corner Minarets -->
+                <rect x="65" y="55" width="10" height="95"/>
+                <rect x="225" y="55" width="10" height="95"/>
+                <polygon points="62,55 70,45 78,55" fill="#ffffff"/>
+                <polygon points="222,55 230,45 238,55" fill="#ffffff"/>
+              </g>
+            </svg>
+          `;
+      }
+    }
+
+    /* =========================================================
+       5.5 LANDMARK BACKGROUND GENERATOR: REAL PHOTO + SVG FALLBACK
+       ========================================================= */
+    function getLandmarkBackgroundHTML(cfg) {
+      return `
+        <div class="landmark-photo-wrap">
+          <img class="landmark-photo-img" 
+               src="${cfg.photoUrl}" 
+               alt="${cfg.landmark}" 
+               loading="lazy" 
+               onerror="this.style.opacity='0'; this.nextElementSibling.style.opacity='1';">
+          <div class="landmark-photo-fallback">
+            ${getWorldLandmarkSVG(cfg.landmarkId)}
+          </div>
+          <div class="landmark-photo-overlay"></div>
+        </div>
+      `;
+    }
+
+    /* =========================================================
+       5.6 PROTECTIVE ANIMAL MOTHER + EGG SYSTEM (Stage 0: 0-49 pts)
+           (Beside the egg, a loving mother animal protects it!)
+       ========================================================= */
+    function getGuardingMotherAndEggSVG(cfg) {
+      let motherFigureSVG = '';
+
+      switch (cfg.animalType) {
+        case 'lion': // 經祐：金獅媽媽
+          motherFigureSVG = `
+            <!-- Mother Lion Body -->
+            <ellipse cx="64" cy="112" rx="30" ry="24" fill="#ffa726"/>
+            <path d="M 68,95 Q 82,108 74,126 Z" fill="#fff3e0"/>
+            <circle cx="68" cy="74" r="23" fill="#ffa726"/>
+            <circle cx="48" cy="56" r="8" fill="#ffa726"/><circle cx="48" cy="56" r="5" fill="#ffe082"/>
+            <circle cx="86" cy="56" r="8" fill="#ffa726"/><circle cx="86" cy="56" r="5" fill="#ffe082"/>
+            <ellipse cx="76" cy="82" rx="10" ry="8" fill="#fff3e0"/>
+            <polygon points="73,79 79,79 76,83" fill="#e65100"/>
+            <path d="M 58,72 Q 63,67 68,72" stroke="#4e342e" stroke-width="2.5" fill="none"/>
+            <path d="M 74,72 Q 79,67 84,72" stroke="#4e342e" stroke-width="2.5" fill="none"/>
+            <path d="M 73,87 Q 76,90 80,87" stroke="#4e342e" stroke-width="2" fill="none"/>
+            <path d="M 78,114 Q 102,110 118,120 Q 102,126 78,122 Z" fill="#ffa726"/>
+            <ellipse cx="118" cy="120" rx="8" ry="6" fill="#fff3e0"/>
+            <path d="M 36,116 Q 18,102 26,88" stroke="#ffa726" stroke-width="5" fill="none"/>
+            <circle cx="26" cy="86" r="6" fill="#e65100"/>
+          `;
+          break;
+
+        case 'shiba': // 東旭：柴犬媽媽
+          motherFigureSVG = `
+            <!-- Mother Shiba Body -->
+            <ellipse cx="64" cy="112" rx="28" ry="22" fill="#e67e22"/>
+            <ellipse cx="75" cy="114" rx="14" ry="17" fill="#ffffff"/>
+            <ellipse cx="68" cy="74" rx="22" ry="20" fill="#e67e22"/>
+            <ellipse cx="58" cy="78" rx="8" ry="9" fill="#ffffff"/>
+            <ellipse cx="78" cy="78" rx="8" ry="9" fill="#ffffff"/>
+            <polygon points="48,64 54,46 64,56" fill="#d35400"/><polygon points="52,62 55,50 61,57" fill="#ffcdd2"/>
+            <polygon points="74,56 84,46 90,64" fill="#d35400"/><polygon points="76,57 82,50 86,62" fill="#ffcdd2"/>
+            <ellipse cx="72" cy="81" rx="7" ry="6" fill="#ffffff"/>
+            <ellipse cx="72" cy="77" rx="3.5" ry="2.5" fill="#212121"/>
+            <path d="M 57,71 Q 62,66 67,71" stroke="#3e2723" stroke-width="2.5" fill="none"/>
+            <path d="M 75,71 Q 80,66 85,71" stroke="#3e2723" stroke-width="2.5" fill="none"/>
+            <path d="M 76,114 Q 98,112 116,120 Q 98,124 76,120 Z" fill="#e67e22"/>
+            <ellipse cx="116" cy="120" rx="7" ry="5" fill="#ffffff"/>
+            <path d="M 38,110 C 24,94 24,74 38,72 C 45,70 50,78 44,84" stroke="#e67e22" stroke-width="6" fill="none" stroke-linecap="round"/>
+          `;
+          break;
+
+        case 'deer': // 羽翔：梅花鹿媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="56" cy="116" rx="28" ry="20" fill="#a1887f"/>
+            <circle cx="42" cy="110" r="2.5" fill="#ffffff"/><circle cx="50" cy="106" r="2" fill="#ffffff"/>
+            <circle cx="50" cy="114" r="2" fill="#ffffff"/><circle cx="58" cy="108" r="2.5" fill="#ffffff"/>
+            <path d="M 66,115 Q 82,90 84,70 L 72,68 Q 62,92 54,115 Z" fill="#a1887f"/>
+            <ellipse cx="86" cy="66" rx="15" ry="13" fill="#a1887f" transform="rotate(15 86 66)"/>
+            <ellipse cx="74" cy="50" rx="6" ry="14" fill="#8d6e63" transform="rotate(-30 74 50)"/><ellipse cx="74" cy="50" rx="3" ry="10" fill="#ffcdd2" transform="rotate(-30 74 50)"/>
+            <ellipse cx="92" cy="54" rx="6" ry="14" fill="#8d6e63" transform="rotate(35 92 54)"/><ellipse cx="92" cy="54" rx="3" ry="10" fill="#ffcdd2" transform="rotate(35 92 54)"/>
+            <ellipse cx="96" cy="72" rx="7" ry="5" fill="#d7ccc8"/><circle cx="99" cy="71" r="2" fill="#3e2723"/>
+            <ellipse cx="84" cy="64" rx="3.5" ry="4.5" fill="#2e7d32"/><circle cx="85" cy="62" r="1.5" fill="#ffffff"/>
+            <path d="M 70,120 Q 92,122 112,126 L 108,130 Q 88,126 66,124 Z" fill="#a1887f"/><ellipse cx="112" cy="126" rx="4" ry="3" fill="#4e342e"/>
+          `;
+          break;
+
+        case 'penguin': // 奕紘：企鵝媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="68" cy="100" rx="26" ry="36" fill="#263238"/>
+            <ellipse cx="74" cy="104" rx="17" ry="28" fill="#ffffff"/>
+            <path d="M 70,72 Q 86,74 80,88 Q 72,84 70,72 Z" fill="#ffb300"/>
+            <circle cx="72" cy="66" r="18" fill="#263238"/>
+            <path d="M 85,66 L 102,71 L 85,76 Z" fill="#ff9800"/>
+            <path d="M 72,64 Q 77,60 82,65" stroke="#ffffff" stroke-width="2" fill="none"/>
+            <path d="M 44,90 Q 30,104 36,120 Q 46,112 48,94 Z" fill="#1b272c"/>
+            <path d="M 82,88 Q 106,86 122,96 Q 106,104 84,98 Z" fill="#263238"/>
+            <ellipse cx="64" cy="134" rx="8" ry="4" fill="#37474f"/><ellipse cx="78" cy="134" rx="8" ry="4" fill="#37474f"/>
+          `;
+          break;
+
+        case 'bear': // 則嶧：棕熊媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="64" cy="108" rx="32" ry="28" fill="#795548"/>
+            <circle cx="68" cy="72" r="25" fill="#795548"/>
+            <circle cx="50" cy="54" r="8" fill="#795548"/><circle cx="50" cy="54" r="5" fill="#a1887f"/>
+            <circle cx="86" cy="54" r="8" fill="#795548"/><circle cx="86" cy="54" r="5" fill="#a1887f"/>
+            <ellipse cx="78" cy="78" rx="11" ry="9" fill="#d7ccc8"/><ellipse cx="80" cy="75" rx="4" ry="3" fill="#3e2723"/>
+            <path d="M 76,82 Q 80,86 84,82" stroke="#3e2723" stroke-width="2" fill="none"/>
+            <path d="M 58,69 Q 63,65 67,69" stroke="#3e2723" stroke-width="2.5" fill="none"/>
+            <path d="M 74,69 Q 78,65 83,69" stroke="#3e2723" stroke-width="2.5" fill="none"/>
+            <path d="M 76,102 Q 106,98 122,112 Q 112,122 80,118 Z" fill="#795548"/>
+            <ellipse cx="120" cy="112" rx="9" ry="7" fill="#6d4c41"/><ellipse cx="118" cy="112" rx="5" ry="4" fill="#d7ccc8"/>
+          `;
+          break;
+
+        case 'fox': // 又炘：赤狐媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="62" cy="112" rx="26" ry="20" fill="#ff5722"/>
+            <ellipse cx="74" cy="110" rx="12" ry="16" fill="#ffffff"/>
+            <ellipse cx="68" cy="74" rx="20" ry="18" fill="#ff5722"/>
+            <path d="M 55,75 Q 68,88 82,75 Q 70,86 55,75 Z" fill="#ffffff"/>
+            <polygon points="50,65 56,42 66,56" fill="#ff5722"/><polygon points="54,49 56,42 61,48" fill="#212121"/><polygon points="53,62 56,50 62,56" fill="#ffcdd2"/>
+            <polygon points="76,56 86,42 92,65" fill="#ff5722"/><polygon points="81,48 86,42 88,49" fill="#212121"/><polygon points="80,56 86,50 89,62" fill="#ffcdd2"/>
+            <polygon points="72,78 77,84 82,78" fill="#ff5722"/><circle cx="77" cy="84" r="2.5" fill="#212121"/>
+            <path d="M 58,72 Q 63,67 68,72" stroke="#bf360c" stroke-width="2.5" fill="none"/>
+            <path d="M 76,72 Q 81,67 86,72" stroke="#bf360c" stroke-width="2.5" fill="none"/>
+            <!-- Bushy Tail Wrapped Under Nest -->
+            <path d="M 44,116 C 18,105 15,135 48,138 C 82,142 125,142 145,134 C 130,132 90,130 54,126 Z" fill="#ff5722"/>
+            <path d="M 125,142 C 138,138 145,134 140,130 C 130,130 118,135 125,142 Z" fill="#ffffff"/>
+          `;
+          break;
+
+        case 'panda': // 勝智：熊貓媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="65" cy="110" rx="30" ry="26" fill="#ffffff" stroke="#263238" stroke-width="2"/>
+            <path d="M 42,98 Q 70,88 90,98 Q 78,122 42,98 Z" fill="#263238"/>
+            <circle cx="68" cy="74" r="24" fill="#ffffff" stroke="#263238" stroke-width="1.5"/>
+            <circle cx="48" cy="55" r="9" fill="#263238"/><circle cx="88" cy="55" r="9" fill="#263238"/>
+            <ellipse cx="58" cy="72" rx="7" ry="8" fill="#263238" transform="rotate(-15 58 72)"/><circle cx="59" cy="71" r="2.5" fill="#ffffff"/>
+            <ellipse cx="78" cy="72" rx="7" ry="8" fill="#263238" transform="rotate(15 78 72)"/><circle cx="77" cy="71" r="2.5" fill="#ffffff"/>
+            <ellipse cx="68" cy="80" rx="5" ry="4" fill="#263238"/>
+            <path d="M 65,85 Q 68,89 71,85" stroke="#263238" stroke-width="2" fill="none"/>
+            <!-- Bamboo sprig -->
+            <path d="M 80,105 L 108,98" stroke="#43a047" stroke-width="3" stroke-linecap="round"/>
+            <path d="M 108,98 Q 115,90 122,94 Q 114,98 108,98 Z" fill="#66bb6a"/>
+            <ellipse cx="102" cy="112" rx="8" ry="6" fill="#263238"/>
+          `;
+          break;
+
+        case 'bunny': // 翌銓：雪兔媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="65" cy="112" rx="26" ry="22" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+            <circle cx="38" cy="116" r="10" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+            <ellipse cx="70" cy="76" rx="20" ry="18" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5"/>
+            <ellipse cx="60" cy="42" rx="7" ry="20" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5" transform="rotate(-10 60 42)"/><ellipse cx="60" cy="42" rx="4" ry="14" fill="#f8bbd0" transform="rotate(-10 60 42)"/>
+            <ellipse cx="78" cy="42" rx="7" ry="20" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.5" transform="rotate(12 78 42)"/><ellipse cx="78" cy="42" rx="4" ry="14" fill="#f8bbd0" transform="rotate(12 78 42)"/>
+            <polygon points="76,79 81,79 78.5,83" fill="#e91e63"/>
+            <line x1="82" y1="80" x2="94" y2="78" stroke="#9e9e9e" stroke-width="1.2"/><line x1="82" y1="83" x2="94" y2="85" stroke="#9e9e9e" stroke-width="1.2"/>
+            <ellipse cx="64" cy="72" rx="3.5" ry="4.5" fill="#c2185b"/><circle cx="65" cy="70" r="1.5" fill="#ffffff"/>
+            <ellipse cx="76" cy="72" rx="3.5" ry="4.5" fill="#c2185b"/><circle cx="77" cy="70" r="1.5" fill="#ffffff"/>
+            <ellipse cx="94" cy="116" rx="8" ry="6" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.2"/>
+            <ellipse cx="106" cy="118" rx="8" ry="6" fill="#ffffff" stroke="#e0e0e0" stroke-width="1.2"/>
+          `;
+          break;
+
+        case 'cat': // 銪芳：豹貓媽媽
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="64" cy="112" rx="28" ry="20" fill="#ff9800"/>
+            <circle cx="48" cy="108" r="3" fill="#e65100"/><circle cx="56" cy="104" r="2.5" fill="#e65100"/>
+            <circle cx="54" cy="115" r="2.5" fill="#e65100"/><circle cx="64" cy="108" r="3" fill="#e65100"/>
+            <ellipse cx="74" cy="112" rx="10" ry="15" fill="#ffffff"/>
+            <circle cx="70" cy="76" r="20" fill="#ff9800"/>
+            <polygon points="54,66 58,46 70,58" fill="#ff9800"/><polygon points="58,63 60,50 67,57" fill="#ffcdd2"/>
+            <polygon points="74,58 84,46 88,66" fill="#ff9800"/><polygon points="77,57 82,50 85,63" fill="#ffcdd2"/>
+            <polygon points="76,80 82,80 79,84" fill="#e91e63"/>
+            <line x1="82" y1="80" x2="96" y2="78" stroke="#ffffff" stroke-width="1.5"/><line x1="82" y1="83" x2="96" y2="84" stroke="#ffffff" stroke-width="1.5"/>
+            <ellipse cx="63" cy="73" rx="4" ry="5" fill="#00acc1"/><ellipse cx="64" cy="73" rx="2" ry="4" fill="#212121"/><circle cx="65" cy="71" r="1.5" fill="#ffffff"/>
+            <ellipse cx="77" cy="73" rx="4" ry="5" fill="#00acc1"/><ellipse cx="78" cy="73" rx="2" ry="4" fill="#212121"/><circle cx="79" cy="71" r="1.5" fill="#ffffff"/>
+            <path d="M 76,114 Q 96,114 114,120 Q 98,124 76,120 Z" fill="#ff9800"/>
+            <ellipse cx="114" cy="120" rx="6" ry="5" fill="#ffffff"/>
+            <path d="M 38,114 Q 22,96 32,80" stroke="#ff9800" stroke-width="5" fill="none" stroke-linecap="round"/>
+          `;
+          break;
+
+        case 'lemur': // 芷嫻：環尾狐猴媽媽（完美延續附圖風格！）
+        default:
+          motherFigureSVG = `
+            <!-- Body -->
+            <ellipse cx="64" cy="112" rx="26" ry="22" fill="#78909c"/>
+            <ellipse cx="72" cy="114" rx="14" ry="16" fill="#ffffff"/>
+            <!-- Iconic Ringed Lemur Tail Arching Protectively Over Nest -->
+            <path d="M 42,118 Q 18,90 26,50 Q 32,25 55,28 Q 75,32 80,48" stroke="#ffffff" stroke-width="10" fill="none" stroke-linecap="round"/>
+            <path d="M 22,100 L 30,104" stroke="#263238" stroke-width="9"/>
+            <path d="M 19,82 L 27,86" stroke="#263238" stroke-width="9"/>
+            <path d="M 22,64 L 30,68" stroke="#263238" stroke-width="9"/>
+            <path d="M 33,42 L 41,44" stroke="#263238" stroke-width="9"/>
+            <path d="M 52,28 L 56,36" stroke="#263238" stroke-width="9"/>
+            <path d="M 70,36 L 76,44" stroke="#263238" stroke-width="9"/>
+            <circle cx="68" cy="76" r="22" fill="#78909c"/>
+            <ellipse cx="48" cy="68" rx="8" ry="10" fill="#78909c"/><ellipse cx="48" cy="68" rx="5" ry="7" fill="#ffcdd2"/>
+            <path d="M 42,70 Q 36,60 46,58 Q 40,52 48,54" fill="#ffffff"/>
+            <ellipse cx="88" cy="68" rx="8" ry="10" fill="#78909c"/><ellipse cx="88" cy="68" rx="5" ry="7" fill="#ffcdd2"/>
+            <path d="M 94,70 Q 100,60 90,58 Q 96,52 88,54" fill="#ffffff"/>
+            <path d="M 52,70 Q 68,58 84,70 Q 86,88 68,92 Q 50,88 52,70 Z" fill="#ffffff"/>
+            <circle cx="58" cy="74" r="8" fill="#263238"/><circle cx="58" cy="74" r="6" fill="#43a047"/><circle cx="58" cy="74" r="3.5" fill="#1b5e20"/><circle cx="60" cy="72" r="2" fill="#ffffff"/>
+            <circle cx="78" cy="74" r="8" fill="#263238"/><circle cx="78" cy="74" r="6" fill="#43a047"/><circle cx="78" cy="74" r="3.5" fill="#1b5e20"/><circle cx="80" cy="72" r="2" fill="#ffffff"/>
+            <ellipse cx="68" cy="84" rx="4.5" ry="3.5" fill="#212121"/>
+            <path d="M 64,88 Q 68,92 72,88" stroke="#212121" stroke-width="1.8" fill="none"/>
+            <path d="M 76,112 Q 98,110 114,118 Q 98,124 76,120 Z" fill="#78909c"/>
+            <ellipse cx="114" cy="118" rx="6" ry="4" fill="#37474f"/>
+          `;
+          break;
+      }
+
+      return `
+        <svg viewBox="0 0 220 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="eggGrad-${cfg.id}" x1="0.2" y1="0.1" x2="0.8" y2="0.9">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="35%" stop-color="#ffe082"/>
+              <stop offset="75%" stop-color="#ffb300"/>
+              <stop offset="100%" stop-color="#fb8c00"/>
+            </linearGradient>
+          </defs>
+
+          <!-- Top Guarding Pill Badge -->
+          <g transform="translate(14, 8)">
+            <rect width="116" height="22" rx="11" fill="rgba(0,0,0,0.68)" stroke="#ffd54f" stroke-width="1.5"/>
+            <text x="58" y="15" text-anchor="middle" font-size="10" font-weight="900" fill="#ffffff" letter-spacing="0.5">🛡️ ${cfg.motherName} 溫柔守護</text>
+          </g>
+
+          <!-- Ground Shadows for Mother and Egg -->
+          <ellipse cx="68" cy="138" rx="38" ry="12" fill="#000000" opacity="0.32"/>
+          <ellipse cx="152" cy="136" rx="34" ry="10" fill="#000000" opacity="0.32"/>
+
+          <!-- 1. Loving Protective Animal Mother (Left) -->
+          <g id="mother-${cfg.id}">
+            ${motherFigureSVG}
+          </g>
+
+          <!-- 2. Warm Life Egg in Golden Nest (Right) -->
+          <g id="egg-nest-${cfg.id}">
+            <!-- Nest Base -->
+            <ellipse cx="152" cy="128" rx="36" ry="12" fill="#2e7d32" opacity="0.9"/>
+            <path d="M 120,126 Q 152,144 184,126 Q 152,134 120,126 Z" fill="#66bb6a"/>
+            <path d="M 124,127 Q 152,139 180,127" stroke="#ffd54f" stroke-width="3" fill="none"/>
+            <path d="M 128,131 Q 152,142 176,131" stroke="#8d6e63" stroke-width="3" fill="none"/>
+
+            <!-- Glossy Egg Shape -->
+            <path d="M 152,50 C 176,50 186,84 186,108 C 186,126 170,132 152,132 C 134,132 118,126 118,108 C 118,84 128,50 152,50 Z" 
+                  fill="url(#eggGrad-${cfg.id})" stroke="#fff9c4" stroke-width="3"/>
+
+            <!-- Specular Highlight -->
+            <path d="M 138,62 C 146,58 156,60 160,65 C 149,63 140,70 137,79 C 135,73 135,67 138,62 Z" fill="#ffffff" opacity="0.8"/>
+
+            <!-- Energy Spots on Egg -->
+            <circle cx="140" cy="98" r="7" fill="#ff6f00" opacity="0.3"/>
+            <circle cx="165" cy="90" r="9" fill="#ff6f00" opacity="0.25"/>
+
+            <!-- Golden Cracks -->
+            <path d="M 150,86 L 156,96 L 152,106 L 158,114" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" fill="none" opacity="0.9"/>
+
+            <!-- Sparkle Star -->
+            <polygon points="174,68 176,73 181,75 176,77 174,82 172,77 167,75 172,73" fill="#fff59d"/>
+
+            <!-- Little Loving Heart -->
+            <g transform="translate(152, 36) scale(0.6)">
+              <path d="M 0,-6 C -6,-16 -20,-8 -12,4 Q 0,16 0,20 Q 0,16 12,4 C 20,-8 6,-16 0,-6 Z" fill="#ff4081" opacity="0.95"/>
+            </g>
+          </g>
+        </svg>
+      `;
+    }
+
+    /* =========================================================
+       6. COMPANION ANIMALS & EGG GENERATOR
+          (MATCHING THE EXACT STYLE OF USER'S UPLOADED IMAGE)
+       ========================================================= */
+    function getCompanionAnimalSVG(cfg, stage) {
+      const isEgg = (stage === 0);
+      const isBaby = (stage === 1);
+      const isAdult = (stage === 2);
+      const isSacred = (stage === 3);
+
+      // 1. PROTECTIVE ANIMAL MOTHER + EGG (Stage 0: 0-49 pts)
+      if (isEgg) {
+        return getGuardingMotherAndEggSVG(cfg);
+      }
+
+      // 2. CUTE REAL COMPANION ANIMALS (EXACT STYLE OF USER'S REFERENCE IMAGE)
+      let furMain = '#78909c';
+      let furSec = '#ffffff';
+      let eyeIris = '#39b54a'; // Emerald green like image!
+      let earInner = '#ffcdd2';
+      let hasStripedTail = false;
+      let hasLionMane = false;
+
+      if (cfg.animalType === 'lemur') {
+        furMain = '#78909c'; furSec = '#ffffff'; eyeIris = '#43a047'; hasStripedTail = true;
+      } else if (cfg.animalType === 'lion') {
+        furMain = '#ffa726'; furSec = '#fff3e0'; eyeIris = '#f57c00'; hasLionMane = true;
+      } else if (cfg.animalType === 'shiba') {
+        furMain = '#e67e22'; furSec = '#fff8e1'; eyeIris = '#4caf50';
+      } else if (cfg.animalType === 'deer') {
+        furMain = '#a1887f'; furSec = '#ffffff'; eyeIris = '#2e7d32';
+      } else if (cfg.animalType === 'penguin') {
+        furMain = '#37474f'; furSec = '#ffffff'; eyeIris = '#0288d1';
+      } else if (cfg.animalType === 'bear') {
+        furMain = '#8d6e63'; furSec = '#d7ccc8'; eyeIris = '#6d4c41';
+      } else if (cfg.animalType === 'fox') {
+        furMain = '#ff7043'; furSec = '#ffffff'; eyeIris = '#388e3c';
+      } else if (cfg.animalType === 'panda') {
+        furMain = '#ffffff'; furSec = '#263238'; eyeIris = '#2e7d32';
+      } else if (cfg.animalType === 'bunny') {
+        furMain = '#ffffff'; furSec = '#f8bbd0'; eyeIris = '#e91e63';
+      } else if (cfg.animalType === 'cat') {
+        furMain = '#ffb74d'; furSec = '#ffffff'; eyeIris = '#00acc1';
+      }
+
+      // Sacred Aura for Stage 3
+      const sacredAura = isSacred ? `
+        <!-- Divine Golden Wings -->
+        <g opacity="0.95">
+          <path d="M 32,80 C 5,50 -5,15 25,12 C 42,10 48,45 42,75 Z" fill="#ffd700" stroke="#fff59d" stroke-width="2"/>
+          <path d="M 128,80 C 155,50 165,15 135,12 C 118,10 112,45 118,75 Z" fill="#ffd700" stroke="#fff59d" stroke-width="2"/>
+        </g>
+        <!-- Golden Halo -->
+        <ellipse cx="80" cy="18" rx="35" ry="9" fill="none" stroke="#ffee58" stroke-width="4.5" opacity="0.9"/>
+        <ellipse cx="80" cy="18" rx="30" ry="7" fill="none" stroke="#ffffff" stroke-width="2" opacity="0.8"/>
+      ` : '';
+
+      return `
+        <svg viewBox="0 0 160 160" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+          ${sacredAura}
+
+          <!-- Shadow on landmark floor -->
+          <ellipse cx="80" cy="136" rx="42" ry="12" fill="#000000" opacity="0.25"/>
+
+          <!-- Striped Tail (Lemur like user reference image) -->
+          ${hasStripedTail || cfg.animalType === 'lemur' ? `
+            <g transform="translate(100, 75) rotate(-15)">
+              <path d="M 0,35 Q 15,10 10,-25 Q 5,-40 -8,-32 Q -18,-20 -8,10 Q -5,30 -5,40 Z" fill="#ffffff" stroke="#263238" stroke-width="2"/>
+              <path d="M 0,25 Q 8,15 5,5 L -6,10 Q -5,22 -3,28 Z" fill="#263238"/>
+              <path d="M 7,0 Q 12,-10 9,-18 L -4,-12 Q -5,-2 -7,5 Z" fill="#263238"/>
+              <path d="M 9,-22 Q 8,-35 -3,-30 L -8,-24 Q 0,-30 4,-20 Z" fill="#263238"/>
+            </g>
+          ` : ''}
+
+          <!-- Lion Fluffy Mane -->
+          ${hasLionMane ? `
+            <circle cx="80" cy="80" r="54" fill="#e65100"/>
+            <circle cx="80" cy="80" r="48" fill="#ff9800"/>
+          ` : ''}
+
+          <!-- Cute Fluffy Ears -->
+          <g>
+            <ellipse cx="38" cy="62" rx="16" ry="18" fill="${furMain}" transform="rotate(-20 38 62)"/>
+            <ellipse cx="38" cy="62" rx="10" ry="12" fill="${earInner}" transform="rotate(-20 38 62)"/>
+            <!-- White fur tufts on ear -->
+            <path d="M 24,65 Q 16,55 28,50 Q 20,44 32,46 Q 30,58 24,65 Z" fill="#ffffff"/>
+
+            <ellipse cx="122" cy="62" rx="16" ry="18" fill="${furMain}" transform="rotate(20 122 62)"/>
+            <ellipse cx="122" cy="62" rx="10" ry="12" fill="${earInner}" transform="rotate(20 122 62)"/>
+            <path d="M 136,65 Q 144,55 132,50 Q 140,44 128,46 Q 130,58 136,65 Z" fill="#ffffff"/>
+          </g>
+
+          <!-- Body / Chest -->
+          <ellipse cx="80" cy="126" rx="36" ry="26" fill="${furMain}"/>
+          <ellipse cx="80" cy="124" rx="24" ry="18" fill="${furSec}"/>
+
+          <!-- Cute Fluffy Head -->
+          <ellipse cx="80" cy="84" rx="44" ry="38" fill="${furMain}"/>
+          <!-- White Fluffy Cheeks & Muzzle (exactly like reference image) -->
+          <path d="M 40,88 C 30,95 38,112 55,110 C 68,118 92,118 105,110 C 122,112 130,95 120,88 C 128,78 115,70 102,76 C 92,72 68,72 58,76 C 45,70 32,78 40,88 Z" fill="${furSec}"/>
+
+          <!-- BIG GLOSSY EYES (Exact match to reference image!) -->
+          <!-- Left Eye -->
+          <g>
+            <ellipse cx="60" cy="80" rx="16" ry="18" fill="#1b2a1a"/>
+            <ellipse cx="60" cy="80" rx="14" ry="16" fill="${eyeIris}"/>
+            <ellipse cx="60" cy="80" rx="9" ry="11" fill="#0d1b0e"/>
+            <ellipse cx="56" cy="74" rx="5" ry="6" fill="#ffffff"/>
+            <ellipse cx="65" cy="86" rx="2.5" ry="3" fill="#ffffff"/>
+          </g>
+
+          <!-- Right Eye -->
+          <g>
+            <ellipse cx="100" cy="80" rx="16" ry="18" fill="#1b2a1a"/>
+            <ellipse cx="100" cy="80" rx="14" ry="16" fill="${eyeIris}"/>
+            <ellipse cx="100" cy="80" rx="9" ry="11" fill="#0d1b0e"/>
+            <ellipse cx="96" cy="74" rx="5" ry="6" fill="#ffffff"/>
+            <ellipse cx="105" cy="86" rx="2.5" ry="3" fill="#ffffff"/>
+          </g>
+
+          <!-- Cute Black Nose -->
+          <ellipse cx="80" cy="94" rx="5" ry="3.5" fill="#212121"/>
+          <ellipse cx="79" cy="93" rx="1.5" ry="1" fill="#ffffff" opacity="0.8"/>
+
+          <!-- Open Happy Smiling Mouth with Tongue -->
+          <path d="M 73,100 Q 80,110 87,100 Z" fill="#b71c1c"/>
+          <path d="M 75,103 Q 80,109 85,103 Z" fill="#ff8a80"/>
+
+          <!-- ADORABLE PAWS HOLDING CHEEKS (Exact pose from reference image!) -->
+          <g transform="translate(42, 102) rotate(18)">
+            <ellipse cx="0" cy="0" rx="8" ry="14" fill="#37474f"/>
+            <line x1="-3" y1="-8" x2="-3" y2="2" stroke="#263238" stroke-width="1.8"/>
+            <line x1="2" y1="-9" x2="2" y2="3" stroke="#263238" stroke-width="1.8"/>
+          </g>
+          <g transform="translate(118, 102) rotate(-18)">
+            <ellipse cx="0" cy="0" rx="8" ry="14" fill="#37474f"/>
+            <line x1="-2" y1="-9" x2="-2" y2="3" stroke="#263238" stroke-width="1.8"/>
+            <line x1="3" y1="-8" x2="3" y2="2" stroke="#263238" stroke-width="1.8"/>
+          </g>
+
+          <!-- Stage 2 Adult Crown or Stage 3 Sacred Sparkles -->
+          ${isAdult ? `
+            <path d="M 66,45 L 72,32 L 80,42 L 88,32 L 94,45 Z" fill="#ffd700" stroke="#ffb300" stroke-width="2"/>
+            <circle cx="80" cy="40" r="3" fill="#e91e63"/>
+          ` : ''}
+
+          ${isSacred ? `
+            <path d="M 64,42 L 68,26 L 80,36 L 92,26 L 96,42 Z" fill="#ffd700" stroke="#fff9c4" stroke-width="2.5"/>
+            <circle cx="80" cy="33" r="4" fill="#d500f9"/>
+            <circle cx="70" cy="36" r="3" fill="#00e5ff"/>
+            <circle cx="90" cy="36" r="3" fill="#ff1744"/>
+          ` : ''}
+        </svg>
+      `;
+    }
+
+    /* =========================================================
+       7. UI RENDERING: STUDENT CARDS & STATS
+       ========================================================= */
+    function renderCards() {
+      const grid = document.getElementById('students-grid');
+      grid.innerHTML = '';
+
+      STUDENTS_CONFIG.forEach(cfg => {
+        const student = studentsData[cfg.id];
+        const points = student ? student.points : 0;
+        const stage = student ? student.stage : 0;
+        const stageInfo = cfg.stages[stage];
+
+        let progressPct = 0;
+        let milestoneText = '';
+        let tagClass = 'tag-egg';
+
+        if (stage === 0) {
+          tagClass = 'tag-egg';
+          progressPct = Math.min(100, Math.round((points / 50) * 100));
+          milestoneText = `目標 50 點破殼誕生 (尚差 ${Math.max(0, 50 - points)} 點)`;
+        } else if (stage === 1) {
+          tagClass = 'tag-baby';
+          progressPct = Math.min(100, Math.round(((points - 50) / 50) * 100));
+          milestoneText = `目標 100 點成長為成獸 (尚差 ${Math.max(0, 100 - points)} 點)`;
+        } else if (stage === 2) {
+          tagClass = 'tag-adult';
+          progressPct = Math.min(100, Math.round(((points - 100) / 100) * 100));
+          milestoneText = `目標 200 點蛻變稀有聖獸！(尚差 ${Math.max(0, 200 - points)} 點)`;
+        } else {
+          tagClass = 'tag-sacred';
+          progressPct = 100;
+          milestoneText = `👑 已達成最高等級【稀有傳說聖獸】！`;
+        }
+
+        const card = document.createElement('div');
+        card.className = `student-card stage-${stage}`;
+        card.id = `card-${cfg.id}`;
+
+        card.innerHTML = `
+          <!-- Landmark Banner on Top of Card -->
+          <div class="card-top-landmark">
+            <span class="landmark-badge">🏛️ ${cfg.landmark}</span>
+            <span>伴生萌獸：${cfg.realAnimal}</span>
+          </div>
+
+          <!-- Card Header: Student Name + Evolution Tag beside Name -->
+          <div class="card-header">
+            <div class="name-evolution-wrap">
+              <div class="name-line">
+                <span class="student-name">${cfg.name}</span>
+                <span class="evolution-tag-beside ${tagClass}">
+                  ${stageInfo.title}
+                </span>
+              </div>
+              <span class="stage-subdesc">${stageInfo.desc}</span>
+            </div>
+          </div>
+
+          <!-- Landmark Background + Companion Animal Display Box -->
+          <div class="landmark-animal-box" onclick="openInspectModal('${cfg.id}')" title="點擊放大查看名勝與大眼萌獸特寫">
+            <!-- World Landmark Background: Real Internet Landscape Photo + Fallback -->
+            ${getLandmarkBackgroundHTML(cfg)}
+
+            <!-- Blue Mystery Question Mark Badge (like reference image) -->
+            <div class="mystery-question-badge" title="名勝探索">?</div>
+
+            <!-- Companion Animal in Foreground (Mother guarding egg at 0-49 pts, cute big-eyed companion at 50+ pts) -->
+            <div class="companion-animal-container" id="char-anim-${cfg.id}">
+              ${getCompanionAnimalSVG(cfg, stage)}
+            </div>
+
+            <span class="click-inspect-hint">🔍 點擊查看名勝與萌獸</span>
+          </div>
+
+          <!-- Score Progress -->
+          <div class="score-progress-wrap">
+            <div class="score-row">
+              <div class="score-number">
+                ${points} <span class="score-unit">點</span>
+              </div>
+              <span class="next-milestone-text">${milestoneText}</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div class="progress-bar-fill ${stage === 3 ? 'sacred' : (stage === 2 ? 'adult' : (stage === 1 ? 'baby' : ''))}" style="width: ${progressPct}%;"></div>
+            </div>
+          </div>
+
+          <!-- Action Buttons with Clapping Sound -->
+          <div class="action-buttons-group">
+            <button class="btn-add-pts btn-homework" onclick="addPoints('${cfg.id}', 5, '功課交齊')">
+              <span class="pts-badge">+5</span>
+              <span class="btn-label">功課交齊 👏</span>
+            </button>
+            <button class="btn-add-pts btn-behavior" onclick="addPoints('${cfg.id}', 5, '優良表現')">
+              <span class="pts-badge">+5</span>
+              <span class="btn-label">優良表現 👏</span>
+            </button>
+            <button class="btn-add-pts btn-other" onclick="addPoints('${cfg.id}', 1, '其他加分')">
+              <span class="pts-badge">+1</span>
+              <span class="btn-label">其他加分 👏</span>
+            </button>
+          </div>
+
+          <!-- Footer Adjust -->
+          <div class="card-footer-mini">
+            <span>名勝：${cfg.landmarkShort}</span>
+            <button class="btn-mini-adjust" onclick="minusPoint('${cfg.id}')" title="扣減 1 點(微調)">
+              ↩️ -1 點
+            </button>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+
+      updateClassStats();
+    }
+
+    function updateClassStats() {
+      let totalPts = 0;
+      let babyCount = 0;
+      let adultCount = 0;
+      let sacredCount = 0;
+
+      Object.values(studentsData).forEach(s => {
+        totalPts += (s.points || 0);
+        if (s.stage >= 1) babyCount++;
+        if (s.stage >= 2) adultCount++;
+        if (s.stage === 3) sacredCount++;
+      });
+
+      const totalEl = document.getElementById('total-class-points');
+      const babyEl = document.getElementById('total-baby-count');
+      const adultEl = document.getElementById('total-adult-count');
+      const sacredEl = document.getElementById('total-sacred-count');
+
+      if (totalEl) totalEl.textContent = totalPts;
+      if (babyEl) babyEl.textContent = babyCount;
+      if (adultEl) adultEl.textContent = adultCount;
+      if (sacredEl) sacredEl.textContent = sacredCount;
+    }
+
+    /* =========================================================
+       8. MODALS & INTERACTIONS
+       ========================================================= */
+    // --- 1. Evolution Celebration Modal ---
+    function openEvoModal(cfg, stage) {
+      const isSacred = (stage === 3);
+      const stageInfo = cfg.stages[stage];
+      const box = document.getElementById('evo-modal-box');
+
+      if (isSacred) {
+        box.className = 'modal-content evolution-modal-box sacred';
+        document.getElementById('evo-main-title').textContent = '👑 突破 200 點！覺醒為【稀有傳說聖獸】！ 👑';
+      } else if (stage === 2) {
+        box.className = 'modal-content evolution-modal-box';
+        document.getElementById('evo-main-title').textContent = '🦁 突破 100 點！成長為【威武成獸】！ 🦁';
+      } else {
+        box.className = 'modal-content evolution-modal-box';
+        document.getElementById('evo-main-title').textContent = '🐣 突破 50 點！生命之蛋破殼誕生！ 🐣';
+      }
+
+      document.getElementById('evo-kid-name').textContent = cfg.name;
+      document.getElementById('evo-landmark-name').textContent = cfg.landmark;
+      document.getElementById('evo-animal-new-title').textContent = stageInfo.title;
+      document.getElementById('evo-lore-text').textContent = stageInfo.desc;
+
+      const container = document.getElementById('evo-stage-art-box');
+      container.innerHTML = `
+        ${getLandmarkBackgroundHTML(cfg)}
+        <div style="width:230px; height:180px; z-index:5; display:flex; align-items:center; justify-content:center; animation:happyJump 1.5s infinite;">
+          ${getCompanionAnimalSVG(cfg, stage)}
+        </div>
+      `;
+
+      document.getElementById('evo-modal').classList.add('active');
+    }
+
+    function closeEvoModal() {
+      document.getElementById('evo-modal').classList.remove('active');
+    }
+
+    // --- 2. Inspect Modal ---
+    function openInspectModal(kidId) {
+      const cfg = STUDENTS_CONFIG.find(c => c.id === kidId);
+      const student = studentsData[kidId];
+      if (!cfg || !student) return;
+
+      const stage = student.stage;
+      const stageInfo = cfg.stages[stage];
+
+      document.getElementById('inspect-kid-name').textContent = cfg.name;
+      document.getElementById('inspect-kid-score').textContent = `${student.points} 點`;
+      document.getElementById('inspect-kid-landmark').textContent = cfg.landmark;
+      document.getElementById('inspect-kid-tier-desc').textContent = `${cfg.realAnimal}・${stageInfo.title} (${stage === 0 ? '生命之蛋' : (stage === 1 ? '破殼萌獸' : (stage === 2 ? '成獸' : '稀有聖獸'))})`;
+      document.getElementById('inspect-kid-quote').textContent = cfg.quote;
+
+      // History
+      const histUl = document.getElementById('inspect-kid-history');
+      histUl.innerHTML = '';
+      if (!student.history || student.history.length === 0) {
+        histUl.innerHTML = '<li style="text-align:center; color:#9e9e9e; padding:10px;">尚未有加分記錄</li>';
+      } else {
+        student.history.slice(0, 5).forEach(h => {
+          const li = document.createElement('li');
+          li.className = 'history-item plus';
+          li.innerHTML = `<span><strong>${h.reason}</strong></span> <span style="font-weight:800; color:#2e7d32;">+${h.pts} 點 <small style="color:#9e9e9e;">(${h.time})</small></span>`;
+          histUl.appendChild(li);
+        });
+      }
+
+      // Stage Art in Modal
+      const container = document.getElementById('inspect-stage-box');
+      container.innerHTML = `
+        ${getLandmarkBackgroundHTML(cfg)}
+        <div style="width:240px; height:180px; z-index:5; display:flex; align-items:center; justify-content:center; animation:pulseAvatar 3s infinite ease-in-out;">
+          ${getCompanionAnimalSVG(cfg, stage)}
+        </div>
+      `;
+
+      document.getElementById('inspect-modal').classList.add('active');
+    }
+
+    function closeInspectModal() {
+      document.getElementById('inspect-modal').classList.remove('active');
+    }
+
+    // --- 3. Batch Add Modal ---
+    function openBatchModal() {
+      const box = document.getElementById('batch-students-checkboxes');
+      box.innerHTML = '';
+
+      STUDENTS_CONFIG.forEach(cfg => {
+        const div = document.createElement('label');
+        div.style.display = 'flex';
+        div.style.alignItems = 'center';
+        div.style.gap = '8px';
+        div.style.padding = '6px';
+        div.style.borderRadius = '8px';
+        div.style.background = '#f1f8e9';
+        div.style.cursor = 'pointer';
+
+        div.innerHTML = `
+          <input type="checkbox" class="batch-chk" value="${cfg.id}" checked style="width:18px; height:18px; accent-color:#2e7d32;">
+          <strong style="font-size:1.05rem;">${cfg.name}</strong>
+          <span style="font-size:0.75rem; color:#558b2f;">(${cfg.landmarkShort}・${cfg.realAnimal}・${studentsData[cfg.id].points}點)</span>
+        `;
+        box.appendChild(div);
+      });
+
+      document.getElementById('batch-modal').classList.add('active');
+    }
+
+    function toggleAllStudentsSelection(selectAll) {
+      document.querySelectorAll('.batch-chk').forEach(c => c.checked = selectAll);
+    }
+
+    function applyBatchAdd(pts, reason) {
+      const selected = Array.from(document.querySelectorAll('.batch-chk:checked')).map(c => c.value);
+      if (selected.length === 0) {
+        showToast('⚠️ 請至少勾選一位學生！');
+        return;
+      }
+
+      selected.forEach(id => {
+        addPoints(id, pts, reason);
+      });
+
+      showToast(`📢 成功為 ${selected.length} 位同學發放 +${pts} 點【${reason}】👏！`);
+      closeBatchModal();
+    }
+
+    function closeBatchModal() {
+      document.getElementById('batch-modal').classList.remove('active');
+    }
+
+    // --- 4. Leaderboard Modal ---
+    function openLeaderboardModal() {
+      const sorted = [...STUDENTS_CONFIG].sort((a, b) => {
+        return (studentsData[b.id].points || 0) - (studentsData[a.id].points || 0);
+      });
+
+      const container = document.getElementById('leaderboard-container');
+      container.innerHTML = '';
+
+      sorted.forEach((cfg, idx) => {
+        const student = studentsData[cfg.id];
+        const stage = student.stage;
+        const rank = idx + 1;
+
+        const row = document.createElement('li');
+        row.className = `leaderboard-row rank-${rank <= 3 ? rank : 'other'}`;
+        row.innerHTML = `
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span class="rank-tag">${rank <= 3 ? (rank === 1 ? '🥇' : (rank === 2 ? '🥈' : '🥉')) : rank}</span>
+            <div>
+              <strong style="font-size:1.15rem; color:#1b5e20;">${cfg.name}</strong>
+              <span class="evolution-tag-beside ${stage === 3 ? 'tag-sacred' : (stage === 2 ? 'tag-adult' : (stage === 1 ? 'tag-baby' : 'tag-egg'))}" style="margin-left:6px; font-size:0.75rem;">
+                ${cfg.stages[stage].title}
+              </span>
+              <div style="font-size:0.78rem; color:#558b2f;">${cfg.landmark}・${cfg.realAnimal}</div>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:1.45rem; font-weight:900; color:#2e7d32; font-family:'Fredoka';">
+              ${student.points}
+            </span>
+            <span style="font-size:0.85rem; font-weight:700; color:#78909c;">點</span>
+            <div style="font-size:0.75rem; color:${stage === 3 ? '#e040fb' : (stage === 2 ? '#ff9800' : (stage === 1 ? '#4caf50' : '#2196f3'))}; font-weight:800;">
+              ${stage === 3 ? '👑 稀有聖獸' : (stage === 2 ? '🦁 成獸' : (stage === 1 ? '🐾 幼獸' : '🥚 蛋'))}
+            </div>
+          </div>
+        `;
+        container.appendChild(row);
+      });
+
+      document.getElementById('leaderboard-modal').classList.add('active');
+    }
+
+    function closeLeaderboardModal() {
+      document.getElementById('leaderboard-modal').classList.remove('active');
+    }
+
+    // --- 5. History Log Modal ---
+    function openHistoryModal() {
+      const ul = document.getElementById('full-history-list');
+      const countEl = document.getElementById('history-count-text');
+      ul.innerHTML = '';
+      countEl.textContent = `共 ${historyLogs.length} 筆加分記錄`;
+
+      if (historyLogs.length === 0) {
+        ul.innerHTML = '<li style="text-align:center; color:#9e9e9e; padding:15px;">尚無記錄</li>';
+      } else {
+        historyLogs.forEach(h => {
+          const li = document.createElement('li');
+          li.className = `history-item ${h.isSacred ? 'sacred' : (h.isEvo ? 'evo' : 'plus')}`;
+          li.innerHTML = `
+            <div>
+              <strong style="color:#1b5e20;">${h.kidName}</strong>: ${h.reason}
+              <span style="font-size:0.75rem; color:#9e9e9e; margin-left:6px;">${h.time}</span>
+            </div>
+            <span style="font-weight:900; color:${h.isSacred ? '#7b1fa2' : (h.isEvo ? '#e65100' : '#2e7d32')};">
+              ${h.isEvo ? (h.isSacred ? '👑 稀有聖獸' : '🌟 進化蛻變') : `+${h.pts} 點 👏`}
+            </span>
+          `;
+          ul.appendChild(li);
+        });
+      }
+
+      document.getElementById('history-modal').classList.add('active');
+    }
+
+    function clearAllHistory() {
+      if (confirm('確定要清空所有加分日誌記錄嗎？（學生點數不會被影響）')) {
+        historyLogs = [];
+        saveData();
+        openHistoryModal();
+        showToast('🗑️ 日誌已清空');
+      }
+    }
+
+    function closeHistoryModal() {
+      document.getElementById('history-modal').classList.remove('active');
+    }
+
+    // --- 6. Settings Modal ---
+    function openSettingsModal() {
+      document.getElementById('settings-modal').classList.add('active');
+    }
+
+    function closeSettingsModal() {
+      document.getElementById('settings-modal').classList.remove('active');
+    }
+
+    function exportDataJSON() {
+      const exportObj = {
+        version: '6.0',
+        exportDate: new Date().toISOString(),
+        studentsData,
+        historyLogs
+      };
+
+      const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute('href', dataStr);
+      downloadAnchor.setAttribute('download', `世界名勝陪伴萌獸加分系統備份_${new Date().toLocaleDateString('zh-TW').replace(/\//g, '-')}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+
+      showToast('💾 資料備份檔案已成功下載！');
+    }
+
+    function importDataJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.studentsData) {
+            studentsData = parsed.studentsData;
+            historyLogs = parsed.historyLogs || [];
+            saveData();
+            renderCards();
+            showToast('✅ 備份資料匯入成功！');
+            closeSettingsModal();
+          } else {
+            alert('檔案格式不正確！');
+          }
+        } catch (err) {
+          alert('解析檔案失敗，請檢查是否為正確的 JSON 備份檔。');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function confirmResetAllPoints() {
+      if (confirm('⚠️ 警告：確定要將全班 10 位小朋友的點數重設為 0 嗎？\n此動作將使所有人回到【生命之蛋】狀態！')) {
+        STUDENTS_CONFIG.forEach(cfg => {
+          studentsData[cfg.id] = {
+            id: cfg.id,
+            points: 0,
+            stage: 0,
+            history: []
+          };
+        });
+        saveData();
+        renderCards();
+        showToast('🔄 全班點數已重設歸零，回到生命之蛋狀態！');
+        closeSettingsModal();
+      }
+    }
+
+    /* =========================================================
+       9. UTILS: FULLSCREEN, AUDIO TOGGLE, TOAST
+       ========================================================= */
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const icon = document.getElementById('audio-icon');
+      if (audioEnabled) {
+        icon.textContent = '👏 拍手音效：開';
+        showToast('👏 拍手音效已開啟');
+      } else {
+        icon.textContent = '🔇 拍手音效：關';
+        showToast('🔇 拍手音效已關閉');
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function showToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.innerHTML = message;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3200);
+    }
+
+    /* =========================================================
+       10. INITIALIZATION
+       ========================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      initData();
+      renderCards();
+    });
+  </script>
+</body>
+</html>
